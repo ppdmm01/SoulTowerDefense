@@ -12,8 +12,4 @@ public class ItemSO : ScriptableObject
 
     [Header("物品标签")]
     public string[] itemTags; // 物品标签（如"力","药水"等）  
-
-    //[Header("预览设置")]
-    //public Color validColor = Color.green; //合法的颜色
-    //public Color invalidColor = Color.red; //非法的颜色
 }

@@ -14,7 +14,9 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     [Header("相关记录数据")]
     private Vector2 oldPos; //记录原本位置（实际坐标位置）
-    private Vector2Int oldGridPos; //记录原本的格子起始坐标（格子坐标位置）
+    private Vector2Int gridPos; //物品放置起始坐标（网格坐标位置，物品新位置）
+    private Vector2Int oldGridPos; //记录原本的起始坐标（网格坐标位置，物品旧位置）
+    private Vector2Int lastFrameGridPos; //记录上一帧格子的坐标（网格坐标位置，物品移动过程中的上一帧位置）
     private BagGrid bagGrid; //当前属于哪个背包
 
     [Header("其他变量")]
@@ -33,6 +35,7 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     private void Init()
     {
         oldGridPos = Defines.nullValue;
+        lastFrameGridPos = gridPos;
         bagGrid = BagManager.Instance.BagDic["bag"]; //记录所属背包
         Icon.sprite = data.icon; //更换图片
         rectTransform.sizeDelta = new Vector2(data.size.x * Defines.cellSize, data.size.y * Defines.cellSize); //根据数据设置物品大小  
@@ -52,19 +55,36 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     public void OnDrag(PointerEventData eventData)
     {
         transform.position = eventData.position;
+
+        //---格子预览功能---
+        //计算放置位置
+        Vector2Int centerGridPos = ScreenToGridPoint(eventData.position); //物品中心所在网格坐标
+        gridPos = CalculateStartGridPoint(centerGridPos); //当前的格子起始坐标
+        //更新预览
+        if (lastFrameGridPos != gridPos && bagGrid.CheckBound(this, gridPos))
+        {
+            Debug.Log("last:" + lastFrameGridPos);
+            Debug.Log("now:" + gridPos);
+            bagGrid.ItemPreview(this, lastFrameGridPos, false); //取消上一次的预览格子
+            lastFrameGridPos = gridPos; //记录
+            bagGrid.ItemPreview(this, gridPos, true); //更新当前预览格子
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        //恢复原来的状态
+        //物品恢复原来的状态
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
 
         // 计算放置位置  
-        Vector2Int centerGridPos = ScreenToGridPoint(eventData.position); //物品中心所在网格坐标
-        Vector2Int gridPos = CalculateStartGridPoint(centerGridPos); //当前的格子起始坐标
+        //Vector2Int centerGridPos = ScreenToGridPoint(eventData.position); //物品中心所在网格坐标
+        //Vector2Int gridPos = CalculateStartGridPoint(centerGridPos); //当前的格子起始坐标
         //Debug.Log("gridPos:"+gridPos);
         //Debug.Log("oldGridPos:" + oldGridPos);
+
+        bagGrid.ItemPreview(this, gridPos, false);//取消预览
+
         if (bagGrid.CanPlaceItem(this, gridPos))
         {
             //print("放置物品成功");

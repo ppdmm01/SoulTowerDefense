@@ -22,7 +22,9 @@ public class BagGrid : MonoBehaviour
         Init();
     }
 
-    //初始化
+    /// <summary>
+    /// 初始化
+    /// </summary>
     private void Init()
     {
         slots = new ItemSlot[gridWidth, gridHeight];
@@ -115,6 +117,37 @@ public class BagGrid : MonoBehaviour
             for (int y = 0; y < item.data.size.y; y++)
             {
                 slots[gridPos.x + x, gridPos.y + y].RemoveItem();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 物品放置预览
+    /// </summary>
+    /// <param name="item">放入的物品</param>
+    /// <param name="gridPos">物品放置的起始坐标</param>
+    /// <param name="isPreview">是否预览，true预览，false取消预览</param>
+    public void ItemPreview(Item item, Vector2Int gridPos,bool isPreview)
+    {
+        Debug.Log("预览");
+        Debug.Log("isPreview:"+isPreview);
+        for (int x = 0; x < item.data.size.x; x++)
+        {
+            for (int y = 0; y < item.data.size.y; y++)
+            {
+                ItemSlot slot = slots[gridPos.x + x, gridPos.y + y];
+                //取消预览
+                if (!isPreview)
+                {
+                    slot.SetStatus(slot.isUsed); //恢复原本状态
+                    continue;
+                }
+
+                //设置预览颜色
+                if (slot.isUsed)
+                    slot.SetColor(Defines.previewInvalidColor);
+                else
+                    slot.SetColor(Defines.previewValidColor);
             }
         }
     }

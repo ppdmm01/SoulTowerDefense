@@ -54,9 +54,21 @@ public class ItemSlot : MonoBehaviour
     /// 设置使用状态
     /// </summary>
     /// <param name="isUsed">是否被使用</param>
-    private void SetStatus(bool isUsed)
+    public void SetStatus(bool isUsed)
     {
         this.isUsed = isUsed;
-        slotImg.color = isUsed ? Defines.invalidColor : Defines.validColor;
+        if (isUsed)
+            SetColor(Defines.invalidColor);
+        else
+            SetColor(Defines.validColor);
+    }
+
+    /// <summary>
+    /// 设置物品格颜色
+    /// </summary>
+    /// <param name="color">颜色</param>
+    public void SetColor(Color color)
+    {
+        slotImg.color = color;
     }
 }
