@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: AmmoSO
   m_EditorClassIdentifier: 
   itemName: Ammo
-  size: {x: 1, y: 1}
+  shape:
+    shapeMatrix: 01000000000000000000000000000000
+    allowRotation: 1
   icon: {fileID: 21300000, guid: 7c1835c831cc33045b3e15f614ed66d7, type: 3}
   itemTags:
   - "\u5B50\u5F39"
