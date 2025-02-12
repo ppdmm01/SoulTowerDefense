@@ -102,10 +102,8 @@ public class ItemShape
     // 矩阵旋转（90度为步长） ，获取旋转后的形状信息 
     public bool[,] GetRotatedMatrix(int rotation)
     {
-        Debug.Log("ROTATION:" + rotation);
         bool[,] rotated = new bool[MatrixLen, MatrixLen];
         int steps = (rotation / 90) % 4;
-        Debug.Log("Steps:" + steps);
         for (int x = 0; x < MatrixLen; x++)
         {
             for (int y = 0; y < MatrixLen; y++)

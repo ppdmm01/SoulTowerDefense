@@ -14,12 +14,17 @@ public class BagGrid : MonoBehaviour
     [SerializeField] private int gridHeight = 10; //网格高
     private float cellSize = Defines.cellSize; //每个格子的大小
 
-    private GameObject ItemSlotObj; //物品格
+    private GameObject ItemSlotObj; //物品格预设体
     private ItemSlot[,] slots; //存储物品格
+
+    public List<Item> items; //存储的物品
+
+    private GridLayoutGroup gridLayoutGroup;
 
     private void Start()
     {
         ItemSlotObj = Resources.Load<GameObject>("Bag/ItemSlot");
+        gridLayoutGroup = GetComponent<GridLayoutGroup>();
         Init();
     }
 
@@ -28,6 +33,7 @@ public class BagGrid : MonoBehaviour
     /// </summary>
     private void Init()
     {
+        gridLayoutGroup.constraintCount = gridWidth;
         slots = new ItemSlot[gridWidth, gridHeight];
         //将物品格填充背包
         for (int y = 0; y < gridHeight; y++)
@@ -44,6 +50,7 @@ public class BagGrid : MonoBehaviour
         }
     }
 
+    #region 物品放置与检测
     /// <summary>
     /// 检测是否可以放入物品
     /// </summary>
@@ -123,10 +130,11 @@ public class BagGrid : MonoBehaviour
         {
             for (int y = 0; y < ItemShape.MatrixLen; y++)
             {
-                if (matrix[x,y])
+                if (matrix[x, y])
                     slots[gridPos.x + x, gridPos.y + y].AddItem(item);
             }
         }
+        items.Add(item);
 
         //将物品附着到格子中心上
         Vector2Int minOffset = item.GetOriginOffset();
@@ -154,8 +162,11 @@ public class BagGrid : MonoBehaviour
                     slots[gridPos.x + x, gridPos.y + y].RemoveItem();
             }
         }
+        items.Remove(item);
     }
+    #endregion
 
+    #region 物品预览
     /// <summary>
     /// 物品放置预览
     /// </summary>
@@ -182,4 +193,5 @@ public class BagGrid : MonoBehaviour
             }
         }
     }
+    #endregion
 }

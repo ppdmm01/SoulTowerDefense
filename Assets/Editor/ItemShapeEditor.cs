@@ -2,6 +2,9 @@
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// ÎïÆ·ÐÎ×´±à¼­Æ÷
+/// </summary>
 [CustomPropertyDrawer(typeof(ItemShape))]
 public class SimpleItemShapeEditor : PropertyDrawer
 {

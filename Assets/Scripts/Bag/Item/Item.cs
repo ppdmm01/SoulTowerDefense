@@ -19,9 +19,9 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
 
     [Header("相关记录数据")]
     private Vector2 oldPos; //记录原本位置（实际坐标位置）
-    private Vector2Int gridPos; //物品放置起始坐标（网格坐标位置，物品新位置）
+    public Vector2Int gridPos; //物品当前放置起始坐标（网格坐标位置，物品新位置）
     private Vector2Int oldGridPos; //记录原本的起始坐标（网格坐标位置，物品旧位置）
-    private Vector2Int lastFrameGridPos; //记录上一帧格子的坐标（网格坐标位置，物品移动过程中的上一帧位置）
+    private Vector2Int lastFrameGridPos; //记录上一帧坐标（网格坐标位置，物品移动过程中的上一帧位置）
     private BagGrid bagGrid; //当前属于哪个背包
 
     [Header("其他变量")]
@@ -45,6 +45,21 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         {
             RotateItem(-90); //顺时针旋转
         }
+
+        //检测物品的所属背包变化（目前使用鼠标点检测即可，减少计算量）
+        if (isDrag)
+        {
+            //检测是否在背包中
+            if (BagManager.Instance.IsInsideBag(Input.mousePosition,"bag") && bagGrid.bagName != "bag")
+            {
+                bagGrid = BagManager.Instance.BagDic["bag"];
+            }
+            //检测是否在储物箱中
+            if (BagManager.Instance.IsInsideBag(Input.mousePosition, "storageBox") && bagGrid.bagName != "storageBox")
+            {
+                bagGrid = BagManager.Instance.BagDic["storageBox"];
+            }
+        }
     }
 
     private void Init()
@@ -53,7 +68,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         currentRotation = 0;
         oldGridPos = Defines.nullValue;
         lastFrameGridPos = gridPos;
-        bagGrid = BagManager.Instance.BagDic["bag"]; //记录所属背包
+        bagGrid = BagManager.Instance.BagDic["storageBox"]; //默认属于储物箱
         Icon.sprite = data.icon; //更换图片
         Vector2Int size = GetSize();
         rectTransform.sizeDelta = new Vector2(size.x * Defines.cellSize, size.y * Defines.cellSize); //根据数据设置物品大小  
@@ -91,8 +106,8 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         isDrag = true;
 
         //取消当前格子占用
-        if (bagGrid.CheckBound(this,oldGridPos)) //如果原先有记录才能取消
-            bagGrid.RemoveItem(this, oldGridPos);
+        if (bagGrid.CheckBound(this, gridPos))
+            bagGrid.RemoveItem(this, gridPos);
         //更新预览
         UpdatePreview();
     }
@@ -117,12 +132,13 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         if (bagGrid.CanPlaceItem(this, gridPos))
         {
             bagGrid.PlaceItem(this, gridPos); //放置物品
-            oldGridPos = gridPos; //记录格子起始坐标
+            oldGridPos = gridPos; //更新老位置坐标
         }
         else
         {
-            if (bagGrid.CheckBound(this,oldGridPos))
+            if (bagGrid.CheckBound(this, oldGridPos))
                 bagGrid.PlaceItem(this, oldGridPos); //恢复原本格子占用
+            gridPos = oldGridPos; //新格子位置回退
             transform.position = oldPos; //回弹  
         }
     }
@@ -199,7 +215,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     {
         if (!data.shape.allowRotation) return;
 
-        //清空之前的预览
+        //清空上一帧的预览
         bagGrid.ItemPreview(this, lastFrameGridPos, false);
 
         //旋转并播放动画
