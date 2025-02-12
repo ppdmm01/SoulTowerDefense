@@ -43,7 +43,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         //右键旋转
         if (isDrag && Input.GetMouseButtonDown(1))
         {
-            RotateItem(-90);
+            RotateItem(-90); //顺时针旋转
         }
     }
 
@@ -130,8 +130,6 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     //更新预览
     public void UpdatePreview()
     {
-        Debug.Log("lastFrameGridPos:" + lastFrameGridPos);
-        Debug.Log("gridPos:"+gridPos);
         gridPos = GetStartGridPoint(Input.mousePosition);
         bagGrid.ItemPreview(this, lastFrameGridPos, false); //取消上一次的预览格子
         lastFrameGridPos = gridPos; //记录
@@ -165,13 +163,33 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     private Vector2Int CalculateStartGridPoint(Vector2Int centerPoint)
     {
         Vector2Int size = GetSize();
-        return new Vector2Int(centerPoint.x - size.x / 2, centerPoint.y - size.y / 2);
+        Vector2Int offset = GetOriginOffset();
+        //计算方法：中心点 - 物品矩形长/2 - 物品有效区域左下角 离 形状矩阵左下角原点的 偏移
+        //centerPoint - size/2 - offset
+        return new Vector2Int(centerPoint.x - size.x / 2 - offset.x, centerPoint.y - size.y / 2 - offset.y);
     }
 
     //获取当前的大小（根据旋转角度而变化）
     public Vector2Int GetSize()
     {
         return data.shape.GetEffectiveSize(currentRotation);
+    }
+
+    //获取形状离原点的偏移
+    public Vector2Int GetOriginOffset()
+    {
+        return data.shape.GetOriginOffset(currentRotation);
+    }
+
+    public Vector2Int GetEndOffset()
+    {
+        return data.shape.GetEndOffset(currentRotation);
+    }
+
+    //获取旋转后的矩阵
+    public bool[,] GetRotateMatrix()
+    {
+        return data.shape.GetRotatedMatrix(currentRotation);
     }
     #endregion
 
@@ -217,4 +235,5 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         rectTransform.rotation = end;
     }
     #endregion
+
 }

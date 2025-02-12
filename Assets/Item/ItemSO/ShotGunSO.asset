@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
+  m_Name: ShotGunSO
+  m_EditorClassIdentifier: 
+  itemName: ShotGun
+  shape:
+    shapeMatrix: 01010000000100000001000000010000
+    allowRotation: 1
+  icon: {fileID: 21300000, guid: 02a5831d7de6223499a4eb02041eefa1, type: 3}
+  itemTags:
+  - "\u6563\u5F39\u67AA"

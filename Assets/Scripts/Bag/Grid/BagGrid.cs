@@ -56,12 +56,14 @@ public class BagGrid : MonoBehaviour
         if (!CheckBound(item, gridPos)) return false;
 
         Vector2Int size = item.GetSize();
+        bool[,] matrix = item.GetRotateMatrix();
+
         //检查格子是否被占用  
-        for (int x = 0; x < size.x; x++)
+        for (int x = 0; x < ItemShape.MatrixLen; x++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int y = 0; y < ItemShape.MatrixLen; y++)
             {
-                if (slots[gridPos.x + x, gridPos.y + y].isUsed)
+                if (matrix[x,y] && slots[gridPos.x + x, gridPos.y + y].isUsed)
                 {
                     return false;
                 }
@@ -78,22 +80,32 @@ public class BagGrid : MonoBehaviour
     /// <returns>边界情况是否合法</returns>
     public bool CheckBound(Item item, Vector2Int gridPos)
     {
-        Vector2Int size = item.GetSize();
-        if (gridPos.x < 0 || gridPos.y < 0) return false;
-        if (gridPos.x + size.x > gridWidth) return false;
-        if (gridPos.y + size.y > gridHeight) return false;
+        bool[,] matrix = item.GetRotateMatrix();
+
+        Vector2Int nowPos;
+        //遍历当前矩阵，逐一判断是否越界
+        for (int x = 0;x < ItemShape.MatrixLen; x++)
+        {
+            for (int y = 0;y < ItemShape.MatrixLen; y++)
+            {
+                if (!matrix[x,y]) continue;
+                //只检测有占位的格子
+                nowPos = new Vector2Int(gridPos.x + x, gridPos.y + y);
+                if (!CheckPoint(nowPos)) return false;
+            }
+        }
         return true;
     }
 
     /// <summary>
     /// 检测该点是否在边界内
     /// </summary>
-    /// <param name="gridPos">检测点</param>
+    /// <param name="point">检测点</param>
     /// <returns></returns>
-    public bool CheckPoint(Vector2Int gridPos)
+    public bool CheckPoint(Vector2Int point)
     {
-        if (gridPos.x < 0 || gridPos.y < 0) return false;
-        if (gridPos.x >= gridWidth || gridPos.y >= gridHeight) return false;
+        if (point.x < 0 || point.y < 0) return false;
+        if (point.x >= gridWidth || point.y >= gridHeight) return false;
         return true;
     }
 
@@ -104,19 +116,24 @@ public class BagGrid : MonoBehaviour
     /// <param name="gridPos">物品放置的起始坐标</param>
     public void PlaceItem(Item item,Vector2Int gridPos)
     {
-        Vector2Int size = item.GetSize();
+        bool[,] matrix = item.GetRotateMatrix();
+
         //对应物品格更新状态
-        for (int x = 0; x < size.x; x++)
+        for (int x = 0; x < ItemShape.MatrixLen; x++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int y = 0; y < ItemShape.MatrixLen; y++)
             {
-                slots[gridPos.x + x, gridPos.y + y].AddItem(item);
+                if (matrix[x,y])
+                    slots[gridPos.x + x, gridPos.y + y].AddItem(item);
             }
         }
-        //将物品附着到格子上
-        ItemSlot beginSlot = slots[gridPos.x, gridPos.y]; //原点坐标
-        ItemSlot endSlot = slots[gridPos.x + size.x-1, gridPos.y + size.y-1]; //右上角格子坐标
-        Vector2 centerPos = (beginSlot.transform.position+endSlot.transform.position) / 2; //计算中心坐标
+
+        //将物品附着到格子中心上
+        Vector2Int minOffset = item.GetOriginOffset();
+        Vector2Int maxOffset = item.GetEndOffset();
+        ItemSlot beginSlot = slots[gridPos.x + minOffset.x, gridPos.y + minOffset.y]; //原点坐标
+        ItemSlot endSlot = slots[gridPos.x + maxOffset.x, gridPos.y + maxOffset.y]; //右上角格子坐标
+        Vector2 centerPos = (beginSlot.transform.position + endSlot.transform.position) / 2; //计算中心坐标
         item.transform.position = centerPos;
     }
 
@@ -127,13 +144,14 @@ public class BagGrid : MonoBehaviour
     /// <param name="gridPos">物品放置的起始坐标</param>
     public void RemoveItem(Item item, Vector2Int gridPos)
     {
-        Vector2Int size = item.GetSize();
+        bool[,] matrix = item.GetRotateMatrix();
         //对应物品格更新状态
-        for (int x = 0; x < size.x; x++)
+        for (int x = 0; x < ItemShape.MatrixLen; x++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int y = 0; y < ItemShape.MatrixLen; y++)
             {
-                slots[gridPos.x + x, gridPos.y + y].RemoveItem();
+                if (matrix[x, y])
+                    slots[gridPos.x + x, gridPos.y + y].RemoveItem();
             }
         }
     }
@@ -146,29 +164,21 @@ public class BagGrid : MonoBehaviour
     /// <param name="isPreview">是否预览，true预览，false取消预览</param>
     public void ItemPreview(Item item, Vector2Int gridPos,bool isPreview)
     {
-        Vector2Int size = item.GetSize();
-        Vector2Int nowPos = Vector2Int.zero; //记录当前格子
-        for (int x = 0; x < size.x; x++)
+        bool[,] matrix = item.GetRotateMatrix();
+        Vector2Int nowPos; //记录当前格子
+        for (int x = 0; x < ItemShape.MatrixLen; x++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int y = 0; y < ItemShape.MatrixLen; y++)
             {
-                nowPos.x = gridPos.x + x;
-                nowPos.y = gridPos.y + y;
-                //如果当前格子超出范围，则跳过
-                if (!CheckPoint(nowPos)) continue;
-                ItemSlot slot = slots[nowPos.x, nowPos.y];
-                //取消预览
-                if (!isPreview)
-                {
-                    slot.SetStatus(slot.isUsed); //恢复原本状态
-                    continue;
-                }
+                if (!matrix[x, y]) continue; //物品未占用
+                nowPos = new Vector2Int(gridPos.x + x, gridPos.y + y);
+                if (!CheckPoint(nowPos)) continue; //超出范围
 
-                //设置预览颜色
-                if (slot.isUsed)
-                    slot.SetColor(Defines.previewInvalidColor);
+                ItemSlot slot = slots[nowPos.x, nowPos.y];
+                if (isPreview)
+                    slot.SetColor(slot.isUsed ? Defines.previewInvalidColor : Defines.previewValidColor); //设置预览颜色
                 else
-                    slot.SetColor(Defines.previewValidColor);
+                    slot.SetStatus(slot.isUsed); //取消预览,恢复原本状态
             }
         }
     }
