@@ -21,8 +21,10 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     private Vector2 oldPos; //记录原本位置（实际坐标位置）
     public Vector2Int gridPos; //物品当前放置起始坐标（网格坐标位置，物品新位置）
     private Vector2Int oldGridPos; //记录原本的起始坐标（网格坐标位置，物品旧位置）
-    private Vector2Int lastFrameGridPos; //记录上一帧坐标（网格坐标位置，物品移动过程中的上一帧位置）
+    private Vector2Int oldCenterGridPos; //记录原本的中心坐标（网格坐标位置，物品旧位置，和oldGridPos一起记录）
+    private Vector2Int lastFrameGridPos; //记录上一帧起始坐标（网格坐标位置，物品移动过程中的上一帧位置）
     private BagGrid bagGrid; //当前属于哪个背包
+    private BagGrid oldBagGrid; //原本属于哪个背包
 
     [Header("其他变量")]
     private CanvasGroup canvasGroup; //用于让物品半透明 和 防止遮挡射线检测
@@ -52,11 +54,13 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
             //检测是否在背包中
             if (BagManager.Instance.IsInsideBag(Input.mousePosition,"bag") && bagGrid.bagName != "bag")
             {
+                oldBagGrid = bagGrid;
                 bagGrid = BagManager.Instance.BagDic["bag"];
             }
             //检测是否在储物箱中
             if (BagManager.Instance.IsInsideBag(Input.mousePosition, "storageBox") && bagGrid.bagName != "storageBox")
             {
+                oldBagGrid = bagGrid;
                 bagGrid = BagManager.Instance.BagDic["storageBox"];
             }
         }
@@ -66,10 +70,14 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     {
         isDrag = false;
         currentRotation = 0;
+
         oldGridPos = Defines.nullValue;
+        oldCenterGridPos = Defines.nullValue;
         lastFrameGridPos = gridPos;
+
         bagGrid = BagManager.Instance.BagDic["storageBox"]; //默认属于储物箱
         Icon.sprite = data.icon; //更换图片
+
         Vector2Int size = GetSize();
         rectTransform.sizeDelta = new Vector2(size.x * Defines.cellSize, size.y * Defines.cellSize); //根据数据设置物品大小  
     }
@@ -132,14 +140,28 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         if (bagGrid.CanPlaceItem(this, gridPos))
         {
             bagGrid.PlaceItem(this, gridPos); //放置物品
+
             oldGridPos = gridPos; //更新老位置坐标
+            oldCenterGridPos = CalculateCenterGridPoint(oldGridPos); //保存老位置中心坐标
         }
         else
         {
-            if (bagGrid.CheckBound(this, oldGridPos))
+            oldGridPos = CalculateStartGridPoint(oldCenterGridPos); //位置偏移需要重新计算，防止旋转带来Bug：物品在拖动中旋转，放在错误的地方后回溯时，原本格子位置却没有跟着旋转而改变。
+            
+            if (oldBagGrid != bagGrid)
+                bagGrid = oldBagGrid; //背包回溯到原来的
+
+            if (bagGrid.CanPlaceItem(this, oldGridPos))
+            {
                 bagGrid.PlaceItem(this, oldGridPos); //恢复原本格子占用
-            gridPos = oldGridPos; //新格子位置回退
-            transform.position = oldPos; //回弹  
+                gridPos = oldGridPos; //位置回溯到原来的
+                transform.position = oldPos; //回弹  
+            }
+            else
+            {
+                //TODO：此时若没有位置放置了，则需要重新寻找放置的地方，或者移到别的地方（可能是拿出来时旋转导致的）
+                Debug.Log("原本位置已失效，自动移到新位置");
+            }
         }
     }
 
@@ -181,8 +203,15 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         Vector2Int size = GetSize();
         Vector2Int offset = GetOriginOffset();
         //计算方法：中心点 - 物品矩形长/2 - 物品有效区域左下角 离 形状矩阵左下角原点的 偏移
-        //centerPoint - size/2 - offset
         return new Vector2Int(centerPoint.x - size.x / 2 - offset.x, centerPoint.y - size.y / 2 - offset.y);
+    }
+
+    // 计算物体的中心网格坐标（传入物品起始坐标）
+    private Vector2Int CalculateCenterGridPoint(Vector2Int gridPoint)
+    {
+        Vector2Int size = GetSize();
+        Vector2Int offset = GetOriginOffset();
+        return new Vector2Int(gridPoint.x + size.x / 2 + offset.x, gridPoint.y + size.y / 2 + offset.y);
     }
 
     //获取当前的大小（根据旋转角度而变化）

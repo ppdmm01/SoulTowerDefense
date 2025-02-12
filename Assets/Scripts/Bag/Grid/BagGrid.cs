@@ -72,6 +72,7 @@ public class BagGrid : MonoBehaviour
             {
                 if (matrix[x,y] && slots[gridPos.x + x, gridPos.y + y].isUsed)
                 {
+                    Debug.Log("X:"+x+" Y:"+y);
                     return false;
                 }
             }
