@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -135,6 +137,8 @@ public class BagGrid : MonoBehaviour
             }
         }
         items.Add(item);
+        //测试：更新信息
+        UIManager.Instance.GetPanel<BagPanel>().UpdateBagInfo();
 
         //将物品附着到格子中心上
         Vector2Int minOffset = item.GetOriginOffset();
@@ -163,6 +167,8 @@ public class BagGrid : MonoBehaviour
             }
         }
         items.Remove(item);
+        //测试：更新信息
+        UIManager.Instance.GetPanel<BagPanel>().UpdateBagInfo();
     }
     #endregion
 
@@ -175,10 +181,6 @@ public class BagGrid : MonoBehaviour
     /// <param name="isPreview">是否预览，true预览，false取消预览</param>
     public void ItemPreview(Item item, Vector2Int gridPos,bool isPreview)
     {
-        if (isPreview)
-            Debug.Log("开启预览");
-        else
-            Debug.Log("关闭预览");
         bool[,] matrix = item.GetRotateMatrix();
         Vector2Int nowPos; //记录当前格子
         for (int x = 0; x < ItemShape.MatrixLen; x++)
@@ -196,6 +198,90 @@ public class BagGrid : MonoBehaviour
                     slot.SetStatus(slot.isUsed); //取消预览,恢复原本状态
             }
         }
+    }
+    #endregion
+
+    #region 物品整理
+    /// <summary>
+    /// 自动整理背包（按物品面积排序）
+    /// </summary>
+    public void AutoArrange()
+    {
+        //临时存储所有物品并清空背包  
+        List<Item> tempList = GetAllItems();
+        ClearAllItems();
+
+        // 按物品面积从大到小排序（提高空间利用率）  
+        tempList = tempList.OrderByDescending(i => i.GetSize().x * i.GetSize().y).ToList();
+
+        // 尝试放置每个物品  
+        foreach (Item item in tempList)
+        {
+            if (!TryAutoPlaceItem(item))
+            {
+                Debug.LogError($"物品 {item.data.itemName} 无法放置，背包可能已满");
+                //TODO:后续处理（删除、开新一页等）
+            }
+        }
+
+        items = tempList; //赋值
+    }
+
+    /// <summary>
+    /// 尝试放置物品
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public bool TryAutoPlaceItem(Item item)
+    {
+        // 重置旋转角度  
+        item.currentRotation = 0;
+        item.rectTransform.rotation = Quaternion.Euler(0, 0, item.currentRotation);
+        int begin = -ItemShape.MatrixLen / 2; //（物品起始点可能会在背包格外）
+        //循环四个方向
+        for (int step = 0; step < 4; step++)
+        {
+            // 遍历背包网格（从左上往右下排列，与网格坐标不一致，需转换）
+            for (int y = gridHeight - 1; y >= begin; y--)
+            {
+                for (int x = begin; x < gridWidth; x++)
+                {
+                    item.gridPos = new Vector2Int(x, y);
+                    if (CanPlaceItem(item, item.gridPos))
+                    {
+                        PlaceItem(item, item.gridPos);
+                        item.oldGridPos = item.gridPos; //更新老位置坐标
+                        return true;
+                    }
+                }
+            }
+
+            //旋转90度
+            item.currentRotation += 90;
+            item.rectTransform.rotation = Quaternion.Euler(0, 0, item.currentRotation);
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 获得当前背包所有物品
+    /// </summary>
+    /// <returns></returns>
+    private List<Item> GetAllItems()
+    {
+        List<Item> tempList = new List<Item>();
+        for (int i = 0; i < items.Count; i++)
+            tempList.Add(items[i]);
+        return tempList;
+    }
+
+    /// <summary>
+    /// 清除所有物品
+    /// </summary>
+    private void ClearAllItems()
+    {
+        for (int i = items.Count-1; i >= 0; i--)
+            RemoveItem(items[i], items[i].gridPos);
     }
     #endregion
 }

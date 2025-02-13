@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
   m_Name: RifleSO
   m_EditorClassIdentifier: 
+  id: 5
   itemName: Rifle
   shape:
     shapeMatrix: 01010000010100000101000000010000

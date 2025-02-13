@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,14 +15,14 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
 {
     [Header("物品数据")]
     public ItemSO data; //物品数据
-    private int currentRotation; //当前旋转度数
+    public int currentRotation; //当前旋转度数
     private int lastCurrentRotation; //记录移动物品前的旋转度数
     private Coroutine rotateCoroutine; //旋转动画协程
 
     [Header("相关记录数据")]
     private Vector2 oldPos; //记录原本位置（实际坐标位置）
-    public Vector2Int gridPos; //物品当前放置起始坐标（网格坐标位置，物品新位置）
-    private Vector2Int oldGridPos; //记录物品移动前的起始坐标（网格坐标位置，物品旧位置）
+    [HideInInspector] public Vector2Int gridPos; //物品当前放置起始坐标（网格坐标位置，物品新位置）
+    [HideInInspector] public Vector2Int oldGridPos; //记录物品移动前的起始坐标（网格坐标位置，物品旧位置）
     private Vector2Int lastFrameGridPos; //记录上一帧起始坐标（网格坐标位置，物品移动过程中的上一帧位置）
     private BagGrid bagGrid; //当前属于哪个背包
     private BagGrid oldBagGrid; //原本属于哪个背包
@@ -29,15 +30,14 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     [Header("其他变量")]
     private CanvasGroup canvasGroup; //用于让物品半透明 和 防止遮挡射线检测
     private Image Icon; //图片
-    private RectTransform rectTransform; //变换组件
+    [HideInInspector] public RectTransform rectTransform; //变换组件
     private bool isDrag; //是否被拖拽
 
-    void Start()
+    void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
         Icon = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
-        Init();
     }
 
     private void Update()
@@ -66,7 +66,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         }
     }
 
-    private void Init()
+    public void Init(BagGrid bagGrid)
     {
         isDrag = false;
         currentRotation = 0;
@@ -75,8 +75,9 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         oldGridPos = Defines.nullValue;
         lastFrameGridPos = gridPos;
 
-        bagGrid = BagManager.Instance.BagDic["storageBox"]; //默认属于储物箱
-        oldBagGrid = bagGrid;
+        this.bagGrid = bagGrid;
+        oldBagGrid = this.bagGrid;
+
         Icon.sprite = data.icon; //更换图片
 
         Vector2Int size = GetSize();
@@ -110,6 +111,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     {
         oldPos = transform.position; //记录原本位置
         lastCurrentRotation = currentRotation; //记录上一次旋转度数
+
         transform.position = eventData.position; //物品吸附
         canvasGroup.alpha = 0.6f; //半透明  
         canvasGroup.blocksRaycasts = false; //防止遮挡射线  
@@ -142,11 +144,13 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         if (bagGrid.CanPlaceItem(this, gridPos))
         {
             bagGrid.PlaceItem(this, gridPos); //放置物品
-
+            oldBagGrid = bagGrid; //更新老背包
             oldGridPos = gridPos; //更新老位置坐标
         }
         else
         {
+            Debug.Log("Old:" + oldBagGrid);
+            Debug.Log("New:" + bagGrid);
             if (oldBagGrid != bagGrid)
                 bagGrid = oldBagGrid; //背包回溯到原来的
             if (lastCurrentRotation != currentRotation)
@@ -163,8 +167,8 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
             }
             else
             {
-                //TODO：此时若没有位置放置了，则需要重新寻找放置的地方，或者移到别的地方（可能是拿出来时旋转导致的）
-                Debug.Log("原本位置已失效，自动移到新位置");
+                Debug.LogError($"物品 {data.itemName} 无法放置，背包可能已满");
+                //TODO:后续处理（删除、开新一页等）
             }
         }
     }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
   m_Name: ShotGunSO
   m_EditorClassIdentifier: 
+  id: 6
   itemName: ShotGun
   shape:
     shapeMatrix: 01010000000100000001000000010000
