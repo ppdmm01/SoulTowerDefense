@@ -38,10 +38,9 @@ public class BagManager : SingletonMono<BagManager>
         item.Init(bag);
         if (!bag.TryAutoPlaceItem(item))
         {
-            Debug.LogError($"物品 {item.data.itemName} 无法放置，背包可能已满");
+            Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
             //TODO:后续处理（删除、开新一页等）
-            bag.items.Remove(item);
-            Destroy(itemObj);
+            item.DeleteMe();
         }
     }
 }

@@ -11,7 +11,7 @@ using static UnityEditor.Progress;
 /// <summary>
 /// 物品
 /// </summary>
-public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHandler
+public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHandler,IPointerEnterHandler,IPointerExitHandler
 {
     [Header("物品数据")]
     public ItemSO data; //物品数据
@@ -32,6 +32,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     private Image Icon; //图片
     [HideInInspector] public RectTransform rectTransform; //变换组件
     private bool isDrag; //是否被拖拽
+    [HideInInspector] public bool isDelete; //是否准备删除
 
     void Awake()
     {
@@ -79,6 +80,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         oldBagGrid = this.bagGrid;
 
         Icon.sprite = data.icon; //更换图片
+        Icon.alphaHitTestMinimumThreshold = 0.1f; //设置透明度阈值
 
         Vector2Int size = GetSize();
         rectTransform.sizeDelta = new Vector2(size.x * Defines.cellSize, size.y * Defines.cellSize); //根据数据设置物品大小  
@@ -105,6 +107,18 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     {
         if (eventData.button == PointerEventData.InputButton.Left)
             End(eventData);
+    }
+
+    //显示信息
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        UIManager.Instance.ShowPanel<InfoPanel>().SetInfo(data.itemName,data.description);
+    }
+
+    //隐藏信息
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        UIManager.Instance.HidePanel<InfoPanel>(false);
     }
 
     private void Begin(PointerEventData eventData)
@@ -140,6 +154,8 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
 
         bagGrid.ItemPreview(this, gridPos, false);//取消当前预览
 
+        if (isDelete) return; //如果准备删除，则跳过
+
         //尝试放置物品
         if (bagGrid.CanPlaceItem(this, gridPos))
         {
@@ -149,8 +165,6 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         }
         else
         {
-            Debug.Log("Old:" + oldBagGrid);
-            Debug.Log("New:" + bagGrid);
             if (oldBagGrid != bagGrid)
                 bagGrid = oldBagGrid; //背包回溯到原来的
             if (lastCurrentRotation != currentRotation)
@@ -281,4 +295,17 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     }
     #endregion
 
+    /// <summary>
+    /// 删除自己
+    /// </summary>
+    public void DeleteMe()
+    {
+        if (bagGrid.CanPlaceItem(this, oldGridPos))
+            bagGrid.RemoveItem(this, oldGridPos);
+        else
+            bagGrid.items.Remove(this);
+
+        UIManager.Instance.GetPanel<BagPanel>().UpdateBagInfo();
+        Destroy(this.gameObject);
+    }
 }

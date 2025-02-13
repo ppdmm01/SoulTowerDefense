@@ -13,6 +13,7 @@ public class ItemSO : ScriptableObject
     [Header("基础属性")]
     public int id; //物品id
     public string itemName; //物品名称
+    public string description; //物品描述
     public ItemShape shape; // 物品占格形状  
     public Sprite icon; //图片
 

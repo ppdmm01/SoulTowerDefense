@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   itemName: Ammo
+  description: "\u5E73\u5E73\u65E0\u5947\u7684\u5B50\u5F39"
   shape:
     shapeMatrix: 01000000000000000000000000000000
     allowRotation: 1

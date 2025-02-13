@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 4
   itemName: Medkit
+  description: "\u4E00\u4E2A\u533B\u7597\u7BB1"
   shape:
     shapeMatrix: 01010000010100000000000000000000
     allowRotation: 1
