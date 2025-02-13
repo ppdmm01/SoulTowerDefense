@@ -72,7 +72,6 @@ public class BagGrid : MonoBehaviour
             {
                 if (matrix[x,y] && slots[gridPos.x + x, gridPos.y + y].isUsed)
                 {
-                    Debug.Log("X:"+x+" Y:"+y);
                     return false;
                 }
             }
@@ -176,6 +175,10 @@ public class BagGrid : MonoBehaviour
     /// <param name="isPreview">是否预览，true预览，false取消预览</param>
     public void ItemPreview(Item item, Vector2Int gridPos,bool isPreview)
     {
+        if (isPreview)
+            Debug.Log("开启预览");
+        else
+            Debug.Log("关闭预览");
         bool[,] matrix = item.GetRotateMatrix();
         Vector2Int nowPos; //记录当前格子
         for (int x = 0; x < ItemShape.MatrixLen; x++)
