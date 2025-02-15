@@ -15,6 +15,7 @@ public class ItemSO : ScriptableObject
     public string itemName; //物品名称
     public string description; //物品描述
     public ItemShape shape; // 物品占格形状  
+    public List<DetectionPoint> detectionPoints; //检测点
     public Sprite icon; //图片
 
     [Header("物品标签")]
@@ -120,6 +121,33 @@ public class ItemShape
             }
         }
         return rotated;
+    }
+}
+
+/// <summary>
+/// 检测点，用于检测物品周围指定点的物品
+/// </summary>
+[Serializable]
+public class DetectionPoint
+{
+    [Tooltip("相对物品原点的偏移量")]
+    public Vector2Int pos;
+
+    [Tooltip("需要匹配的标签")]
+    public string[] requiredTags;
+
+    //获取指定角度的检测点相对原点位置
+    public Vector2Int GetRotatePoint(int rotation)
+    {
+        int steps = (rotation / 90) % 4;
+        switch (steps)
+        {
+            case 0: return pos; //0
+            case 1: return new Vector2Int(ItemShape.MatrixLen - pos.y - 1, pos.x); // 逆时针90（顺时针270）
+            case 2: return new Vector2Int(ItemShape.MatrixLen - pos.x - 1, ItemShape.MatrixLen - pos.y - 1); // 180  
+            case 3: return new Vector2Int(pos.y, ItemShape.MatrixLen - pos.x - 1); // 逆时针270（顺时针90）
+            default: return pos;
+        }
     }
 }
 

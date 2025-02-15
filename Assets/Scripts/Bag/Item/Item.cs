@@ -2,11 +2,12 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 /// <summary>
 /// 物品
@@ -27,6 +28,8 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     private BagGrid bagGrid; //当前属于哪个背包
     private BagGrid oldBagGrid; //原本属于哪个背包
 
+    private List<GameObject> starPoints; //记录目前亮的星星
+
     [Header("其他变量")]
     private CanvasGroup canvasGroup; //用于让物品半透明 和 防止遮挡射线检测
     private Image Icon; //图片
@@ -39,6 +42,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         canvasGroup = GetComponent<CanvasGroup>();
         Icon = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
+        starPoints = new List<GameObject>();
     }
 
     private void Update()
@@ -65,6 +69,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
                 bagGrid = BagManager.Instance.BagDic["storageBox"];
             }
         }
+
     }
 
     public void Init(BagGrid bagGrid)
@@ -112,12 +117,14 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     //显示信息
     public void OnPointerEnter(PointerEventData eventData)
     {
+        GetConnectItems();
         UIManager.Instance.ShowPanel<InfoPanel>().SetInfo(data.itemName,data.description);
     }
 
     //隐藏信息
     public void OnPointerExit(PointerEventData eventData)
     {
+        HideAllStar();
         UIManager.Instance.HidePanel<InfoPanel>(false);
     }
 
@@ -152,7 +159,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         canvasGroup.blocksRaycasts = true;
         isDrag = false;
 
-        bagGrid.ItemPreview(this, gridPos, false);//取消当前预览
+        CancelPreview(gridPos);//取消当前预览
 
         if (isDelete) return; //如果准备删除，则跳过
 
@@ -170,7 +177,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
             if (lastCurrentRotation != currentRotation)
             {
                 RotateItem(lastCurrentRotation - currentRotation); //回溯到原来的角度
-                bagGrid.ItemPreview(this, gridPos, false); //旋转时会更新预览，需要再次关掉
+                CancelPreview(gridPos); //旋转时会更新预览，需要再次关掉
             }
 
             if (bagGrid.CanPlaceItem(this, oldGridPos))
@@ -186,14 +193,34 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
             }
         }
     }
+    #endregion
 
+    #region 预览相关
     //更新预览
     public void UpdatePreview()
     {
+        CancelPreview(lastFrameGridPos); //取消上一次的预览格子
+
+        //更新位置
         gridPos = GetStartGridPoint(Input.mousePosition);
-        bagGrid.ItemPreview(this, lastFrameGridPos, false); //取消上一次的预览格子
         lastFrameGridPos = gridPos; //记录
-        bagGrid.ItemPreview(this, gridPos, true); //更新当前预览格子
+
+        ShowPreview(gridPos); //更新当前预览格子
+    }
+
+    //取消指定位置的预览
+    public void CancelPreview(Vector2Int gridPos)
+    {
+        bagGrid.ItemPreview(this, gridPos, false);
+        HideAllStar();
+    }
+
+    //显示指定位置的预览
+    public void ShowPreview(Vector2Int gridPos)
+    {
+        bagGrid.ItemPreview(this, gridPos, true);
+        GetConnectItems();
+        transform.SetAsLastSibling(); //设置在父级的最后一层，拖拽的物品要显示在最前面
     }
     #endregion
 
@@ -259,7 +286,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         if (!data.shape.allowRotation) return;
 
         //清空上一帧的预览
-        bagGrid.ItemPreview(this, lastFrameGridPos, false);
+        CancelPreview(lastFrameGridPos);
 
         //旋转并播放动画
         currentRotation = (currentRotation + angle + 360) % 360; //加上360，防止出现负数
@@ -268,7 +295,8 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         //旋转后重新更新预览
         gridPos = GetStartGridPoint(Input.mousePosition);
         lastFrameGridPos = gridPos; //更新记录
-        bagGrid.ItemPreview(this, gridPos, true);
+
+        ShowPreview(gridPos); //更新当前预览格子
     }
 
     //旋转动画
@@ -292,6 +320,63 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
             yield return null;
         }
         rectTransform.rotation = end;
+    }
+    #endregion
+
+    #region 检测周围物品相关
+
+    //获取周围物品并显示所有星星
+    public List<Item> GetConnectItems()
+    {
+        List<Item> neighbors = new List<Item>();
+
+        foreach (DetectionPoint point in data.detectionPoints)
+        {
+            //计算实际检测位置
+            Vector2Int rotatedOffset = point.GetRotatePoint(currentRotation); //获取当前角度目标位置的点
+            Vector2Int checkPos = gridPos + rotatedOffset; //在背包中的位置
+
+            //边界检查  
+            if (!bagGrid.CheckPoint(checkPos)) continue;
+
+            //获取目标物品  
+            ItemSlot slot = bagGrid.slots[checkPos.x, checkPos.y];
+            if (slot.nowItem == null)
+            {
+                CreateStar(slot.transform.position, false);
+            }
+            else
+            {
+                CreateStar(slot.transform.position, true);
+                neighbors.Add(slot.nowItem);
+            }
+
+            //// 标签匹配检查  
+            //if (point.requiredTags.Length > 0 &&
+            //    !slot.item.data.itemTags.Intersect(point.requiredTags).Any())
+            //    continue;
+        }
+
+        return neighbors.Distinct().ToList(); //去重
+    }
+
+    //设置星星图片
+    public void CreateStar(Vector2 pos,bool isShow)
+    {
+        GameObject starObj = UIManager.Instance.CreateUIObj("Bag/StarPoint",BagManager.Instance.itemsTrans);
+        starObj.transform.position = pos;
+        starObj.GetComponent<StarPoint>().SetStarActive(isShow);
+        starPoints.Add(starObj);
+    }
+
+    //隐藏所有星星
+    public void HideAllStar()
+    {
+        foreach (GameObject obj in starPoints)
+        {
+            UIManager.Instance.DestroyUIObj(obj);
+        }
+        starPoints.Clear();
     }
     #endregion
 

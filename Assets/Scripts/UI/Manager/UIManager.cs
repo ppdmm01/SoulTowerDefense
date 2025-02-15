@@ -10,6 +10,9 @@ public class UIManager : Singleton<UIManager>
 
     //存储面板的容器
     private Dictionary<string, BasePanel> panelDic = new Dictionary<string, BasePanel>();
+    
+    //存储UI物体的容器
+    private List<GameObject> UIObjList = new List<GameObject>();
 
     private UIManager()
     {
@@ -95,5 +98,33 @@ public class UIManager : Singleton<UIManager>
         if (panelDic.ContainsKey(panelName))
             return panelDic[panelName] as T;
         return null;
+    }
+
+    /// <summary>
+    /// 创建UI物体
+    /// </summary>
+    /// <param name="resName">资源路径名</param>
+    /// <param name="parentTrans">父对象的变换组件</param>
+    /// <returns></returns>
+    public GameObject CreateUIObj(string resName,Transform parentTrans)
+    {
+        GameObject UIObj = GameObject.Instantiate(Resources.Load<GameObject>(resName)); //从对象池中获取对象
+        UIObj.transform.SetParent(parentTrans, false);
+        UIObj.transform.SetAsLastSibling(); //设置在父级的最后一层
+        UIObjList.Add(UIObj);
+        return UIObj;
+    }
+
+    /// <summary>
+    /// 删除UI物体
+    /// </summary>
+    /// <param name="UIObj">要删除的UI物体</param>
+    public void DestroyUIObj(GameObject UIObj)
+    {
+        if (UIObjList.Contains(UIObj))
+        {
+            UIObjList.Remove(UIObj);
+            GameObject.Destroy(UIObj);
+        }
     }
 }

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 /// <summary>
 /// 物品格
 /// </summary>
 public class ItemSlot : MonoBehaviour
 {
-    public bool isUsed; //是否被占用
+    [HideInInspector] public bool isUsed; //是否被占用
     private BagGrid bagGrid; //物品格属于哪个背包
-    private Item nowItem; //当前物品格的物品
+    [HideInInspector] public Item nowItem; //当前物品格的物品
+
     private Image slotImg;
 
     void Start()

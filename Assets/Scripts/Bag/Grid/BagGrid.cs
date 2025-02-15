@@ -14,12 +14,11 @@ public class BagGrid : MonoBehaviour
     public string bagName; //背包名
     [SerializeField] private int gridWidth = 10; //网格宽
     [SerializeField] private int gridHeight = 10; //网格高
-    private float cellSize = Defines.cellSize; //每个格子的大小
 
     private GameObject ItemSlotObj; //物品格预设体
-    private ItemSlot[,] slots; //存储物品格
+    public ItemSlot[,] slots; //存储物品格
 
-    public List<Item> items; //存储的物品
+    [HideInInspector] public List<Item> items; //存储的物品
 
     private GridLayoutGroup gridLayoutGroup;
 
