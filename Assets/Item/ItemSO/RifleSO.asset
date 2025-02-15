@@ -18,6 +18,9 @@ MonoBehaviour:
   shape:
     shapeMatrix: 01010000010100000101000000010000
     allowRotation: 1
+  detectionPoints:
+  - pos: {x: 4, y: 1}
+    requiredTags: []
   icon: {fileID: 21300000, guid: b638923084c9fb145bded1af37ff7dc3, type: 3}
   itemTags:
   - "\u6B65\u67AA"

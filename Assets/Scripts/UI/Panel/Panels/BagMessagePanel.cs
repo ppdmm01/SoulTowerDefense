@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class InfoPanel : BasePanel
+public class BagMessagePanel : BasePanel
 {
     public TextMeshProUGUI nameTxt;
     public TextMeshProUGUI InfoTxt;

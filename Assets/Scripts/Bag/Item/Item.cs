@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 /// <summary>
@@ -29,6 +30,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     private BagGrid oldBagGrid; //原本属于哪个背包
 
     private List<GameObject> starPoints; //记录目前亮的星星
+    private List<GameObject> itemFrameList; //记录物品边框
 
     [Header("其他变量")]
     private CanvasGroup canvasGroup; //用于让物品半透明 和 防止遮挡射线检测
@@ -43,6 +45,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         Icon = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
         starPoints = new List<GameObject>();
+        itemFrameList = new List<GameObject>();
     }
 
     private void Update()
@@ -69,7 +72,6 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
                 bagGrid = BagManager.Instance.BagDic["storageBox"];
             }
         }
-
     }
 
     public void Init(BagGrid bagGrid)
@@ -89,6 +91,10 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
 
         Vector2Int size = GetSize();
         rectTransform.sizeDelta = new Vector2(size.x * Defines.cellSize, size.y * Defines.cellSize); //根据数据设置物品大小  
+
+        //生成物品边框
+        CreateItemFrame();
+        HideItemFrame();
     }
 
 
@@ -118,14 +124,14 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     public void OnPointerEnter(PointerEventData eventData)
     {
         GetConnectItems();
-        UIManager.Instance.ShowPanel<InfoPanel>().SetInfo(data.itemName,data.description);
+        UIManager.Instance.ShowPanel<BagMessagePanel>().SetInfo(data.itemName,data.description);
     }
 
     //隐藏信息
     public void OnPointerExit(PointerEventData eventData)
     {
         HideAllStar();
-        UIManager.Instance.HidePanel<InfoPanel>(false);
+        UIManager.Instance.HidePanel<BagMessagePanel>(false);
     }
 
     private void Begin(PointerEventData eventData)
@@ -141,8 +147,9 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         //取消当前格子占用
         if (bagGrid.CheckBound(this, gridPos))
             bagGrid.RemoveItem(this, gridPos);
-        //更新预览
-        UpdatePreview();
+
+        UpdatePreview(); //更新预览
+        ShowItemFrame(); //显示边框
     }
 
     private void Process(PointerEventData eventData)
@@ -160,6 +167,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         isDrag = false;
 
         CancelPreview(gridPos);//取消当前预览
+        HideItemFrame(); //隐藏边框
 
         if (isDelete) return; //如果准备删除，则跳过
 
@@ -221,6 +229,53 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         bagGrid.ItemPreview(this, gridPos, true);
         GetConnectItems();
         transform.SetAsLastSibling(); //设置在父级的最后一层，拖拽的物品要显示在最前面
+    }
+
+    //生成物品边框
+    public void CreateItemFrame()
+    {
+        Vector2 size = GetSize();
+        Vector2Int originOffset = GetOriginOffset();
+        bool[,] matrix = GetRotateMatrix();
+
+        //计算每个边框位置并生成
+        for (int x = 0; x < ItemShape.MatrixLen; x++)
+        {
+            for (int y = 0; y < ItemShape.MatrixLen; y++)
+            {
+                if (matrix[x, y])
+                {
+                    GameObject itemFrameObj = UIManager.Instance.CreateUIObj("Bag/ItemFrame",transform);
+                    Vector2Int point = new Vector2Int(x,y) - originOffset; //计算转换后物品位置坐标（转换成从(0,0)开始，方便计算）
+                    Vector2 mousePoint = new Vector2((size.x - 1) / 2, (size.y - 1) / 2); //计算鼠标点的位置下标（含小数点）
+                    Vector2 offset = point - mousePoint; //计算鼠标与该边框所在位置的偏移
+
+                    //Vector2 nowPos = Input.mousePosition - new Vector3(offset.x*Defines.cellSize, offset.y * Defines.cellSize, 0);
+                    //Debug.Log("nowPos:"+nowPos);
+                    //Debug.Log("MOUSEPosition:" + Input.mousePosition);                 
+                    itemFrameObj.transform.localPosition = new Vector3(offset.x * Defines.cellSize, offset.y * Defines.cellSize, 0);
+                    itemFrameList.Add(itemFrameObj);    
+                }
+            }
+        }
+    }
+
+    //显示边框
+    public void ShowItemFrame()
+    {
+        foreach (GameObject obj in itemFrameList)
+        {
+            obj.SetActive(true);
+        }
+    }
+
+    //隐藏边框
+    public void HideItemFrame()
+    {
+        foreach (GameObject obj in itemFrameList)
+        {
+            obj.SetActive(false);
+        }
     }
     #endregion
 
@@ -391,6 +446,11 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
             bagGrid.items.Remove(this);
 
         UIManager.Instance.GetPanel<BagPanel>().UpdateBagInfo();
+
+        //销毁
+        foreach (GameObject obj in itemFrameList)
+            Destroy(obj);
+        itemFrameList.Clear();
         Destroy(this.gameObject);
     }
 }

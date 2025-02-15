@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3394401603315903975}
   - component: {fileID: 7364310115164895621}
   m_Layer: 5
-  m_Name: InfoPanel
+  m_Name: BagMessagePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
