@@ -14,4 +14,8 @@ public static class Defines
     public static Color previewInvalidColor = Color.red; //预览非法颜色
     public static Color previewValidColor = Color.green; //预览合法颜色
     public static Vector2Int nullValue = new Vector2Int(-1,-1); //初始化值，相当于null
+
+    //塔防相关常量
+    public static Color validRangeColor = new Color(0, 0, 0, 0.2f); //合法范围的颜色
+    public static Color invalidRangeColor = new Color(1f, 0f, 0f, 0.2f); //无效范围的颜色
 }

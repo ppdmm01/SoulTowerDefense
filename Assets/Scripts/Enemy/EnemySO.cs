@@ -1,0 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "EnemySO",menuName = "ScriptableObject/EnemySO")]
+public class EnemySO : ScriptableObject
+{
+    [Header("基础属性")]
+    public int hp; //血量
+    public float moveSpeed; //移动速度
+    public int atk; //攻击力
+}

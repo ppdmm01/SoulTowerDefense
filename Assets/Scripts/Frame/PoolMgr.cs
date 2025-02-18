@@ -187,6 +187,7 @@ public class PoolMgr : Singleton<PoolMgr>
     /// <param name="obj">放入的对象</param>
     public void PushObj(GameObject obj)
     {
+        obj.transform.position = Vector2.one * 1000; //移到看不见的位置
         //将对象压入抽屉当中
         poolDic[obj.name].Push(obj);
     }

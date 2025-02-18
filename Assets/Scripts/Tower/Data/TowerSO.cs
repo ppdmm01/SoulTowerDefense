@@ -1,0 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "TowerSO",menuName = "ScriptableObject/TowerSO")]
+public class TowerSO : ScriptableObject
+{
+    [Header("基础属性")]
+    public int hp; //血量
+    public int cost; //花费
+
+    [Header("攻击相关")]
+    public bool isAttacker; //是否是攻击者
+    public int damage; //伤害
+    public float range; //攻击范围
+    public float interval; //攻击间隔
+
+    [Header("生产资源相关")]
+    public bool isProducer; //是否生产资源
+    public int output; //每次产量
+    public float cooldown; //生产冷却时间
+}
