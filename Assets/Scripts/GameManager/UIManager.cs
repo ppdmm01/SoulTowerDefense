@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class UIManager : Singleton<UIManager>
 {
     //场景上的Canvas
-    private Transform canvasTrans;
+    public Transform canvasTrans;
 
     //存储面板的容器
     private Dictionary<string, BasePanel> panelDic = new Dictionary<string, BasePanel>();
@@ -126,5 +126,18 @@ public class UIManager : Singleton<UIManager>
             UIObjList.Remove(UIObj);
             GameObject.Destroy(UIObj);
         }
+    }
+
+    /// <summary>
+    /// 显示跳字文本
+    /// </summary>
+    /// <param name="txt">文本</param>
+    /// <param name="color">颜色</param>
+    /// <param name="pos">位置</param>
+    public void ShowTxtPopup(string txt,Color color, Vector2 pos)
+    {
+        GameObject obj = CreateUIObj("UI/Popup/TxtPopup", canvasTrans);
+        UIPopup txtPopup = obj.GetComponent<UIPopup>();
+        txtPopup.Init(txt, color, pos);
     }
 }

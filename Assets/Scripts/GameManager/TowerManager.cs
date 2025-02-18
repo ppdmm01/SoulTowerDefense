@@ -93,7 +93,7 @@ public class TowerManager : SingletonMono<TowerManager>
             collisonTowerList.Clear(); //清空数据，方便下一次放置塔防时调用
         }
         else
-        {
+        { 
             Debug.Log("位置不足，放置失败！");
         }
 

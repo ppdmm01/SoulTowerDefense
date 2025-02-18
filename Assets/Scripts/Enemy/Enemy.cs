@@ -39,6 +39,8 @@ public class Enemy : MonoBehaviour
         //特效
         GameObject effObj = PoolMgr.Instance.GetObj("Effect/BloodEffect");
         effObj.transform.position = transform.position;
+        //受击数字
+        UIManager.Instance.ShowTxtPopup(dmg.ToString(),Color.red,transform.position);
         //判断死亡
         if (nowHp < 0)
         {

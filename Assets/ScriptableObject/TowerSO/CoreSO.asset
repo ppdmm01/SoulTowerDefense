@@ -19,5 +19,5 @@ MonoBehaviour:
   range: 0
   interval: 0
   isProducer: 1
-  output: 15
-  cooldown: 5
+  output: 10
+  cooldown: 2

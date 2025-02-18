@@ -25,7 +25,7 @@ public class BaseTower : MonoBehaviour
     protected float produceTimer; //生产计时器
     protected Animator ani; //动画
 
-    protected List<Transform> enemyList; //记录在范围内的敌人
+    public List<Transform> enemyList; //记录在范围内的敌人
 
     [HideInInspector] public bool isUsed; //是否启用
     //public bool canPlace; //是否可以放置
@@ -102,6 +102,7 @@ public class BaseTower : MonoBehaviour
     {
         FlashSmoothly(1f, Color.yellow, () =>
         {
+            UIManager.Instance.ShowTxtPopup(data.output.ToString(), Color.yellow, transform.position);
             GameResManager.Instance.AddQiNum(data.output);
         });
     }
@@ -110,7 +111,9 @@ public class BaseTower : MonoBehaviour
     {
         //检测敌人是否进入范围
         if (collision.CompareTag("Enemy") && !enemyList.Contains(collision.transform))
+        {
             enemyList.Add(collision.transform);
+        }
 
         //防御塔放置相关碰撞检测
         if (collision.CompareTag("Tower") && TowerManager.Instance.isPlacing && TowerManager.Instance.target == this)
@@ -143,17 +146,23 @@ public class BaseTower : MonoBehaviour
     {
         Vector2 corePos = TowerManager.Instance.core.transform.position;
         Transform targetTrans = null;
-        foreach (Transform enemyTrans in enemyList)
+        for (int i = enemyList.Count-1;i >=0;i--)
         {
+            if (Vector2.Distance(corePos, enemyList[i].position) > 100) //如果距离非常远，则代表敌人被消灭（对象池销毁）
+            {
+                enemyList.RemoveAt(i);
+                continue;
+            }
+
             if (targetTrans == null)
             {
-                targetTrans = enemyTrans;
+                targetTrans = enemyList[i];
             }
             else
             {
-                if (Vector2.Distance(corePos,enemyTrans.position) < Vector2.Distance(corePos, targetTrans.position))
+                if (Vector2.Distance(corePos, enemyList[i].position) < Vector2.Distance(corePos, targetTrans.position))
                 {
-                    targetTrans = enemyTrans;
+                    targetTrans = enemyList[i];
                 }
             }
         }
