@@ -50,6 +50,7 @@ public class TowerManager : SingletonMono<TowerManager>
         if (towerObj == null)
             Debug.LogError("防御塔不存在！");
 
+        tower.towerCollider.isTrigger = true;
         tower.isUsed = false;
         isPlacing = true;
         target = tower;
@@ -74,29 +75,22 @@ public class TowerManager : SingletonMono<TowerManager>
     /// </summary>
     public void PlaceTower()
     {
-        if (CanPlace())
+        if (HasResources())
         {
-            if (HasResources())
-            {
-                GameResManager.Instance.AddQiNum(-target.data.cost); //消耗资源
-                target.isUsed = true;
-                isPlacing = false;
-                target.HideRange();
-                target = null;
-            }
-            else
-            {
-                Debug.Log("资源不足，放置失败！");
-                //CancelPlaceTower();
-            }
-
-            collisonTowerList.Clear(); //清空数据，方便下一次放置塔防时调用
+            GameResManager.Instance.AddQiNum(-target.data.cost); //消耗资源
+            target.towerCollider.isTrigger = false;
+            target.isUsed = true;
+            isPlacing = false;
+            target.HideRange();
+            target = null;
         }
         else
-        { 
-            Debug.Log("位置不足，放置失败！");
+        {
+            Debug.Log("资源不足，放置失败！");
+            //CancelPlaceTower();
         }
 
+        collisonTowerList.Clear(); //清空数据，方便下一次放置塔防时调用
     }
 
     /// <summary>
@@ -153,7 +147,7 @@ public class TowerManager : SingletonMono<TowerManager>
             target.transform.position = mousePos;
             //显示防御塔范围
             target.ShowRange();
-            if (CanPlace() && HasResources())
+            if (HasResources())
                 target.SetRangeColor(Defines.validRangeColor);
             else
                 target.SetRangeColor(Defines.invalidRangeColor);
@@ -168,14 +162,6 @@ public class TowerManager : SingletonMono<TowerManager>
                 CancelPlaceTower();
             }
         }
-    }
-
-    /// <summary>
-    /// 是否可以放置防御塔
-    /// </summary>
-    public bool CanPlace()
-    {
-        return collisonTowerList.Count <= 0;
     }
     
     /// <summary>

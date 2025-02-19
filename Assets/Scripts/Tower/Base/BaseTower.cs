@@ -20,6 +20,9 @@ public class BaseTower : MonoBehaviour
     public GameObject rangeObj; //显示范围
     public CircleCollider2D rangeTrigger; //范围检测器
 
+    [Header("防御塔碰撞范围")]
+    public CircleCollider2D towerCollider; //防御塔碰撞范围
+
     protected Transform target; //瞄准目标
     protected float attackTimer; //发射计时器
     protected float produceTimer; //生产计时器
@@ -28,12 +31,18 @@ public class BaseTower : MonoBehaviour
     public List<Transform> enemyList; //记录在范围内的敌人
 
     [HideInInspector] public bool isUsed; //是否启用
-    //public bool canPlace; //是否可以放置
 
     protected virtual void Start()
     {
         enemyList = new List<Transform>();
         ani = GetComponent<Animator>();
+
+        Material material = Resources.Load<Material>("Material/FlashMaterial");
+        foreach (SpriteRenderer renderer in renderers)
+        {
+            if (renderer.material != material)
+                renderer.material = material;   
+        }
 
         attackTimer = 0;
         produceTimer = 0;
@@ -204,10 +213,13 @@ public class BaseTower : MonoBehaviour
     public void Wound(int dmg)
     {
         nowHp -= dmg;
+        //受击数字
+        UIManager.Instance.ShowTxtPopup(dmg.ToString(), Color.magenta, transform.position);
         if (nowHp < 0)
         {
             Dead();
         }
+        Flash(0.1f,Color.white);
     }
 
     /// <summary>
@@ -216,6 +228,7 @@ public class BaseTower : MonoBehaviour
     public void Dead()
     {
         Debug.Log("防御塔销毁");
+        Destroy(gameObject);
     }
 
     /// <summary>
@@ -244,9 +257,12 @@ public class BaseTower : MonoBehaviour
         {
             spriteRenderer.material.SetFloat("_FlashAmount",1);
             spriteRenderer.material.SetColor("_FlashColor", color);
-            yield return new WaitForSeconds(time);
+        }
+        yield return new WaitForSeconds(time);
+        foreach (SpriteRenderer spriteRenderer in renderers)
+        {
             spriteRenderer.material.SetColor("_FlashColor", Color.white);
-            spriteRenderer.material.SetFloat("_FlashAmount",0);
+            spriteRenderer.material.SetFloat("_FlashAmount", 0);
         }
     }
 

@@ -12,6 +12,10 @@ public class Enemy : MonoBehaviour
     private int nowHp;
 
     private Vector3 dir; //敌人移动方向
+    private BaseTower target; //敌人攻击的目标
+    private List<BaseTower> towerList; //范围内的防御塔
+    private bool isAttack; //是否正在攻击
+    private float attackTimer;
 
     //闪白特效相关
     private SpriteRenderer spriteRenderer;
@@ -20,14 +24,38 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         nowHp = data.hp;
+        attackTimer = 0;
+        target = null;
+        towerList = new List<BaseTower>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         originColor = spriteRenderer.color;
     }
 
     void Update()
     {
-        dir = (TowerManager.Instance.core.transform.position - transform.position).normalized;
-        transform.position += dir * Time.deltaTime * data.moveSpeed;
+        attackTimer += Time.deltaTime;
+
+        if (target == null)
+        {
+            attackTimer -= Time.deltaTime;
+            target = FindTarget();
+        }
+
+        if (target != null)
+        {
+            //攻击
+            if (attackTimer >= data.interval)
+            {
+                attackTimer = 0;
+                target.Wound(data.atk);
+            }
+        }
+        else
+        {
+            //移动
+            dir = (TowerManager.Instance.core.transform.position - transform.position).normalized;
+            transform.position += dir * Time.deltaTime * data.moveSpeed;
+        }
     }
 
     /// <summary>
@@ -75,8 +103,37 @@ public class Enemy : MonoBehaviour
         spriteRenderer.color = originColor;
     }
 
+    private BaseTower FindTarget()
+    {
+        if (towerList.Count == 0) return null;
+        return towerList[0];
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Tower"))
+        {
+            BaseTower tower = collision.GetComponent<BaseTower>();
+            if (!tower.isUsed) return;
+            if (!towerList.Contains(tower))
+                towerList.Add(tower);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Tower"))
+        {
+            BaseTower tower = collision.GetComponent<BaseTower>();
+            if (!tower.isUsed) return;
+            if (towerList.Contains(tower))
+                towerList.Remove(tower);
+        }
+    }
+
     private void OnDisable()
     {
         spriteRenderer.color = originColor;
+        towerList.Clear();
     }
 }

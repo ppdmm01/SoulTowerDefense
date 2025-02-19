@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ·ÀÓùËşÊı¾İ
+/// </summary>
 [CreateAssetMenu(fileName = "TowerSO",menuName = "ScriptableObject/TowerSO")]
 public class TowerSO : ScriptableObject
 {

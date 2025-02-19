@@ -16,7 +16,7 @@ MonoBehaviour:
   cost: 10
   isAttacker: 1
   damage: 5
-  range: 5
+  range: 4
   interval: 1
   isProducer: 0
   output: 0

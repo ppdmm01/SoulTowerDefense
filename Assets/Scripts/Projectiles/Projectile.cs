@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    protected int damage;
+    public float moveSpeed; //“∆∂ØÀŸ∂»
+    protected int damage; //…À∫¶
+    protected float explosionRange; //±¨’®∑∂Œß
 
     protected virtual void Start()
     {
@@ -18,12 +19,12 @@ public class Projectile : MonoBehaviour
     }
 
     /// <summary>
-    /// …Ë÷√…À∫¶
+    /// ≥ı ºªØ
     /// </summary>
-    /// <param name="dmg">…À∫¶÷µ</param>
-    public void SetDamage(int dmg)
+    public void Init(int damage,float explosionRange = 0f)
     {
-        damage = dmg;
+        this.damage = damage;
+        this.explosionRange = explosionRange;
     }
 
     private IEnumerator DestroyMe(float time)

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrossbowTower : BaseTower
+public class FireDragonTower : BaseTower
 {
     [Header("投射物资源路径")]
     public string projectilePath = "Projectiles/Arrow";
@@ -14,10 +14,10 @@ public class CrossbowTower : BaseTower
     /// </summary>
     public void CreateProjectile()
     {
-        GameObject arrowObj = PoolMgr.Instance.GetObj(projectilePath);
-        Arrow arrow = arrowObj.GetComponent<Arrow>();
-        arrow.Init(data.damage);
-        arrow.transform.position = firePos.position;
-        arrow.transform.rotation = firePos.rotation;
+        GameObject obj = PoolMgr.Instance.GetObj(projectilePath);
+        FireDragon fireDragon = obj.GetComponent<FireDragon>();
+        fireDragon.Init(data.damage,2f);
+        fireDragon.transform.position = firePos.position;
+        fireDragon.transform.rotation = firePos.rotation;
     }
 }

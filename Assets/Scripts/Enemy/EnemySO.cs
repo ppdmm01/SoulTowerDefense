@@ -9,4 +9,5 @@ public class EnemySO : ScriptableObject
     public int hp; //血量
     public float moveSpeed; //移动速度
     public int atk; //攻击力
+    public float interval; //攻击间隔
 }
