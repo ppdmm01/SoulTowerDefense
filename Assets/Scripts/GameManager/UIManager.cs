@@ -108,9 +108,7 @@ public class UIManager : Singleton<UIManager>
     /// <returns></returns>
     public GameObject CreateUIObj(string resName,Transform parentTrans)
     {
-        GameObject UIObj = GameObject.Instantiate(Resources.Load<GameObject>(resName)); //从对象池中获取对象
-        UIObj.transform.SetParent(parentTrans, false);
-        UIObj.transform.SetAsLastSibling(); //设置在父级的最后一层
+        GameObject UIObj = PoolMgr.Instance.GetUIObj(resName); //从对象池中获取对象
         UIObjList.Add(UIObj);
         return UIObj;
     }
@@ -124,7 +122,7 @@ public class UIManager : Singleton<UIManager>
         if (UIObjList.Contains(UIObj))
         {
             UIObjList.Remove(UIObj);
-            GameObject.Destroy(UIObj);
+            PoolMgr.Instance.PushUIObj(UIObj);
         }
     }
 

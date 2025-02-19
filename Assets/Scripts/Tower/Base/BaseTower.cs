@@ -227,7 +227,6 @@ public class BaseTower : MonoBehaviour
     /// </summary>
     public void Dead()
     {
-        Debug.Log("·ÀÓùËşÏú»Ù");
         Destroy(gameObject);
     }
 

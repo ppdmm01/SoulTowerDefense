@@ -10,6 +10,7 @@ using UnityEngine;
 public class UIPopup : MonoBehaviour
 {
     private TextMeshProUGUI digitalText;
+    private Sequence seq;
     [SerializeField] private float moveHeight = 50f; //移动高度  
     [SerializeField] private float duration = 0.8f; //持续时间
     [SerializeField] private float maxOffset = 30f; //水平偏移
@@ -23,6 +24,7 @@ public class UIPopup : MonoBehaviour
         //世界坐标转屏幕坐标  
         Vector2 screenPos = mainCamera.WorldToScreenPoint(pos);
         transform.position = screenPos;
+        transform.localScale = Vector3.one;
 
         // 设置数值和初始状态  
         digitalText.text = txt;
@@ -31,9 +33,9 @@ public class UIPopup : MonoBehaviour
 
         //随机水平偏移  
         float offsetX = Random.Range(-maxOffset, maxOffset);
-
+        
         //动画序列  
-        Sequence seq = DOTween.Sequence();
+        seq = DOTween.Sequence();
         //垂直移动
         seq.Append(transform.DOMoveY(screenPos.y + moveHeight, duration).SetEase(Ease.OutQuad));
         //水平偏移  
@@ -43,6 +45,15 @@ public class UIPopup : MonoBehaviour
         //缩放动画  
         seq.Join(transform.DOPunchScale(Vector3.one * 0.3f, 0.3f, 2));
         //动画完成后销毁  
-        seq.OnComplete(() => UIManager.Instance.DestroyUIObj(gameObject));
+        seq.OnComplete(() => 
+        {
+            UIManager.Instance.DestroyUIObj(gameObject);
+        });
+
+    }
+
+    private void OnDisable()
+    {
+        DOTween.Kill(transform);
     }
 }

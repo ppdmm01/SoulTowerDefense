@@ -8,7 +8,7 @@ public class Projectile : MonoBehaviour
     protected int damage; //…À∫¶
     protected float explosionRange; //±¨’®∑∂Œß
 
-    protected virtual void Start()
+    private void OnEnable()
     {
         StartCoroutine(DestroyMe(5f));
     }
@@ -31,5 +31,10 @@ public class Projectile : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         PoolMgr.Instance.PushObj(gameObject);
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 }

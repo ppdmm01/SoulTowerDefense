@@ -14,7 +14,6 @@ public class Enemy : MonoBehaviour
     private Vector3 dir; //敌人移动方向
     private BaseTower target; //敌人攻击的目标
     private List<BaseTower> towerList; //范围内的防御塔
-    private bool isAttack; //是否正在攻击
     private float attackTimer;
 
     //闪白特效相关
@@ -52,9 +51,12 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            //移动
-            dir = (TowerManager.Instance.core.transform.position - transform.position).normalized;
-            transform.position += dir * Time.deltaTime * data.moveSpeed;
+            if (TowerManager.Instance.core != null)
+            {
+                //移动
+                dir = (TowerManager.Instance.core.transform.position - transform.position).normalized;
+                transform.position += dir * Time.deltaTime * data.moveSpeed;
+            }
         }
     }
 
@@ -133,6 +135,7 @@ public class Enemy : MonoBehaviour
 
     private void OnDisable()
     {
+        target = null;
         spriteRenderer.color = originColor;
         towerList.Clear();
     }
