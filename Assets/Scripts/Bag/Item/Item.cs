@@ -245,14 +245,11 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
             {
                 if (matrix[x, y])
                 {
-                    GameObject itemFrameObj = UIManager.Instance.CreateUIObj("Bag/ItemFrame",transform);
+                    GameObject itemFrameObj = UIManager.Instance.CreateUIObj("Bag/ItemFrame");
                     Vector2Int point = new Vector2Int(x,y) - originOffset; //计算转换后物品位置坐标（转换成从(0,0)开始，方便计算）
                     Vector2 mousePoint = new Vector2((size.x - 1) / 2, (size.y - 1) / 2); //计算鼠标点的位置下标（含小数点）
                     Vector2 offset = point - mousePoint; //计算鼠标与该边框所在位置的偏移
-
-                    //Vector2 nowPos = Input.mousePosition - new Vector3(offset.x*Defines.cellSize, offset.y * Defines.cellSize, 0);
-                    //Debug.Log("nowPos:"+nowPos);
-                    //Debug.Log("MOUSEPosition:" + Input.mousePosition);                 
+             
                     itemFrameObj.transform.localPosition = new Vector3(offset.x * Defines.cellSize, offset.y * Defines.cellSize, 0);
                     itemFrameList.Add(itemFrameObj);    
                 }
@@ -418,7 +415,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     //设置星星图片
     public void CreateStar(Vector2 pos,bool isShow)
     {
-        GameObject starObj = UIManager.Instance.CreateUIObj("Bag/StarPoint",BagManager.Instance.itemsTrans);
+        GameObject starObj = UIManager.Instance.CreateUIObj("Bag/StarPoint");
         starObj.transform.position = pos;
         starObj.GetComponent<StarPoint>().SetStarActive(isShow);
         starPoints.Add(starObj);

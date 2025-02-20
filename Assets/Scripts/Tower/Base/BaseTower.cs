@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class BaseTower : MonoBehaviour
 {
     [Header("基础数据")]
     public TowerSO data; //防御塔数据
-    protected int nowHp;
+    public int nowHp;
 
     [Header("发射器")]
     public Transform launcher; //发射器
@@ -27,6 +28,7 @@ public class BaseTower : MonoBehaviour
     protected float attackTimer; //发射计时器
     protected float produceTimer; //生产计时器
     protected Animator ani; //动画
+    public HealthBar hpBar; //血条
 
     public List<Transform> enemyList; //记录在范围内的敌人
 
@@ -34,27 +36,8 @@ public class BaseTower : MonoBehaviour
 
     protected virtual void Start()
     {
-        enemyList = new List<Transform>();
-        ani = GetComponent<Animator>();
-
-        Material material = Resources.Load<Material>("Material/FlashMaterial");
-        foreach (SpriteRenderer renderer in renderers)
-        {
-            if (renderer.material != material)
-                renderer.material = material;   
-        }
-
-        attackTimer = 0;
-        produceTimer = 0;
-        nowHp = data.hp;
-
-        target = null;
-
-        rangeTrigger.radius = data.range;
-        rangeObj.transform.localScale = Vector3.one*(data.range * 2);
-        rangeObj.SetActive(false);
+        Init();
     }
-
     protected virtual void Update()
     {
         if (!isUsed) return;
@@ -93,6 +76,35 @@ public class BaseTower : MonoBehaviour
             produceTimer = 0;
             Produce();
         }
+    }
+
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    public void Init()
+    {
+        enemyList = new List<Transform>();
+        ani = GetComponent<Animator>();
+
+        Material material = Resources.Load<Material>("Material/FlashMaterial");
+        foreach (SpriteRenderer renderer in renderers)
+        {
+            if (renderer.material != material)
+                renderer.material = material;
+        }
+
+        attackTimer = 0;
+        produceTimer = 0;
+        nowHp = data.hp;
+
+        target = null;
+
+        rangeTrigger.radius = data.range;
+        rangeObj.transform.localScale = Vector3.one * (data.range * 2);
+        rangeObj.SetActive(false);
+
+        //创建血条
+        CreateHpBar();
     }
 
     /// <summary>
@@ -153,6 +165,8 @@ public class BaseTower : MonoBehaviour
     /// </summary>
     public virtual Transform FindTarget()
     {
+        if (TowerManager.Instance.core == null) return null;
+
         Vector2 corePos = TowerManager.Instance.core.transform.position;
         Transform targetTrans = null;
         for (int i = enemyList.Count-1;i >=0;i--)
@@ -178,6 +192,48 @@ public class BaseTower : MonoBehaviour
         return targetTrans;
     }
 
+    #region 血条相关
+    /// <summary>
+    /// 创建血条
+    /// </summary>
+    public virtual void CreateHpBar()
+    {
+        //创建血条
+        GameObject HpBarObj = UIManager.Instance.CreateUIObj("UI/HealthBar/HealthBar");
+        HealthBar hpBar = HpBarObj.GetComponent<HealthBar>();
+        hpBar.Init(nowHp, data.hp, Color.green,true);
+        this.hpBar = hpBar;
+        HideHpBar();
+    }
+
+    /// <summary>
+    /// 显示血条
+    /// </summary>
+    public void ShowHpBar()
+    {
+        if (hpBar != null)
+            hpBar.ShowHpBar();
+    }
+
+    /// <summary>
+    /// 直接隐藏血条
+    /// </summary>
+    public void HideHpBar()
+    {
+        if (hpBar != null)
+            hpBar.HideHpBar();
+    }
+
+    /// <summary>
+    /// 设置血条位置
+    /// </summary>
+    public void SetHpBarPos(Vector2 pos)
+    {
+        hpBar.SetPos(pos);
+    }
+    #endregion
+
+    #region 攻击范围相关
     /// <summary>
     /// 显示范围
     /// </summary>
@@ -206,30 +262,41 @@ public class BaseTower : MonoBehaviour
         if (renderer.color != color)
             renderer.color = color;
     }
+    #endregion
 
+    #region 受伤死亡相关
     /// <summary>
     /// 受伤
     /// </summary>
-    public void Wound(int dmg)
+    public virtual void Wound(int dmg)
     {
         nowHp -= dmg;
-        //受击数字
-        UIManager.Instance.ShowTxtPopup(dmg.ToString(), Color.magenta, transform.position);
+        //更新血条
+        ShowHpBar();
+        hpBar.UpdateHp(nowHp,data.hp);
+        //死亡
         if (nowHp < 0)
         {
             Dead();
         }
+        //闪白
         Flash(0.1f,Color.white);
     }
 
     /// <summary>
     /// 死亡
     /// </summary>
-    public void Dead()
+    public virtual void Dead()
     {
+        //删除血条
+        UIManager.Instance.DestroyUIObj(hpBar.gameObject);
+        hpBar = null;
+        enemyList.Clear();
         Destroy(gameObject);
     }
+    #endregion
 
+    #region 闪烁效果相关
     /// <summary>
     /// 闪烁效果
     /// </summary>
@@ -303,4 +370,5 @@ public class BaseTower : MonoBehaviour
 
         callback?.Invoke();
     }
+    #endregion
 }

@@ -71,9 +71,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.31}
+  m_Offset: {x: 0, y: -0.3}
   serializedVersion: 2
-  m_Radius: 0.866402
+  m_Radius: 0.8
 --- !u!50 &1785548667874877545
 Rigidbody2D:
   serializedVersion: 4
@@ -114,12 +114,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 929dc51b8b9db794686103d538c2d261, type: 2}
+  nowHp: 0
   launcher: {fileID: 0}
   renderers:
   - {fileID: 1410260970792974541}
   rangeObj: {fileID: 4021602119476756137}
   rangeTrigger: {fileID: 2600108792878629535}
   towerCollider: {fileID: 4197820435685459537}
+  hpBar: {fileID: 0}
   enemyList: []
   isUsed: 0
 --- !u!95 &5422533861887307699

@@ -43,11 +43,15 @@ public class PoolData
         PoolObj poolObj = usedObj.GetComponent<PoolObj>();
         if (poolObj == null)
         {
-            Debug.LogError("请为对象挂载PoolObj脚本，用于设置对象最大上限");
+            maxNum = 1000;
+            Debug.Log("请为对象挂载PoolObj脚本，用于设置对象最大上限，已默认上限为1000");
             return;
         }
-        //记录上限
-        maxNum = poolObj.maxNum;
+        else
+        {
+            //记录上限
+            maxNum = poolObj.maxNum;
+        }
     }
 
     //抽屉中对象数量

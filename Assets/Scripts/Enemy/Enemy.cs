@@ -85,6 +85,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void Dead()
     {
+        target = null;
         PoolMgr.Instance.PushObj(gameObject);
     }
 

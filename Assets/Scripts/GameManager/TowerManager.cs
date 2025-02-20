@@ -66,6 +66,7 @@ public class TowerManager : SingletonMono<TowerManager>
         if (coreObj == null)
             Debug.LogError("核心不存在！");
 
+        //使用
         core.isUsed = true;
         this.core = core;
     }
@@ -78,6 +79,10 @@ public class TowerManager : SingletonMono<TowerManager>
         if (HasResources())
         {
             GameResManager.Instance.AddQiNum(-target.data.cost); //消耗资源
+
+            //使用
+            target.SetHpBarPos(target.transform.position+Vector3.up);
+            target.ShowHpBar();
             target.towerCollider.isTrigger = false;
             target.isUsed = true;
             isPlacing = false;

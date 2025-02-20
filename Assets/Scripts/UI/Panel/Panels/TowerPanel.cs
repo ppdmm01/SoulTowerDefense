@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class TowerPanel : BasePanel
 {
     public TextMeshProUGUI qiNumText; //“气”资源数量文本
+    public HealthBar hpBar; //基地血量
     public Button createTowerBtn; //创建塔防按钮
     public Button createTowerBtn2; 
     public override void Init()

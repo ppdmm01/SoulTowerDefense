@@ -104,9 +104,8 @@ public class UIManager : Singleton<UIManager>
     /// 创建UI物体
     /// </summary>
     /// <param name="resName">资源路径名</param>
-    /// <param name="parentTrans">父对象的变换组件</param>
     /// <returns></returns>
-    public GameObject CreateUIObj(string resName,Transform parentTrans)
+    public GameObject CreateUIObj(string resName)
     {
         GameObject UIObj = PoolMgr.Instance.GetUIObj(resName); //从对象池中获取对象
         UIObjList.Add(UIObj);
@@ -134,8 +133,20 @@ public class UIManager : Singleton<UIManager>
     /// <param name="pos">位置</param>
     public void ShowTxtPopup(string txt,Color color, Vector2 pos)
     {
-        GameObject obj = CreateUIObj("UI/Popup/TxtPopup", canvasTrans);
+        GameObject obj = CreateUIObj("UI/Popup/TxtPopup");
         UIPopup txtPopup = obj.GetComponent<UIPopup>();
         txtPopup.Init(txt, color, pos);
+    }
+
+    /// <summary>
+    /// 清理所有UI物体（过场景时使用）
+    /// </summary>
+    public void ClearAllUIObj()
+    {
+        foreach (GameObject UIObj in UIObjList)
+        {
+            GameObject.Destroy(UIObj);
+        }
+        UIObjList.Clear();
     }
 }

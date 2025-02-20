@@ -7,20 +7,51 @@ using UnityEngine;
 /// </summary>
 public class Core : BaseTower
 {
-    protected override void OnTriggerEnter2D(Collider2D collision)
+    //protected override void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    base.OnTriggerEnter2D(collision);
+
+    //    if (collision.CompareTag("Enemy"))
+    //    {
+    //        //特效
+    //        GameObject effObj = PoolMgr.Instance.GetObj("Effect/ExplosionEffect");
+    //        effObj.transform.position = transform.position;
+
+    //        //扣血
+    //        Enemy enemy = collision.GetComponent<Enemy>();
+    //        nowHp -= enemy.data.atk;
+    //        PoolMgr.Instance.PushObj(enemy.gameObject);
+    //    }
+    //}
+
+    public override void CreateHpBar()
     {
-        base.OnTriggerEnter2D(collision);
+        //创建血条
+        HealthBar hpBar = UIManager.Instance.GetPanel<TowerPanel>().hpBar;
+        hpBar.Init(nowHp, data.hp, Color.green, false);
+        this.hpBar = hpBar;
+    }
 
-        if (collision.CompareTag("Enemy"))
+    public override void Wound(int dmg)
+    {
+        nowHp -= dmg;
+        //特效
+        GameObject effObj = PoolMgr.Instance.GetObj("Effect/ExplosionEffect");
+        effObj.transform.position = transform.position;
+        //更新血条
+        hpBar.UpdateHp(nowHp, data.hp);
+        //死亡
+        if (nowHp < 0)
         {
-            //特效
-            GameObject effObj = PoolMgr.Instance.GetObj("Effect/ExplosionEffect");
-            effObj.transform.position = transform.position;
-
-            //扣血
-            Enemy enemy = collision.GetComponent<Enemy>();
-            nowHp -= enemy.data.atk;
-            PoolMgr.Instance.PushObj(enemy.gameObject);
+            Dead(); //游戏结束
         }
+        //闪白
+        Flash(0.1f, Color.white);
+    }
+
+    public override void Dead()
+    {
+        base.Dead();
+        TowerManager.Instance.core = null;
     }
 }
