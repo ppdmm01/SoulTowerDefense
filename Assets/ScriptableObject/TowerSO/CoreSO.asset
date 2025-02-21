@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 578254652ecb9044ba512c2f5e392687, type: 3}
   m_Name: CoreSO
   m_EditorClassIdentifier: 
+  towerName: Core
+  description: 
   hp: 100
   cost: 0
   isAttacker: 0

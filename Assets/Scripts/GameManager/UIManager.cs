@@ -101,11 +101,11 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// 创建UI物体
+    /// 通过对象池创建UI物体
     /// </summary>
     /// <param name="resName">资源路径名</param>
-    /// <returns></returns>
-    public GameObject CreateUIObj(string resName)
+    /// <returns>物体</returns>
+    public GameObject CreateUIObjByPoolMgr(string resName)
     {
         GameObject UIObj = PoolMgr.Instance.GetUIObj(resName); //从对象池中获取对象
         UIObjList.Add(UIObj);
@@ -113,7 +113,33 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// 删除UI物体
+    /// 创建UI物体
+    /// </summary>
+    /// <param name="resName">资源路径名</param>
+    /// <returns>物体</returns>
+    public GameObject CreateUIObj(string resName,Transform parent)
+    {
+        GameObject UIObj = GameObject.Instantiate(Resources.Load<GameObject>(resName),parent); //从对象池中获取对象
+        UIObj.transform.SetAsLastSibling();
+        UIObjList.Add(UIObj);
+        return UIObj;
+    }
+
+    /// <summary>
+    /// 通过对象池删除UI物体
+    /// </summary>
+    /// <param name="UIObj">要删除的UI物体</param>
+    public void DestroyUIObjByPoolMgr(GameObject UIObj)
+    {
+        if (UIObjList.Contains(UIObj))
+        {
+            UIObjList.Remove(UIObj);
+            PoolMgr.Instance.PushUIObj(UIObj);
+        }
+    }
+
+    /// <summary>
+    /// 通过对象池删除UI物体
     /// </summary>
     /// <param name="UIObj">要删除的UI物体</param>
     public void DestroyUIObj(GameObject UIObj)
@@ -121,7 +147,7 @@ public class UIManager : Singleton<UIManager>
         if (UIObjList.Contains(UIObj))
         {
             UIObjList.Remove(UIObj);
-            PoolMgr.Instance.PushUIObj(UIObj);
+            GameObject.Destroy(UIObj);
         }
     }
 
@@ -133,7 +159,7 @@ public class UIManager : Singleton<UIManager>
     /// <param name="pos">位置</param>
     public void ShowTxtPopup(string txt,Color color, Vector2 pos)
     {
-        GameObject obj = CreateUIObj("UI/Popup/TxtPopup");
+        GameObject obj = CreateUIObjByPoolMgr("UI/Popup/TxtPopup");
         UIPopup txtPopup = obj.GetComponent<UIPopup>();
         txtPopup.Init(txt, color, pos);
     }

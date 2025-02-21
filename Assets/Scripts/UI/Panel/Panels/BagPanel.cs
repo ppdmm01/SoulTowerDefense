@@ -9,17 +9,11 @@ public class BagPanel : BasePanel
 {
     [Header("文本信息")]
     public TextMeshProUGUI bagItemInfo;
-    public TextMeshProUGUI boxItemInfo;
 
     [Header("按钮")]
     public Button arrangeBtn; //排序按钮
     //添加物品按钮
-    public Button AdditemBtn1;
-    public Button AdditemBtn2;
-    public Button AdditemBtn3;
-    public Button AdditemBtn4;
-    public Button AdditemBtn5;
-    public Button AdditemBtn6;
+    public Button AdditemBtn;
 
     //放置物品的地方
     private Transform itemsTrans;
@@ -36,29 +30,9 @@ public class BagPanel : BasePanel
         {
             BagManager.Instance.BagDic["storageBox"].AutoArrange();
         });
-        AdditemBtn1.onClick.AddListener(() =>
+        AdditemBtn.onClick.AddListener(() =>
         {
-            BagManager.Instance.AddItemByName("Ammo", BagManager.Instance.BagDic["storageBox"]);
-        });
-        AdditemBtn2.onClick.AddListener(() =>
-        {
-            BagManager.Instance.AddItemByName("Grenade", BagManager.Instance.BagDic["storageBox"]);
-        });
-        AdditemBtn3.onClick.AddListener(() =>
-        {
-            BagManager.Instance.AddItemByName("Katana", BagManager.Instance.BagDic["storageBox"]);
-        });
-        AdditemBtn4.onClick.AddListener(() =>
-        {
-            BagManager.Instance.AddItemByName("Medkit", BagManager.Instance.BagDic["storageBox"]);
-        });
-        AdditemBtn5.onClick.AddListener(() =>
-        {
-            BagManager.Instance.AddItemByName("Rifle", BagManager.Instance.BagDic["storageBox"]);
-        });
-        AdditemBtn6.onClick.AddListener(() =>
-        {
-            BagManager.Instance.AddItemByName("ShotGun", BagManager.Instance.BagDic["storageBox"]);
+            BagManager.Instance.AddRandomItem(3, BagManager.Instance.GetBagByName("storageBox"));
         });
     }
 
@@ -79,23 +53,23 @@ public class BagPanel : BasePanel
     }
 
     /// <summary>
-    /// 更新背包信息
+    /// 更新信息
     /// </summary>
-    public void UpdateBagInfo()
+    public void UpdateMessage()
     {
-        string bagInfo = "";
-        string boxInfo = "";
-        List<Item> list = BagManager.Instance.BagDic["bag"].items;
-        for (int i = 0; i < list.Count; i++)
+        string info = "";
+        foreach (TowerData towerData in TowerManager.Instance.towers.Values)
         {
-            bagInfo += $"{i + 1}：{list[i].data.itemName}\n";
+            info += "名字：" + towerData.towerName + "\n";
+            info += "描述：" + towerData.description + "\n";
+            info += "伤害：" + towerData.damage + "\n";
+            info += "攻击范围：" + towerData.range + "\n";
+            info += "攻击间隔：" + towerData.interval + "\n";
+            info += "产量：" + towerData.output + "\n";
+            info += "生产间隔：" + towerData.cooldown + "\n";
+            info += "----------------------\n";
         }
-        list = BagManager.Instance.BagDic["storageBox"].items;
-        for (int i = 0; i < list.Count; i++)
-        {
-            boxInfo += $"{i + 1}：{list[i].data.itemName}\n";
-        }
-        bagItemInfo.text = bagInfo;
-        boxItemInfo.text = boxInfo;
+
+        bagItemInfo.text = info;
     }
 }

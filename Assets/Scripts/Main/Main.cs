@@ -9,8 +9,8 @@ public class Main : MonoBehaviour
 {
     void Start()
     {
-        //UIManager.Instance.ShowPanel<BagPanel>();
+        UIManager.Instance.ShowPanel<BagPanel>();
 
-        UIManager.Instance.ShowPanel<TowerPanel>();
+        //UIManager.Instance.ShowPanel<TowerPanel>();
     }
 }

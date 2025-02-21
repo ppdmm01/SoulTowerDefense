@@ -8,7 +8,7 @@ using UnityEngine;
 public static class Defines
 {
     //背包相关常量
-    public static readonly float cellSize = 48f; //每个格子大小
+    public static readonly float cellSize = 64f; //每个格子大小
     public static readonly Color invalidColor = Color.cyan; //背包格被占用时的颜色
     public static readonly Color validColor = Color.white; //背包格未占用时的颜色
     public static readonly Color previewInvalidColor = Color.red; //预览非法颜色

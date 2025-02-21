@@ -47,7 +47,7 @@ public class UIPopup : MonoBehaviour
         //动画完成后销毁  
         seq.OnComplete(() => 
         {
-            UIManager.Instance.DestroyUIObj(gameObject);
+            UIManager.Instance.DestroyUIObjByPoolMgr(gameObject);
         });
 
     }

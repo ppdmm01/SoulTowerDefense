@@ -35,6 +35,7 @@ public class BagGrid : MonoBehaviour
     private void Init()
     {
         gridLayoutGroup.constraintCount = gridWidth;
+        gridLayoutGroup.cellSize = new Vector2(Defines.cellSize,Defines.cellSize);
         slots = new ItemSlot[gridWidth, gridHeight];
         //将物品格填充背包
         for (int y = 0; y < gridHeight; y++)
@@ -136,8 +137,9 @@ public class BagGrid : MonoBehaviour
             }
         }
         items.Add(item);
+
         //测试：更新信息
-        UIManager.Instance.GetPanel<BagPanel>().UpdateBagInfo();
+        BagManager.Instance.UpdateMainBagInfo();
 
         //将物品附着到格子中心上
         Vector2Int minOffset = item.GetOriginOffset();
@@ -167,7 +169,7 @@ public class BagGrid : MonoBehaviour
         }
         items.Remove(item);
         //测试：更新信息
-        UIManager.Instance.GetPanel<BagPanel>().UpdateBagInfo();
+        BagManager.Instance.UpdateMainBagInfo();
     }
     #endregion
 
@@ -281,6 +283,27 @@ public class BagGrid : MonoBehaviour
     {
         for (int i = items.Count-1; i >= 0; i--)
             RemoveItem(items[i], items[i].gridPos);
+    }
+    #endregion
+
+    #region 物品属性效果计算（计算最终玩家实力）
+    /// <summary>
+    /// 计算有哪些可以使用的防御塔
+    /// </summary>
+    public void CalculateTower()
+    {
+        TowerManager.Instance.towers.Clear();
+        foreach (Item item in items)
+        {
+            if (item.data.itemTags.Contains(ItemTag.Tower))
+            {
+                TowerData towerData = new TowerData();
+                towerData.Init(TowerManager.Instance.GetTowerSOByName(item.data.itemName));
+                //添加防御塔
+                TowerManager.Instance.AddTower(item.data.itemName, towerData);
+            }
+        }
+        UIManager.Instance.GetPanel<BagPanel>().UpdateMessage();
     }
     #endregion
 }

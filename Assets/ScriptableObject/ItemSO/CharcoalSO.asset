@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
+  m_Name: CharcoalSO
+  m_EditorClassIdentifier: 
+  id: 2
+  itemName: Charcoal
+  description: "\u6728\u70AD"
+  shape:
+    shapeMatrix: 01000000000000000000000000000000
+    allowRotation: 1
+  detectionPoints:
+  - pos: {x: -1, y: 0}
+    requiredTags: []
+  - pos: {x: 1, y: 0}
+    requiredTags: []
+  - pos: {x: 0, y: 1}
+    requiredTags: []
+  - pos: {x: 0, y: -1}
+    requiredTags: []
+  icon: {fileID: 1620226355, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
+  itemTags: 01000000

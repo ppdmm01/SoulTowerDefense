@@ -14,12 +14,16 @@ public class ItemSO : ScriptableObject
     public int id; //物品id
     public string itemName; //物品名称
     public string description; //物品描述
+    [Header("物品形状")]
     public ItemShape shape; // 物品占格形状  
+    [Header("检测点")]
     public List<DetectionPoint> detectionPoints; //检测点
+    [Header("物品属性")]
+    public List<ItemAttribute> itemAttributes; //物品属性
     public Sprite icon; //图片
 
     [Header("物品标签")]
-    public string[] itemTags; // 物品标签（如"力","药水"等）  
+    public List<ItemTag> itemTags; // 物品标签
 }
 
 /// <summary>
@@ -102,7 +106,7 @@ public class ItemShape
         return new Vector2Int(MaxX, MaxY);
     }
 
-    // 矩阵旋转（90度为步长） ，获取旋转后的形状信息 
+    // 矩阵旋转（90度为步长），获取旋转后的形状信息 
     public bool[,] GetRotatedMatrix(int rotation)
     {
         bool[,] rotated = new bool[MatrixLen, MatrixLen];
@@ -133,8 +137,8 @@ public class DetectionPoint
     [Tooltip("相对物品原点的偏移量")]
     public Vector2Int pos;
 
-    [Tooltip("需要匹配的标签")]
-    public string[] requiredTags;
+    //[Tooltip("需要匹配的标签")]
+    //public ItemTag[] requiredTags;
 
     //获取指定角度的检测点相对原点位置
     public Vector2Int GetRotatePoint(int rotation)
@@ -149,5 +153,67 @@ public class DetectionPoint
             default: return pos;
         }
     }
+}
+
+/// <summary>
+/// 物品属性
+/// </summary>
+[Serializable]
+public class ItemAttribute
+{
+    /// <summary>
+    /// 属性类型枚举
+    /// </summary>
+    public enum AttributeType 
+    { 
+        Global, //全局属性
+        Link, //联动属性
+    }
+
+    [Header("属性类型")]
+    public AttributeType attributeType;
+
+    [Header("要求的标签")]
+    public ItemTag[] requireTags;
+
+    [Header("属性激活效果")]
+    public ItemActiveEffect[] activeEffects;
+
+    /// <summary>
+    /// 检测其他物品是否满足该标签
+    /// </summary>
+    /// <param name="item">要检测的物品</param>
+    /// <returns>是否满足</returns>
+    public bool IsMatch(Item item)
+    {
+        foreach (ItemTag tag in requireTags)
+            foreach (ItemTag otherTag in item.data.itemTags)
+                if (tag == otherTag) return true;
+        return false;
+    }
+}
+
+/// <summary>
+/// 物品属性激活效果
+/// </summary>
+[Serializable]
+public class ItemActiveEffect
+{
+    /// <summary>
+    /// 效果类型枚举
+    /// </summary>
+    public enum EffectType
+    {
+        Hp, //血量
+        Cost, //花费
+        Damage, //攻击伤害
+        Range, //攻击范围
+        Interval, //攻击间隔
+        Output, //产量
+        Cooldown, //生产冷却
+    }
+
+    public EffectType effectType; //效果类型
+    public float value; //值
 }
 

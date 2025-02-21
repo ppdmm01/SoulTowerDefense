@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 578254652ecb9044ba512c2f5e392687, type: 3}
   m_Name: CrossbowTowerSO
   m_EditorClassIdentifier: 
+  towerName: CrossbowTower
+  description: 
   hp: 50
   cost: 10
   isAttacker: 1

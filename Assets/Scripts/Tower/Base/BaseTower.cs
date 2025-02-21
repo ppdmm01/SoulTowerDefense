@@ -199,7 +199,7 @@ public class BaseTower : MonoBehaviour
     public virtual void CreateHpBar()
     {
         //创建血条
-        GameObject HpBarObj = UIManager.Instance.CreateUIObj("UI/HealthBar/HealthBar");
+        GameObject HpBarObj = UIManager.Instance.CreateUIObjByPoolMgr("UI/HealthBar/HealthBar");
         HealthBar hpBar = HpBarObj.GetComponent<HealthBar>();
         hpBar.Init(nowHp, data.hp, Color.green,true);
         this.hpBar = hpBar;
@@ -289,7 +289,7 @@ public class BaseTower : MonoBehaviour
     public virtual void Dead()
     {
         //删除血条
-        UIManager.Instance.DestroyUIObj(hpBar.gameObject);
+        UIManager.Instance.DestroyUIObjByPoolMgr(hpBar.gameObject);
         hpBar = null;
         enemyList.Clear();
         Destroy(gameObject);

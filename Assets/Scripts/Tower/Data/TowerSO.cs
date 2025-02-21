@@ -8,6 +8,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "TowerSO",menuName = "ScriptableObject/TowerSO")]
 public class TowerSO : ScriptableObject
 {
+    [Header("防御塔描述")]
+    public string towerName;
+    public string description;
+
     [Header("基础属性")]
     public int hp; //血量
     public int cost; //花费

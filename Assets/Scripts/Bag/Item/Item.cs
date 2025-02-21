@@ -74,8 +74,15 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         }
     }
 
-    public void Init(BagGrid bagGrid)
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="data">物品数据</param>
+    /// <param name="bagGrid">创建在哪个背包</param>
+    public void Init(ItemSO data,BagGrid bagGrid)
     {
+        this.data = data;
+
         isDrag = false;
         currentRotation = 0;
         lastCurrentRotation = currentRotation;
@@ -87,7 +94,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         oldBagGrid = this.bagGrid;
 
         Icon.sprite = data.icon; //更换图片
-        Icon.alphaHitTestMinimumThreshold = 0.1f; //设置透明度阈值
+        //Icon.alphaHitTestMinimumThreshold = 1f; //设置透明度阈值
 
         Vector2Int size = GetSize();
         rectTransform.sizeDelta = new Vector2(size.x * Defines.cellSize, size.y * Defines.cellSize); //根据数据设置物品大小  
@@ -123,8 +130,11 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     //显示信息
     public void OnPointerEnter(PointerEventData eventData)
     {
-        GetConnectItems();
-        UIManager.Instance.ShowPanel<BagMessagePanel>().SetInfo(data.itemName,data.description);
+        if (ItemManager.Instance.dragTarget == null)
+        {
+            GetConnectItems(true);
+            UIManager.Instance.ShowPanel<BagMessagePanel>().SetInfo(data.itemName, data.description);
+        }
     }
 
     //隐藏信息
@@ -138,6 +148,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     {
         oldPos = transform.position; //记录原本位置
         lastCurrentRotation = currentRotation; //记录上一次旋转度数
+        ItemManager.Instance.dragTarget = this;
 
         transform.position = eventData.position; //物品吸附
         canvasGroup.alpha = 0.6f; //半透明  
@@ -165,6 +176,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
         isDrag = false;
+        ItemManager.Instance.dragTarget = null;
 
         CancelPreview(gridPos);//取消当前预览
         HideItemFrame(); //隐藏边框
@@ -227,7 +239,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     public void ShowPreview(Vector2Int gridPos)
     {
         bagGrid.ItemPreview(this, gridPos, true);
-        GetConnectItems();
+        GetConnectItems(true);
         transform.SetAsLastSibling(); //设置在父级的最后一层，拖拽的物品要显示在最前面
     }
 
@@ -245,7 +257,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
             {
                 if (matrix[x, y])
                 {
-                    GameObject itemFrameObj = UIManager.Instance.CreateUIObj("Bag/ItemFrame");
+                    GameObject itemFrameObj = UIManager.Instance.CreateUIObj("Bag/ItemFrame",transform);
                     Vector2Int point = new Vector2Int(x,y) - originOffset; //计算转换后物品位置坐标（转换成从(0,0)开始，方便计算）
                     Vector2 mousePoint = new Vector2((size.x - 1) / 2, (size.y - 1) / 2); //计算鼠标点的位置下标（含小数点）
                     Vector2 offset = point - mousePoint; //计算鼠标与该边框所在位置的偏移
@@ -377,11 +389,10 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
 
     #region 检测周围物品相关
 
-    //获取周围物品并显示所有星星
-    public List<Item> GetConnectItems()
+    //获取周围物品并显示所有星星（是否显示星星）
+    public List<Item> GetConnectItems(bool isShowStar = false)
     {
         List<Item> neighbors = new List<Item>();
-
         foreach (DetectionPoint point in data.detectionPoints)
         {
             //计算实际检测位置
@@ -393,29 +404,26 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
 
             //获取目标物品  
             ItemSlot slot = bagGrid.slots[checkPos.x, checkPos.y];
-            if (slot.nowItem == null)
+            if (slot.nowItem != null && IsMatch(slot.nowItem) && !neighbors.Contains(slot.nowItem))
             {
-                CreateStar(slot.transform.position, false);
+                if (isShowStar)
+                    CreateStar(slot.transform.position, true); //星星处有物品，并且物品满足激活条件，并且没重复
+                neighbors.Add(slot.nowItem);
             }
             else
             {
-                CreateStar(slot.transform.position, true);
-                neighbors.Add(slot.nowItem);
+                if (isShowStar)
+                    CreateStar(slot.transform.position, false);
             }
-
-            //// 标签匹配检查  
-            //if (point.requiredTags.Length > 0 &&
-            //    !slot.item.data.itemTags.Intersect(point.requiredTags).Any())
-            //    continue;
         }
 
-        return neighbors.Distinct().ToList(); //去重
+        return neighbors.ToList();
     }
 
     //设置星星图片
     public void CreateStar(Vector2 pos,bool isShow)
     {
-        GameObject starObj = UIManager.Instance.CreateUIObj("Bag/StarPoint");
+        GameObject starObj = UIManager.Instance.CreateUIObjByPoolMgr("Bag/StarPoint");
         starObj.transform.position = pos;
         starObj.GetComponent<StarPoint>().SetStarActive(isShow);
         starPoints.Add(starObj);
@@ -426,9 +434,17 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     {
         foreach (GameObject obj in starPoints)
         {
-            UIManager.Instance.DestroyUIObj(obj);
+            UIManager.Instance.DestroyUIObjByPoolMgr(obj);
         }
         starPoints.Clear();
+    }
+
+    //检测指定物品是否满足该物品的属性激活要求
+    public bool IsMatch(Item item)
+    {
+        foreach (ItemAttribute attribute in data.itemAttributes)
+            if (attribute.IsMatch(item)) return true; //如果匹配其中一个属性要求，则属性激活成功
+        return false;
     }
     #endregion
 
@@ -442,11 +458,12 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         else
             bagGrid.items.Remove(this);
 
-        UIManager.Instance.GetPanel<BagPanel>().UpdateBagInfo();
+        //测试：更新信息
+        BagManager.Instance.UpdateMainBagInfo();
 
         //销毁
         foreach (GameObject obj in itemFrameList)
-            Destroy(obj);
+            UIManager.Instance.DestroyUIObj(obj);
         itemFrameList.Clear();
         Destroy(this.gameObject);
     }
