@@ -308,8 +308,7 @@ public class BagGrid : MonoBehaviour
         {
             if (item.data.itemTags.Contains(ItemTag.Tower))
             {
-                TowerData towerData = new TowerData();
-                towerData.Init(TowerManager.Instance.GetTowerSO_ByName(item.data.itemName));
+                TowerData towerData = new TowerData(TowerManager.Instance.GetTowerSO_ByName(item.data.itemName));
                 //Ìí¼Ó·ÀÓùËþ
                 TowerManager.Instance.AddTower(item.data.itemName, towerData);
             }

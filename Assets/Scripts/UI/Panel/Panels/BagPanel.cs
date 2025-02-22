@@ -10,10 +10,10 @@ public class BagPanel : BasePanel
     [Header("按钮")]
     public Button arrangeBtn; //排序按钮
     public Button AdditemBtn; //添加物品按钮
+    public Button startFightBtn; //开始战斗按钮
 
     [Header("防御塔信息")]
     public ScrollRect towerSr;
-    //private Dictionary<string,TowerInfo> towerInfoDic; //防御塔信息列表
     private List<TowerInfo> towerInfoList; //防御塔信息列表
     private float nowHeight; //当前所有防御塔信息高度
 
@@ -29,7 +29,6 @@ public class BagPanel : BasePanel
     public override void Init()
     {
         HideItemInfo();
-        //towerInfoDic = new Dictionary<string, TowerInfo>();
         towerInfoList = new List<TowerInfo>();
         nowHeight = 0;
 
@@ -43,6 +42,12 @@ public class BagPanel : BasePanel
         AdditemBtn.onClick.AddListener(() =>
         {
             BagManager.Instance.AddRandomItem(3, BagManager.Instance.GetBagByName("storageBox"));
+        });
+        startFightBtn.onClick.AddListener(() =>
+        {
+            //战斗开始
+            LevelManager.Instance.StartLevel("LevelScene1");
+            UIManager.Instance.HidePanel<BagPanel>();
         });
     }
 
@@ -67,14 +72,6 @@ public class BagPanel : BasePanel
     /// </summary>
     public void UpdateTowerInfo()
     {
-        //清理多余的塔
-        //List<string> towerNameList = new List<string>(towerInfoDic.Keys);
-        //foreach (string towerName in towerNameList)
-        //{
-        //    if (!TowerManager.Instance.towers.ContainsKey(towerName))
-        //        RemoveTowerInfo(towerName); //删除数据中没有用上的防御塔
-        //}
-
         //数据溢出，清理列表中多余的数据
         if (TowerManager.Instance.towers.Count < towerInfoList.Count)
         {

@@ -19,7 +19,7 @@ public class TowerManager : SingletonMono<TowerManager>
 
     public Dictionary<string,TowerData> towers; //记录目前选择的防御塔及其数据
 
-    private List<BaseTower> gameTowerList; //记录场上的防御塔
+    public List<BaseTower> gameTowerList; //记录场上的防御塔
 
     [Header("防御塔放置相关")]
     public bool isPlacing; //是否放置塔防中
@@ -61,16 +61,16 @@ public class TowerManager : SingletonMono<TowerManager>
     /// <summary>
     /// 创建防御塔
     /// </summary>
-    /// <param name="towerName"></param>
+    /// <param name="towerName">防御塔名称</param>
     public void CreateTower(string towerName)
     {
         GameObject towerObj = Instantiate(Resources.Load<GameObject>("Tower/" + towerName));
-        BaseTower tower = towerObj.GetComponent<BaseTower>();
-        gameTowerList.Add(tower);
-
         if (towerObj == null)
             Debug.LogError("防御塔不存在！");
-
+        //初始化数据
+        BaseTower tower = towerObj.GetComponent<BaseTower>();
+        tower.Init(towers[towerName]);
+        //放置中，未使用
         tower.towerCollider.isTrigger = true;
         tower.isUsed = false;
         isPlacing = true;
@@ -83,12 +83,16 @@ public class TowerManager : SingletonMono<TowerManager>
     public void CreateCore()
     {
         GameObject coreObj = Instantiate(Resources.Load<GameObject>("Tower/Core"),Vector2.zero,Quaternion.identity);
-        Core core = coreObj.GetComponent<Core>();
         if (coreObj == null)
             Debug.LogError("核心不存在！");
+        //初始化数据
+        Core core = coreObj.GetComponent<Core>();
+        TowerData towerData = new TowerData(GetTowerSO_ByName("Core"));
+        core.Init(towerData);
 
         //使用
         core.isUsed = true;
+        //记录
         this.core = core;
     }
 
@@ -102,13 +106,14 @@ public class TowerManager : SingletonMono<TowerManager>
             GameResManager.Instance.AddQiNum(-target.data.cost); //消耗资源
 
             //使用
-            target.SetHpBarPos(target.transform.position+Vector3.up);
             target.ShowHpBar();
             target.towerCollider.isTrigger = false;
             target.isUsed = true;
             isPlacing = false;
             target.HideRange();
             target = null;
+            //记录
+            gameTowerList.Add(target);
         }
         else
         {

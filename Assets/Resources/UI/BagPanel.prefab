@@ -571,7 +571,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000039807917}
+  m_AnchoredPosition: {x: 0, y: -0.000028242059}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2596985105645131835
@@ -1345,6 +1345,7 @@ MonoBehaviour:
   alphaSpeed: 5
   arrangeBtn: {fileID: 3202153457184826886}
   AdditemBtn: {fileID: 1638448716577557002}
+  startFightBtn: {fileID: 7196498188421517169}
   towerSr: {fileID: 5606741249914175809}
   ItemInfoObj: {fileID: 3929365669522344570}
   bag: {fileID: 6178017384071104481}
@@ -2180,7 +2181,7 @@ GameObject:
   - component: {fileID: 4992377578519698643}
   - component: {fileID: 7196498188421517169}
   m_Layer: 5
-  m_Name: BeginBattleBtn
+  m_Name: StartFightBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

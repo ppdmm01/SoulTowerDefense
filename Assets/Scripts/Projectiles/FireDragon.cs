@@ -29,8 +29,8 @@ public class FireDragon : Projectile
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position,explosionRange);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.DrawWireSphere(transform.position,explosionRange);
+    //}
 }

@@ -24,6 +24,11 @@ public class Core : BaseTower
     //    }
     //}
 
+    public override void SetHpBarPos(Vector2 pos)
+    {
+        //不需要移动
+    }
+
     public override void CreateHpBar()
     {
         //创建血条

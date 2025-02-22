@@ -31,6 +31,11 @@ public class TowerData
     [Header("标签")]
     public List<ItemTag> itemTags; //用于与物品产生联动
 
+    public TowerData(TowerSO towerSO)
+    {
+        Init(towerSO);
+    }
+
     /// <summary>
     /// 初始化用
     /// </summary>

@@ -30,7 +30,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && LevelManager.Instance.isInLevel)
         {
             SpawnWaveEnemies("Enemy1", 20, 5, 0.5f);
         }

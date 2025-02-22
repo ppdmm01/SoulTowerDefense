@@ -8,8 +8,9 @@ using UnityEngine.SocialPlatforms.Impl;
 public class BaseTower : MonoBehaviour
 {
     [Header("基础数据")]
-    public TowerSO data; //防御塔数据
-    public int nowHp;
+    //public TowerSO data; //防御塔数据
+    [HideInInspector] public TowerData data; //动态的防御塔数据
+    protected int nowHp;
 
     [Header("发射器")]
     public Transform launcher; //发射器
@@ -34,10 +35,6 @@ public class BaseTower : MonoBehaviour
 
     [HideInInspector] public bool isUsed; //是否启用
 
-    protected virtual void Start()
-    {
-        Init();
-    }
     protected virtual void Update()
     {
         if (!isUsed) return;
@@ -76,13 +73,19 @@ public class BaseTower : MonoBehaviour
             produceTimer = 0;
             Produce();
         }
+
+        //更新血条位置
+        if (hpBar.gameObject.activeSelf)
+            SetHpBarPos(transform.position + Vector3.up);
     }
 
     /// <summary>
     /// 初始化
     /// </summary>
-    public void Init()
+    public void Init(TowerData data)
     {
+        this.data = data;
+
         enemyList = new List<Transform>();
         ani = GetComponent<Animator>();
 
@@ -225,9 +228,18 @@ public class BaseTower : MonoBehaviour
     }
 
     /// <summary>
+    /// 更新血条
+    /// </summary>
+    public void UpdateHpBar()
+    {
+        if (hpBar != null)
+            hpBar.UpdateHp(nowHp, data.hp);
+    }
+
+    /// <summary>
     /// 设置血条位置
     /// </summary>
-    public void SetHpBarPos(Vector2 pos)
+    public virtual void SetHpBarPos(Vector2 pos)
     {
         hpBar.SetPos(pos);
     }
@@ -273,7 +285,7 @@ public class BaseTower : MonoBehaviour
         nowHp -= dmg;
         //更新血条
         ShowHpBar();
-        hpBar.UpdateHp(nowHp,data.hp);
+        UpdateHpBar();
         //死亡
         if (nowHp < 0)
         {
