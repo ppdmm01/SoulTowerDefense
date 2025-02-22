@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 4
   itemName: MoJing
-  description: "\u58A8\u7ECF"
+  itemChineseName: "\u58A8\u7ECF"
+  description: "\u6682\u65E0\u7528\u5904"
   shape:
     shapeMatrix: 01010000000000000000000000000000
     allowRotation: 1
   detectionPoints:
   - pos: {x: 0, y: 2}
-    requiredTags: []
+  itemAttributes: []
   icon: {fileID: 1469814840, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
   itemTags: 0200000004000000

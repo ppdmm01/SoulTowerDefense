@@ -9,8 +9,11 @@ using UnityEngine;
 public class TowerSO : ScriptableObject
 {
     [Header("防御塔描述")]
-    public string towerName;
-    public string description;
+    public string towerName; //防御塔名称
+    public string towerChineseName; //防御塔中文名称
+    [TextArea]
+    public string description; //描述
+    public Sprite towerIcon; //防御塔图片
 
     [Header("基础属性")]
     public int hp; //血量
@@ -26,4 +29,7 @@ public class TowerSO : ScriptableObject
     public bool isProducer; //是否生产资源
     public int output; //每次产量
     public float cooldown; //生产冷却时间
+
+    [Header("标签")]
+    public List<ItemTag> itemTags; //用于与物品产生联动
 }

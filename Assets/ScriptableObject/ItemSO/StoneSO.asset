@@ -14,27 +14,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 6
   itemName: Stone
-  description: "\u790C\u77F3"
+  itemChineseName: "\u790C\u77F3"
+  description: "\u6548\u679C\u5F3A\u5927\uFF0C\u4F46\u5360\u4F4D\u7F6E"
   shape:
     shapeMatrix: 01010000010100000000000000000000
     allowRotation: 1
   detectionPoints:
   - pos: {x: -1, y: 0}
-    requiredTags: []
   - pos: {x: -1, y: 1}
-    requiredTags: []
   - pos: {x: 0, y: 2}
-    requiredTags: []
   - pos: {x: 1, y: 2}
-    requiredTags: []
   - pos: {x: 2, y: 1}
-    requiredTags: []
   - pos: {x: 2, y: 0}
-    requiredTags: []
   - pos: {x: 0, y: -1}
-    requiredTags: []
   - pos: {x: 1, y: -1}
-    requiredTags: []
+  itemAttributes:
+  - attributeType: 0
+    condition:
+      conditionType: 0
+      name: 
+      tags: 0500000000000000
+    activeEffects:
+    - effectType: 2
+      value: 2
+    description: "\u6240\u6709\u529B\u5B66\u5854\uFF1A\u4F24\u5BB3+2"
+  - attributeType: 1
+    condition:
+      conditionType: 0
+      name: 
+      tags: 0000000005000000
+    activeEffects:
+    - effectType: 3
+      value: 1
+    description: "\u88AB\u661F\u661F\u89E6\u53D1\u7684\u529B\u5B66\u5854\uFF1A\u653B\u51FB\u8303\u56F4+1"
   icon: {fileID: 2015579406, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
-  itemTags:
-  - "\u529B\u91CF"
+  itemTags: 00000000

@@ -14,12 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   itemName: Gunpowder
-  description: "\u706B\u836F"
+  itemChineseName: "\u706B\u836F"
+  description: "\u5A01\u529B\u5DE8\u5927\u7684\u706B\u836F"
   shape:
     shapeMatrix: 01000000010000000000000000000000
     allowRotation: 1
   detectionPoints:
-  - pos: {x: 2, y: 0}
-    requiredTags: []
+  - pos: {x: 0, y: 1}
+  - pos: {x: 1, y: 1}
+  itemAttributes:
+  - attributeType: 1
+    condition:
+      conditionType: 0
+      name: 
+      tags: 0100000005000000
+    activeEffects:
+    - effectType: 2
+      value: 4
+    description: "\u88AB\u661F\u661F\u89E6\u53D1\u7684\u70ED\u5B66\u5854\uFF1A\u4F24\u5BB3+4"
   icon: {fileID: -741162250, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
   itemTags: 01000000

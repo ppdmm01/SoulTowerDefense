@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: FireDragonTowerSO
   m_EditorClassIdentifier: 
   towerName: FireDragonTower
+  towerChineseName: "\u706B\u9F99\u5854"
   description: 
+  towerIcon: {fileID: -760889985, guid: 2f2241beb7d677848aa78d696cf9e668, type: 3}
   hp: 35
   cost: 15
   isAttacker: 1
@@ -23,3 +25,4 @@ MonoBehaviour:
   isProducer: 0
   output: 0
   cooldown: 0
+  itemTags: 0100000005000000

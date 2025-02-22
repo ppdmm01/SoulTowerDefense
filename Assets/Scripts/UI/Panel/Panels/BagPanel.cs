@@ -7,13 +7,18 @@ using UnityEngine.UI;
 
 public class BagPanel : BasePanel
 {
-    [Header("文本信息")]
-    public TextMeshProUGUI bagItemInfo;
-
     [Header("按钮")]
     public Button arrangeBtn; //排序按钮
-    //添加物品按钮
-    public Button AdditemBtn;
+    public Button AdditemBtn; //添加物品按钮
+
+    [Header("防御塔信息")]
+    public ScrollRect towerSr;
+    //private Dictionary<string,TowerInfo> towerInfoDic; //防御塔信息列表
+    private List<TowerInfo> towerInfoList; //防御塔信息列表
+    private float nowHeight; //当前所有防御塔信息高度
+
+    [Header("物品信息")]
+    public GameObject ItemInfoObj;
 
     //放置物品的地方
     private Transform itemsTrans;
@@ -23,6 +28,11 @@ public class BagPanel : BasePanel
 
     public override void Init()
     {
+        HideItemInfo();
+        //towerInfoDic = new Dictionary<string, TowerInfo>();
+        towerInfoList = new List<TowerInfo>();
+        nowHeight = 0;
+
         itemsTrans = transform.Find("Items");
         BagManager.Instance.itemsTrans = itemsTrans;
 
@@ -53,23 +63,73 @@ public class BagPanel : BasePanel
     }
 
     /// <summary>
-    /// 更新信息
+    /// 更新防御塔信息
     /// </summary>
-    public void UpdateMessage()
+    public void UpdateTowerInfo()
     {
-        string info = "";
-        foreach (TowerData towerData in TowerManager.Instance.towers.Values)
+        //清理多余的塔
+        //List<string> towerNameList = new List<string>(towerInfoDic.Keys);
+        //foreach (string towerName in towerNameList)
+        //{
+        //    if (!TowerManager.Instance.towers.ContainsKey(towerName))
+        //        RemoveTowerInfo(towerName); //删除数据中没有用上的防御塔
+        //}
+
+        //数据溢出，清理列表中多余的数据
+        if (TowerManager.Instance.towers.Count < towerInfoList.Count)
         {
-            info += "名字：" + towerData.towerName + "\n";
-            info += "描述：" + towerData.description + "\n";
-            info += "伤害：" + towerData.damage + "\n";
-            info += "攻击范围：" + towerData.range + "\n";
-            info += "攻击间隔：" + towerData.interval + "\n";
-            info += "产量：" + towerData.output + "\n";
-            info += "生产间隔：" + towerData.cooldown + "\n";
-            info += "----------------------\n";
+            for (int i= towerInfoList.Count-1 ; i >= TowerManager.Instance.towers.Count; i--)
+            {
+                //销毁对象
+                Destroy(towerInfoList[i].gameObject);
+                //移除数据
+                towerInfoList.RemoveAt(i);  
+            }
+        }
+        //数据不足，创建新的数据
+        else if (TowerManager.Instance.towers.Count > towerInfoList.Count)
+        {
+            //创建对象
+            GameObject towerInfoObj = Instantiate(Resources.Load<GameObject>("UI/UIObj/TowerInfo"));
+            towerInfoObj.transform.SetParent(towerSr.content, false);
+            TowerInfo towerInfo = towerInfoObj.GetComponent<TowerInfo>();
+            //添加数据
+            towerInfoList.Add(towerInfo);
         }
 
-        bagItemInfo.text = info;
+        //清空剩余防御塔信息的所有属性
+        foreach (TowerInfo towerInfo in towerInfoList)
+            towerInfo.RemoveAllAttributeInfo();
+
+        //更改塔的数据
+        int index = 0;
+        nowHeight = 0;
+        foreach (TowerData towerData in TowerManager.Instance.towers.Values)
+        {
+            TowerInfo towerInfo = towerInfoList[index];
+            towerInfo.SetInfo(towerData, -nowHeight);
+            nowHeight += towerInfo.GetHeight();
+            index++;
+        }
+        //更新ScrollView内容高度
+        towerSr.content.sizeDelta = new Vector2(towerSr.content.sizeDelta.x, nowHeight);
+    }
+
+    /// <summary>
+    /// 显示物品信息
+    /// </summary>
+    public void ShowItemInfo(ItemSO data)
+    {
+        ItemInfoObj.SetActive(true);
+        ItemInfoObj.GetComponent<ItemInfo>().SetInfo(data);
+    }
+
+    /// <summary>
+    /// 隐藏物品信息
+    /// </summary>
+    public void HideItemInfo()
+    {
+        ItemInfoObj.SetActive(false);
+        ItemInfoObj.GetComponent<ItemInfo>().RemoveAllAttributeInfo();
     }
 }

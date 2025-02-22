@@ -229,9 +229,78 @@ public class TowerManager : SingletonMono<TowerManager>
             towers.Remove(towerName);
     }
 
-    public TowerSO GetTowerSOByName(string towerName)
+    /// <summary>
+    /// 通过名字获取防御塔配置数据
+    /// </summary>
+    /// <param name="towerName">防御塔名字</param>
+    /// <returns>防御塔配置数据</returns>
+    public TowerSO GetTowerSO_ByName(string towerName)
     {
         if (!towerDataDic.ContainsKey(towerName)) return null;
         return towerDataDic[towerName];
+    }
+
+    /// <summary>
+    /// 修改指定防御塔属性
+    /// </summary>
+    /// <param name="towerName">防御塔名字</param>
+    /// <param name="activeEffect">激活效果</param>
+    public void SetTowerDataFromName(string towerName, ItemActiveEffect[] activeEffects)
+    {
+        if (!towers.ContainsKey(towerName)) 
+        {
+            Debug.Log("未找到名为"+towerName+"的防御塔");
+            return;
+        }
+
+        TowerData data = towers[towerName];
+        foreach (ItemActiveEffect activeEffect in activeEffects)
+        {
+            switch (activeEffect.effectType)
+            {
+                case ItemActiveEffect.EffectType.Hp:
+                    data.hp += (int)activeEffect.value;
+                    break;
+                case ItemActiveEffect.EffectType.Cost:
+                    data.cost += (int)activeEffect.value;
+                    break;
+                case ItemActiveEffect.EffectType.Damage:
+                    data.damage += (int)activeEffect.value;
+                    break;
+                case ItemActiveEffect.EffectType.Range:
+                    data.range += activeEffect.value;
+                    break;
+                case ItemActiveEffect.EffectType.Interval:
+                    data.interval += activeEffect.value;
+                    break;
+                case ItemActiveEffect.EffectType.Output:
+                    data.output += (int)activeEffect.value;
+                    break;
+                case ItemActiveEffect.EffectType.Cooldown:
+                    data.cooldown += activeEffect.value;
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 通过标签统一修改防御塔属性
+    /// </summary>
+    /// <param name="tags">标签</param>
+    /// <param name="activeEffects">激活效果</param>
+    public void SetTowerDataFromTag(ItemTag[] tags, ItemActiveEffect[] activeEffects)
+    {
+        bool flag = true; //标记是否满足标签条件
+        foreach (TowerData data in towers.Values)
+        {
+            flag = true;
+            //只有所有标签满足才行
+            foreach (ItemTag tag in tags)
+                if (!data.itemTags.Contains(tag)) 
+                    flag = false;
+
+            if (flag)
+                SetTowerDataFromName(data.towerName, activeEffects);
+        }
     }
 }

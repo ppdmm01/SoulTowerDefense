@@ -14,18 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 5
   itemName: Saltpeter
-  description: "\u785D\u77F3"
+  itemChineseName: "\u785D\u77F3"
+  description: "\u6682\u65E0\u7528\u5904"
   shape:
     shapeMatrix: 01000000000000000000000000000000
     allowRotation: 1
   detectionPoints:
   - pos: {x: -1, y: 0}
-    requiredTags: []
   - pos: {x: 1, y: 0}
-    requiredTags: []
   - pos: {x: 0, y: 1}
-    requiredTags: []
   - pos: {x: 0, y: -1}
-    requiredTags: []
+  itemAttributes: []
   icon: {fileID: 1386249883, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
   itemTags: 01000000

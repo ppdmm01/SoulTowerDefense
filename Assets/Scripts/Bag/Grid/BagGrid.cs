@@ -169,7 +169,7 @@ public class BagGrid : MonoBehaviour
         }
         items.Remove(item);
         //测试：更新信息
-        BagManager.Instance.UpdateMainBagInfo();
+        //BagManager.Instance.UpdateMainBagInfo();
     }
     #endregion
 
@@ -287,6 +287,17 @@ public class BagGrid : MonoBehaviour
     #endregion
 
     #region 物品属性效果计算（计算最终玩家实力）
+
+    /// <summary>
+    /// 计算属性
+    /// </summary>
+    public void CalculateAttribute()
+    {
+        CalculateTower();
+        CalculateItemAttribute();
+        UIManager.Instance.GetPanel<BagPanel>().UpdateTowerInfo();
+    }
+
     /// <summary>
     /// 计算有哪些可以使用的防御塔
     /// </summary>
@@ -298,12 +309,46 @@ public class BagGrid : MonoBehaviour
             if (item.data.itemTags.Contains(ItemTag.Tower))
             {
                 TowerData towerData = new TowerData();
-                towerData.Init(TowerManager.Instance.GetTowerSOByName(item.data.itemName));
+                towerData.Init(TowerManager.Instance.GetTowerSO_ByName(item.data.itemName));
                 //添加防御塔
                 TowerManager.Instance.AddTower(item.data.itemName, towerData);
             }
         }
-        UIManager.Instance.GetPanel<BagPanel>().UpdateMessage();
+    }
+
+    /// <summary>
+    /// 计算物品的属性（目前都是给防御塔加的，联动也是防御塔）
+    /// </summary>
+    public void CalculateItemAttribute()
+    {
+        //遍历背包中所有物品
+        foreach (Item item in items)
+        {
+            List<Item> neighbors = item.GetConnectItems(); //获取该物品周围有效的激活物品（无法知道激活的是哪个属性）
+            
+            //遍历物品的所有属性
+            foreach (ItemAttribute attribute in item.data.itemAttributes)
+            {
+                //全局属性
+                if (attribute.attributeType == ItemAttribute.AttributeType.Global)
+                {
+                    if (attribute.condition.conditionType == ItemActiveCondition.ConditionType.Tag)
+                        TowerManager.Instance.SetTowerDataFromTag(attribute.condition.tags, attribute.activeEffects);
+                    else
+                        TowerManager.Instance.SetTowerDataFromName(attribute.condition.name, attribute.activeEffects);
+                }
+                //联动属性
+                else
+                {
+                    //对激活物品进行遍历，检查是否满足该物品属性（一个物品可能会有许多个联动属性）
+                    foreach (Item neighborItem in neighbors)
+                    {
+                        if (attribute.IsMatch(neighborItem))
+                            TowerManager.Instance.SetTowerDataFromName(neighborItem.data.itemName, attribute.activeEffects);
+                    }
+                }
+            }
+        }
     }
     #endregion
 }

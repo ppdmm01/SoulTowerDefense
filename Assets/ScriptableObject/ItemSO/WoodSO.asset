@@ -14,13 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 8
   itemName: Wood
-  description: "\u71E7\u6728"
+  itemChineseName: "\u71E7\u6728"
+  description: "\u5E73\u5E73\u65E0\u5947\u7684\u6728\u5934\uFF0C\u4F46\u6709\u7528"
   shape:
     shapeMatrix: 01000000010000000000000000000000
     allowRotation: 1
   detectionPoints:
   - pos: {x: 2, y: 0}
-    requiredTags: []
+  - pos: {x: 0, y: 1}
+  - pos: {x: 1, y: 1}
+  - pos: {x: 0, y: -1}
+  - pos: {x: 1, y: -1}
+  - pos: {x: -1, y: 0}
+  itemAttributes:
+  - attributeType: 0
+    condition:
+      conditionType: 0
+      name: 
+      tags: 0500000000000000
+    activeEffects:
+    - effectType: 2
+      value: 1
+    description: "\u6240\u6709\u529B\u5B66\u5854\uFF1A\u4F24\u5BB3+1"
+  - attributeType: 1
+    condition:
+      conditionType: 0
+      name: 
+      tags: 0000000005000000
+    activeEffects:
+    - effectType: 2
+      value: 2
+    description: "\u88AB\u661F\u661F\u89E6\u53D1\u7684\u529B\u5B66\u5854\uFF1A\u4F24\u5BB3\u518D+2"
   icon: {fileID: -1025332416, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
-  itemTags:
-  - "\u529B\u91CF"
+  itemTags: 00000000

@@ -133,7 +133,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         if (ItemManager.Instance.dragTarget == null)
         {
             GetConnectItems(true);
-            UIManager.Instance.ShowPanel<BagMessagePanel>().SetInfo(data.itemName, data.description);
+            UIManager.Instance.GetPanel<BagPanel>().ShowItemInfo(data);
         }
     }
 
@@ -141,7 +141,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     public void OnPointerExit(PointerEventData eventData)
     {
         HideAllStar();
-        UIManager.Instance.HidePanel<BagMessagePanel>(false);
+        UIManager.Instance.GetPanel<BagPanel>().HideItemInfo();
     }
 
     private void Begin(PointerEventData eventData)
@@ -387,9 +387,9 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     }
     #endregion
 
-    #region 检测周围物品相关
+    #region 检测周围物品相关（检测物品联动属性）
 
-    //获取周围物品并显示所有星星（是否显示星星）
+    //获取周围物品并显示星星（isShowStar是否显示星星）
     public List<Item> GetConnectItems(bool isShowStar = false)
     {
         List<Item> neighbors = new List<Item>();
@@ -404,7 +404,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
 
             //获取目标物品  
             ItemSlot slot = bagGrid.slots[checkPos.x, checkPos.y];
-            if (slot.nowItem != null && IsMatch(slot.nowItem) && !neighbors.Contains(slot.nowItem))
+            if (slot.nowItem != null && IsMatchLinkAttribute(slot.nowItem) && !neighbors.Contains(slot.nowItem))
             {
                 if (isShowStar)
                     CreateStar(slot.transform.position, true); //星星处有物品，并且物品满足激活条件，并且没重复
@@ -439,11 +439,14 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         starPoints.Clear();
     }
 
-    //检测指定物品是否满足该物品的属性激活要求
-    public bool IsMatch(Item item)
+    //检测指定物品是否满足该物品的 联动属性激活要求
+    public bool IsMatchLinkAttribute(Item item)
     {
         foreach (ItemAttribute attribute in data.itemAttributes)
+        {
+            if (attribute.attributeType == ItemAttribute.AttributeType.Global) continue; //全局的不考虑
             if (attribute.IsMatch(item)) return true; //如果匹配其中一个属性要求，则属性激活成功
+        }
         return false;
     }
     #endregion

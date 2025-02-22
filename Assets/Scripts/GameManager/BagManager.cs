@@ -107,6 +107,6 @@ public class BagManager : SingletonMono<BagManager>
     public void UpdateMainBagInfo()
     {
         //这里先默认存在，后面可能需要判空
-        GetBagByName("bag").CalculateTower();
+        GetBagByName("bag").CalculateAttribute();
     }
 }
