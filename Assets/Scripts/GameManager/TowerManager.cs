@@ -18,6 +18,7 @@ public class TowerManager : SingletonMono<TowerManager>
     private Dictionary<string, TowerSO> towerDataDic; //存储防御塔配置数据
 
     public Dictionary<string,TowerData> towers; //记录目前选择的防御塔及其数据
+    public Dictionary<string,TowerData> oldTowerDatas; //记录上一次变化前的数据（用于计算属性变化）
 
     public List<BaseTower> gameTowerList; //记录场上的防御塔
 
@@ -47,6 +48,8 @@ public class TowerManager : SingletonMono<TowerManager>
     void Start()
     {
         towers = new Dictionary<string, TowerData>();
+        oldTowerDatas = new Dictionary<string, TowerData>();
+
         gameTowerList = new List<BaseTower>();
         collisonTowerList = new List<GameObject>();
         nowTower = null;
@@ -306,6 +309,20 @@ public class TowerManager : SingletonMono<TowerManager>
 
             if (flag)
                 SetTowerDataFromName(data.towerName, activeEffects);
+        }
+    }
+
+    /// <summary>
+    /// 记录老数据
+    /// </summary>
+    public void RecordOldData()
+    {
+        //清理老数据
+        oldTowerDatas.Clear();
+        foreach (string towerName in towers.Keys)
+        {
+            TowerData oldData = new TowerData(towers[towerName]);
+            oldTowerDatas.Add(towerName, oldData);
         }
     }
 }

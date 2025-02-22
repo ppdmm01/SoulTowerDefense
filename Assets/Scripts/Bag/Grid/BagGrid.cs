@@ -26,6 +26,7 @@ public class BagGrid : MonoBehaviour
     {
         ItemSlotObj = Resources.Load<GameObject>("Bag/ItemSlot");
         gridLayoutGroup = GetComponent<GridLayoutGroup>();
+        items = new List<Item>();
         Init();
     }
 
@@ -293,6 +294,7 @@ public class BagGrid : MonoBehaviour
     /// </summary>
     public void CalculateAttribute()
     {
+        TowerManager.Instance.RecordOldData(); //数据变化前先记录老数据
         CalculateTower();
         CalculateItemAttribute();
         UIManager.Instance.GetPanel<BagPanel>().UpdateTowerInfo();

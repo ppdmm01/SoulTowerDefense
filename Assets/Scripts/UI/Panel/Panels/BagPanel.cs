@@ -101,10 +101,19 @@ public class BagPanel : BasePanel
         //更改塔的数据
         int index = 0;
         nowHeight = 0;
-        foreach (TowerData towerData in TowerManager.Instance.towers.Values)
+        foreach (string towerName in TowerManager.Instance.towers.Keys)
         {
             TowerInfo towerInfo = towerInfoList[index];
-            towerInfo.SetInfo(towerData, -nowHeight);
+            TowerData newData = TowerManager.Instance.towers[towerName]; //新数据
+
+            if (TowerManager.Instance.oldTowerDatas.ContainsKey(towerName))
+            {
+                TowerData oldData = TowerManager.Instance.oldTowerDatas[towerName]; //变化前的数据
+                towerInfo.SetChangedInfo(newData, oldData, -nowHeight); //需要显示数据变化
+            }
+            else
+                towerInfo.SetInfo(newData, -nowHeight);
+
             nowHeight += towerInfo.GetHeight();
             index++;
         }

@@ -36,6 +36,23 @@ public class TowerData
         Init(towerSO);
     }
 
+    public TowerData(TowerData other)
+    {
+        towerName = other.towerName;
+        towerChineseName = other.towerChineseName;
+        description = other.description;
+        towerIcon = other.towerIcon;
+        hp = other.hp;
+        cost = other.cost;
+        isAttacker = other.isAttacker;
+        damage = other.damage;
+        range = other.range;
+        interval = other.interval;
+        output = other.output;
+        cooldown = other.cooldown;
+        itemTags = other.itemTags;
+    }
+
     /// <summary>
     /// ≥ı ºªØ”√
     /// </summary>

@@ -45,10 +45,39 @@ public class TowerInfo : MonoBehaviour
     }
 
     /// <summary>
+    /// 设置变化的信息
+    /// </summary>
+    public void SetChangedInfo(TowerData data,TowerData oldData,float startHeight)
+    {
+        (transform as RectTransform).anchoredPosition = new Vector2((transform as RectTransform).anchoredPosition.x, startHeight);
+
+        towerIcon.sprite = data.towerIcon;
+        towerName.text = data.towerChineseName;
+        towerDescription.text = data.description;
+        nowHeight = towerBaseInfoTrans.sizeDelta.y;
+        //创建属性
+        CreateAttributeInfo(nameof(data.hp), "血量：" + data.hp, ColorTextTools.ColorTextWithInt(data.hp - oldData.hp));
+        CreateAttributeInfo(nameof(data.cost), "花费：" + data.cost ,ColorTextTools.ColorTextWithInt(data.cost - oldData.cost,true));
+        if (data.isAttacker)
+        {
+            CreateAttributeInfo(nameof(data.damage), "伤害：" + data.damage , ColorTextTools.ColorTextWithInt(data.damage - oldData.damage));
+            CreateAttributeInfo(nameof(data.range), "攻击范围：" + data.range + "m" , ColorTextTools.ColorTextWithFloat(data.range - oldData.range));
+            CreateAttributeInfo(nameof(data.interval), "攻击间隔：" + data.interval + "s" , ColorTextTools.ColorTextWithFloat(data.interval - oldData.interval,true));
+        }
+        if (data.isProducer)
+        {
+            CreateAttributeInfo(nameof(data.output), "产量：" + data.output + "/次" , ColorTextTools.ColorTextWithInt(data.output - oldData.output));
+            CreateAttributeInfo(nameof(data.cooldown), "冷却时间：" + data.cooldown + "s" , ColorTextTools.ColorTextWithFloat(data.cooldown - oldData.cooldown, true));
+        }
+        //更新背景高度
+        (transform as RectTransform).sizeDelta = new Vector2((transform as RectTransform).sizeDelta.x, nowHeight + 50);
+    }
+
+    /// <summary>
     /// 创建属性
     /// </summary>
     /// <param name="info">属性信息</param>
-    private void CreateAttributeInfo(string name, string info)
+    private void CreateAttributeInfo(string name, string info, string changedInfo = null)
     {
         AttributeInfo attributeInfo;
         if (!towerAttributes.ContainsKey(name))
@@ -70,7 +99,10 @@ public class TowerInfo : MonoBehaviour
             attributeInfo = towerAttributes[name];
         }
         //设置信息
-        attributeInfo.SetInfo(info,36);
+        if (changedInfo != null)
+            attributeInfo.SetChangedInfo(info, changedInfo, 36);
+        else
+            attributeInfo.SetInfo(info,36);
         //计算高度
         nowHeight += attributeInfo.GetHeight();
     }

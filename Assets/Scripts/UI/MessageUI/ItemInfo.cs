@@ -22,16 +22,17 @@ public class ItemInfo : MonoBehaviour
         itemName.text = data.itemChineseName;
         //类型
         string typeInfo;
-        if (data.itemTags.Contains(ItemTag.Tower)) typeInfo = "<color=#FF3030>【防御塔】</color>";
-        else typeInfo = "<color=yellow>【道具】</color>";
+        if (data.itemTags.Contains(ItemTag.Tower)) typeInfo = ColorTextTools.ColorText("【防御塔】", "#FF3030");
+        else typeInfo = ColorTextTools.ColorText("【道具】", "yellow");
         CreateAttributeInfo("Type", "物品类型：" + typeInfo);
         //描述
         CreateAttributeInfo("Description", "物品描述：" + data.description);
         //塔
         if (data.itemTags.Contains(ItemTag.Tower))
         {
+            string towerName = TowerManager.Instance.GetTowerSO_ByName(data.itemName).towerChineseName;
             string info =
-                $"放置在背包中：可使用<color=red>【{TowerManager.Instance.GetTowerSO_ByName(data.itemName).towerChineseName}】</color>\n" +
+                $"放置在背包中：可使用{ColorTextTools.ColorTextWithBrackets(towerName, "red")}\n" +
                 $"若重复放置：属性不叠加，但会参与触发联动效果";
             CreateAttributeInfo("TowerItem", info);
         }
