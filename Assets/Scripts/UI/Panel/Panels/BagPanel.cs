@@ -9,7 +9,8 @@ public class BagPanel : BasePanel
 {
     [Header("按钮")]
     public Button arrangeBtn; //排序按钮
-    public Button AdditemBtn; //添加物品按钮
+    public Button addItemBtn; //添加物品按钮
+    public Button clearItemBtn; //清空物品按钮
     public Button startFightBtn; //开始战斗按钮
 
     [Header("防御塔信息")]
@@ -39,9 +40,13 @@ public class BagPanel : BasePanel
         {
             BagManager.Instance.BagDic["storageBox"].AutoArrange();
         });
-        AdditemBtn.onClick.AddListener(() =>
+        addItemBtn.onClick.AddListener(() =>
         {
-            BagManager.Instance.AddRandomItem(3, BagManager.Instance.GetBagByName("storageBox"));
+            BagManager.Instance.AddRandomItem(3, storageBox);
+        });
+        clearItemBtn.onClick.AddListener(() =>
+        {
+            BagManager.Instance.ClearAllItem(storageBox);
         });
         startFightBtn.onClick.AddListener(() =>
         {

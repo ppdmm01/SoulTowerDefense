@@ -102,6 +102,15 @@ public class BagManager : SingletonMono<BagManager>
     }
 
     /// <summary>
+    /// 清理指定背包的所有物品
+    /// </summary>
+    /// <param name="bag"></param>
+    public void ClearAllItem(BagGrid bag)
+    {
+        bag.DestroyAllItems();
+    }
+
+    /// <summary>
     /// 更新主背包信息
     /// </summary>
     public void UpdateMainBagInfo()

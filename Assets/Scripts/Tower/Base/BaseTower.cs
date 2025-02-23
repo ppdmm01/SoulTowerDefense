@@ -89,6 +89,12 @@ public class BaseTower : MonoBehaviour
         enemyList = new List<Transform>();
         ani = GetComponent<Animator>();
 
+        if (data.isAttacker)
+        {
+            float atkSpeed = TowerManager.Instance.GetTowerSO_ByName(data.towerName).interval / data.interval; //计算攻击速度增长了多少
+            ani.SetFloat("AttackSpeed", atkSpeed); //设置攻击动画速度
+        }
+
         Material material = Resources.Load<Material>("Material/FlashMaterial");
         foreach (SpriteRenderer renderer in renderers)
         {
@@ -117,6 +123,7 @@ public class BaseTower : MonoBehaviour
     {
         if (target == null) return;
         ani.Play("Attack"); //动画事件触发攻击
+        Debug.Log("攻击");
     }
 
     /// <summary>

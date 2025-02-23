@@ -32,13 +32,13 @@ public class TowerInfo : MonoBehaviour
         if (data.isAttacker)
         {
             CreateAttributeInfo(nameof(data.damage), "ÉËº¦£º" + data.damage);
-            CreateAttributeInfo(nameof(data.range), "¹¥»÷·¶Î§£º" + data.range + "m");
-            CreateAttributeInfo(nameof(data.interval), "¹¥»÷¼ä¸ô£º" + data.interval + "s");
+            CreateAttributeInfo(nameof(data.range), "¹¥»÷·¶Î§£º" + data.range.ToString("F2") + "m");
+            CreateAttributeInfo(nameof(data.interval), "¹¥»÷¼ä¸ô£º" + data.interval.ToString("F2") + "s");
         }
         if (data.isProducer)
         {
             CreateAttributeInfo(nameof(data.output), "²úÁ¿£º" + data.output + "/´Î");
-            CreateAttributeInfo(nameof(data.cooldown), "ÀäÈ´Ê±¼ä£º" + data.cooldown + "s");
+            CreateAttributeInfo(nameof(data.cooldown), "ÀäÈ´Ê±¼ä£º" + data.cooldown.ToString("F2") + "s");
         }
         //¸üÐÂ±³¾°¸ß¶È
         (transform as RectTransform).sizeDelta = new Vector2((transform as RectTransform).sizeDelta.x, nowHeight+50);
@@ -61,13 +61,13 @@ public class TowerInfo : MonoBehaviour
         if (data.isAttacker)
         {
             CreateAttributeInfo(nameof(data.damage), "ÉËº¦£º" + data.damage , ColorTextTools.ColorTextWithInt(data.damage - oldData.damage));
-            CreateAttributeInfo(nameof(data.range), "¹¥»÷·¶Î§£º" + data.range + "m" , ColorTextTools.ColorTextWithFloat(data.range - oldData.range));
-            CreateAttributeInfo(nameof(data.interval), "¹¥»÷¼ä¸ô£º" + data.interval + "s" , ColorTextTools.ColorTextWithFloat(data.interval - oldData.interval,true));
+            CreateAttributeInfo(nameof(data.range), "¹¥»÷·¶Î§£º" + data.range.ToString("F2") + "m" , ColorTextTools.ColorTextWithFloat(data.range - oldData.range));
+            CreateAttributeInfo(nameof(data.interval), "¹¥»÷¼ä¸ô£º" + data.interval.ToString("F2") + "s" , ColorTextTools.ColorTextWithFloat(data.interval - oldData.interval,true));
         }
         if (data.isProducer)
         {
             CreateAttributeInfo(nameof(data.output), "²úÁ¿£º" + data.output + "/´Î" , ColorTextTools.ColorTextWithInt(data.output - oldData.output));
-            CreateAttributeInfo(nameof(data.cooldown), "ÀäÈ´Ê±¼ä£º" + data.cooldown + "s" , ColorTextTools.ColorTextWithFloat(data.cooldown - oldData.cooldown, true));
+            CreateAttributeInfo(nameof(data.cooldown), "ÀäÈ´Ê±¼ä£º" + data.cooldown.ToString("F2") + "s" , ColorTextTools.ColorTextWithFloat(data.cooldown - oldData.cooldown, true));
         }
         //¸üÐÂ±³¾°¸ß¶È
         (transform as RectTransform).sizeDelta = new Vector2((transform as RectTransform).sizeDelta.x, nowHeight + 50);

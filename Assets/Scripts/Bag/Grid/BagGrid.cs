@@ -278,12 +278,21 @@ public class BagGrid : MonoBehaviour
     }
 
     /// <summary>
-    /// 清除所有物品
+    /// 清除所有物品（清除数据）
     /// </summary>
     private void ClearAllItems()
     {
         for (int i = items.Count-1; i >= 0; i--)
             RemoveItem(items[i], items[i].gridPos);
+    }
+
+    /// <summary>
+    /// 销毁所有物品
+    /// </summary>
+    public void DestroyAllItems()
+    {
+        for (int i = items.Count - 1; i >= 0; i--)
+            items[i].DeleteMe();
     }
     #endregion
 

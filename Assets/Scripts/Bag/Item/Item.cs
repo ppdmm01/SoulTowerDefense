@@ -194,6 +194,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         {
             if (oldBagGrid != bagGrid)
                 bagGrid = oldBagGrid; //背包回溯到原来的
+
             if (lastCurrentRotation != currentRotation)
             {
                 RotateItem(lastCurrentRotation - currentRotation); //回溯到原来的角度
@@ -456,10 +457,10 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     /// </summary>
     public void DeleteMe()
     {
-        if (bagGrid.CanPlaceItem(this, oldGridPos))
-            bagGrid.RemoveItem(this, oldGridPos);
+        if (oldBagGrid.CheckBound(this, oldGridPos))
+            oldBagGrid.RemoveItem(this, oldGridPos);
         else
-            bagGrid.items.Remove(this);
+            oldBagGrid.items.Remove(this);
 
         //测试：更新信息
         BagManager.Instance.UpdateMainBagInfo();

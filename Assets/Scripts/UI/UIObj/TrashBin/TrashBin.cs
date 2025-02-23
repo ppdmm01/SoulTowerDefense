@@ -7,9 +7,10 @@ public class TrashBin : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 {
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log($"{eventData.pointerDrag.GetComponent<Item>().data.itemName}±»¶ªÈëÀ¬»øÍ°");
+        Item item = eventData.pointerDrag.GetComponent<Item>();
+        Debug.Log($"{item.data.itemName}±»¶ªÈëÀ¬»øÍ°");
         if (eventData.pointerDrag != null)
-            eventData.pointerDrag.GetComponent<Item>().DeleteMe();
+            item.DeleteMe();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
