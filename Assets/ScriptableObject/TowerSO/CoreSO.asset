@@ -16,7 +16,7 @@ MonoBehaviour:
   towerChineseName: "\u5143\u6C14\u6C34\u6676"
   description: 
   towerIcon: {fileID: -1650095065, guid: 3667d243f5e2ea54ba985deb4ff0ddca, type: 3}
-  hp: 100
+  hp: 250
   cost: 0
   isAttacker: 0
   damage: 0

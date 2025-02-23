@@ -117,7 +117,8 @@ public class PoolMgr : Singleton<PoolMgr>
     {
         obj.transform.position = Vector2.one * 1000; //移到看不见的位置
         //将对象压入抽屉当中
-        poolDic[obj.name].Push(obj);
+        if (poolDic.ContainsKey(obj.name))
+            poolDic[obj.name].Push(obj);
     }
 
     /// <summary>
@@ -127,7 +128,8 @@ public class PoolMgr : Singleton<PoolMgr>
     public void PushUIObj(GameObject obj)
     {
         //将对象压入抽屉当中
-        UIPoolDic[obj.name].Push(obj);
+        if (UIPoolDic.ContainsKey(obj.name))
+            UIPoolDic[obj.name].Push(obj);
     }
 
     /// <summary>
@@ -139,11 +141,13 @@ public class PoolMgr : Singleton<PoolMgr>
         {
             while (pool.Count > 0)
                 GameObject.Destroy(pool.Pop());
+            GameObject.Destroy(pool.rootObj); //删除根物体
         }
         foreach (PoolData pool in UIPoolDic.Values)
         {
             while (pool.Count > 0)
                 GameObject.Destroy(pool.Pop());
+            GameObject.Destroy(pool.rootObj); //删除根物体
         }
         poolDic.Clear();
         UIPoolDic.Clear();
@@ -153,10 +157,11 @@ public class PoolMgr : Singleton<PoolMgr>
             GameObject.Destroy(poolObj);
             poolObj = null;
         }
-        if (UIPoolObj != null)
-        {
-            GameObject.Destroy(UIPoolObj);
-            UIPoolDic = null;
-        }
+        //UIPoolObj不用置空，是Don'tDestroy物体
+        //if (UIPoolObj != null)
+        //{
+        //    GameObject.DestroyImmediate(UIPoolObj);
+        //    UIPoolObj = null;
+        //}
     }
 }

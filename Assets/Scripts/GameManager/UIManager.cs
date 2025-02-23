@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -165,6 +166,15 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
+    /// 显示提示信息
+    /// </summary>
+    /// <param name="info">信息</param>
+    public void ShowTipInfo(string info)
+    {
+        GameObject obj = CreateUIObj("UI/UIObj/TipInfo", canvasTrans);
+        obj.GetComponent<TipInfo>().Init(info);
+    }
+    /// <summary>
     /// 清理所有UI物体（过场景时使用）
     /// </summary>
     public void ClearAllUIObj()
@@ -174,5 +184,35 @@ public class UIManager : Singleton<UIManager>
             GameObject.Destroy(UIObj);
         }
         UIObjList.Clear();
+    }
+
+    /// <summary>
+    /// 游戏结束，显示面板
+    /// </summary>
+    /// <param name="isWin"></param>
+    public void ShowGameOverPanel(bool isWin)
+    {
+        //清理战场
+        LevelManager.Instance.isInLevel = false;
+        LevelManager.Instance.Clear();
+        TowerManager.Instance.Clear();
+        EnemyManager.Instance.Clear();
+        PoolMgr.Instance.ClearPool(); //切换场景前先清除对象池
+
+        //显示面板
+        TipPanel panel = ShowPanel<TipPanel>();
+        string info = isWin ? "胜利！" : "失败！";
+        panel.SetInfo(info, () =>
+        {
+            //返回背包面板（TODO:跳到胜利选奖励面板）
+            HidePanel<TowerPanel>();
+            SceneManager.LoadSceneAsync("BagScene");
+        });
+        panel.AddCancelBtnCallBack(() =>
+        {
+            //返回背包面板，和确认按钮逻辑一样
+            HidePanel<TowerPanel>();
+            SceneManager.LoadSceneAsync("BagScene");
+        });
     }
 }

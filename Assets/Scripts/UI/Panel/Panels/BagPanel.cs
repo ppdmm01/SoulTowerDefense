@@ -50,9 +50,14 @@ public class BagPanel : BasePanel
         });
         startFightBtn.onClick.AddListener(() =>
         {
-            //战斗开始
-            LevelManager.Instance.StartLevel("LevelScene1");
-            UIManager.Instance.HidePanel<BagPanel>();
+            if (TowerManager.Instance.towerDatas.Count == 0)
+            {
+                UIManager.Instance.ShowPanel<TipPanel>().SetInfo("你没有上场任何防御塔，确定继续吗？", StartFight);
+            }
+            else
+            {
+                StartFight();
+            }
         });
     }
 
@@ -78,9 +83,9 @@ public class BagPanel : BasePanel
     public void UpdateTowerInfo()
     {
         //数据溢出，清理列表中多余的数据
-        if (TowerManager.Instance.towers.Count < towerInfoList.Count)
+        if (TowerManager.Instance.towerDatas.Count < towerInfoList.Count)
         {
-            for (int i= towerInfoList.Count-1 ; i >= TowerManager.Instance.towers.Count; i--)
+            for (int i= towerInfoList.Count-1 ; i >= TowerManager.Instance.towerDatas.Count; i--)
             {
                 //销毁对象
                 Destroy(towerInfoList[i].gameObject);
@@ -89,7 +94,7 @@ public class BagPanel : BasePanel
             }
         }
         //数据不足，创建新的数据
-        else if (TowerManager.Instance.towers.Count > towerInfoList.Count)
+        else if (TowerManager.Instance.towerDatas.Count > towerInfoList.Count)
         {
             //创建对象
             GameObject towerInfoObj = Instantiate(Resources.Load<GameObject>("UI/UIObj/TowerInfo"));
@@ -106,10 +111,10 @@ public class BagPanel : BasePanel
         //更改塔的数据
         int index = 0;
         nowHeight = 0;
-        foreach (string towerName in TowerManager.Instance.towers.Keys)
+        foreach (string towerName in TowerManager.Instance.towerDatas.Keys)
         {
             TowerInfo towerInfo = towerInfoList[index];
-            TowerData newData = TowerManager.Instance.towers[towerName]; //新数据
+            TowerData newData = TowerManager.Instance.towerDatas[towerName]; //新数据
 
             if (TowerManager.Instance.oldTowerDatas.ContainsKey(towerName))
             {
@@ -142,5 +147,15 @@ public class BagPanel : BasePanel
     {
         ItemInfoObj.SetActive(false);
         ItemInfoObj.GetComponent<ItemInfo>().RemoveAllAttributeInfo();
+    }
+
+    /// <summary>
+    /// 开始战斗
+    /// </summary>
+    public void StartFight()
+    {
+        //战斗开始
+        LevelManager.Instance.StartLevel("LevelScene1");
+        UIManager.Instance.HidePanel<BagPanel>();
     }
 }

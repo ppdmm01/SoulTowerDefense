@@ -144,12 +144,6 @@ public class BaseTower : MonoBehaviour
         {
             enemyList.Add(collision.transform);
         }
-
-        ////防御塔放置相关碰撞检测
-        //if (collision.CompareTag("Tower") && TowerManager.Instance.isPlacing && TowerManager.Instance.target == this)
-        //{
-        //    TowerManager.Instance.collsionTowerList.Add(collision.gameObject);
-        //}
     }
 
     protected virtual void OnTriggerExit2D(Collider2D collision)
@@ -161,12 +155,6 @@ public class BaseTower : MonoBehaviour
                 target = null; //目标已消失，置空
             enemyList.Remove(collision.transform);
         }
-
-        ////防御塔放置相关碰撞检测
-        //if (collision.CompareTag("Tower") && TowerManager.Instance.isPlacing && TowerManager.Instance.target == this)
-        //{
-        //    TowerManager.Instance.collsionTowerList.Remove(collision.gameObject);
-        //}
     }
 
     /// <summary>
@@ -311,6 +299,13 @@ public class BaseTower : MonoBehaviour
         hpBar = null;
         enemyList.Clear();
         Destroy(gameObject);
+    }
+
+    private void OnDisable()
+    {
+        //清除防御塔管理器的记录
+        if (TowerManager.Instance.gameTowerList.Contains(this))
+            TowerManager.Instance.gameTowerList.Remove(this);
     }
     #endregion
 

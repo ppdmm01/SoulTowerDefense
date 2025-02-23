@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.GraphicsBuffer;
 
 /// <summary>
@@ -9,24 +11,22 @@ using static UnityEngine.GraphicsBuffer;
 /// </summary>
 public class TowerManager : SingletonMono<TowerManager>
 {
-    [HideInInspector] public Core core; //塔防核心
-
-    [Header("防御塔所在层")]
-    [SerializeField] private LayerMask towerLayer; //防御塔所在层
-
+    //【防御塔配置数据，清理时不用清除】
     private TowerManagerSO data; //存储防御塔配置数据
-    private Dictionary<string, TowerSO> towerDataDic; //存储防御塔配置数据
+    private Dictionary<string, TowerSO> towerSODic; //存储防御塔配置数据
 
-    public Dictionary<string,TowerData> towers; //记录目前选择的防御塔及其数据
-    public Dictionary<string,TowerData> oldTowerDatas; //记录上一次变化前的数据（用于计算属性变化）
+    //记录动态变化的防御塔数据
+    public Dictionary<string,TowerData> towerDatas; //记录目前选择的防御塔及其数据
+    public Dictionary<string,TowerData> oldTowerDatas; //记录上一次变化的数据（用于计算属性变化）
 
+    //记录场上的塔
+    public Core core; //记录基地核心
     public List<BaseTower> gameTowerList; //记录场上的防御塔
 
-    [Header("防御塔放置相关")]
-    public bool isPlacing; //是否放置塔防中
-    public BaseTower target; //正在放置的目标
-    //public List<GameObject> collsionTowerList; //记录在碰撞范围内的防御塔
-    private BaseTower nowTower; //当前检测的防御塔
+    //操作相关
+    private bool isPlacing; //是否放置塔防中
+    private BaseTower target; //当前放置的目标防御塔
+    private BaseTower nowTower; //当前检测范围的防御塔
 
     protected override void Awake()
     {
@@ -38,20 +38,19 @@ public class TowerManager : SingletonMono<TowerManager>
                 Debug.LogError("加载TowerManagerSO失败！");
         }
 
-        towerDataDic = new Dictionary<string, TowerSO>();
+        towerSODic = new Dictionary<string, TowerSO>();
         foreach (TowerSO towerSO in data.towerSOList)
         {
-            towerDataDic.Add(towerSO.towerName, towerSO);
+            towerSODic.Add(towerSO.towerName, towerSO);
         }
     }
 
     void Start()
     {
-        towers = new Dictionary<string, TowerData>();
+        towerDatas = new Dictionary<string, TowerData>();
         oldTowerDatas = new Dictionary<string, TowerData>();
 
         gameTowerList = new List<BaseTower>();
-        //collsionTowerList = new List<GameObject>();
         nowTower = null;
     }
 
@@ -72,7 +71,7 @@ public class TowerManager : SingletonMono<TowerManager>
             Debug.LogError("防御塔不存在！");
         //初始化数据
         BaseTower tower = towerObj.GetComponent<BaseTower>();
-        tower.Init(towers[towerName]);
+        tower.Init(towerDatas[towerName]);
         //放置中，未使用
         tower.towerCollider.isTrigger = true;
         tower.isUsed = false;
@@ -120,11 +119,8 @@ public class TowerManager : SingletonMono<TowerManager>
         }
         else
         {
-            Debug.Log("资源不足，放置失败！");
-            //CancelPlaceTower();
+            UIManager.Instance.ShowTipInfo("资源不足，放置失败！");
         }
-
-        //collsionTowerList.Clear(); //清空数据，方便下一次放置塔防时调用
     }
 
     /// <summary>
@@ -149,7 +145,7 @@ public class TowerManager : SingletonMono<TowerManager>
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         // 检测鼠标是否悬停在防御塔本体上  
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, towerLayer);
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, 1 << LayerMask.GetMask("Tower"));
         if (hit.collider != null)
         {
             if (nowTower != hit.collider.GetComponent<BaseTower>())
@@ -158,7 +154,8 @@ public class TowerManager : SingletonMono<TowerManager>
                     nowTower.HideRange(); //把之前塔范围隐藏了
                 nowTower = hit.collider.GetComponent<BaseTower>();
             }
-            nowTower.ShowRange();
+            if (nowTower != null)
+                nowTower.ShowRange();
         }
         else
         {
@@ -207,34 +204,22 @@ public class TowerManager : SingletonMono<TowerManager>
     }
 
     /// <summary>
-    /// 清理场上所有防御塔
-    /// </summary>
-    public void ClearAllTower()
-    {
-        foreach (BaseTower tower in gameTowerList)
-        {
-            Destroy(tower.gameObject);
-        }
-        gameTowerList.Clear();
-    }
-
-    /// <summary>
     /// 添加要用到的防御塔
     /// </summary>
-    public void AddTower(string towerName,TowerData data)
+    public void AddTowerData(string towerName,TowerData data)
     {
-        if (towers.ContainsKey(towerName)) return;
-        towers.Add(towerName,data);
+        if (towerDatas.ContainsKey(towerName)) return;
+        towerDatas.Add(towerName,data);
     }
 
     /// <summary>
     /// 移除要用到防御塔
     /// </summary>
     /// <param name="towerName"></param>
-    public void RemoveTower(string towerName)
+    public void RemoveTowerData(string towerName)
     {
-        if (towers.ContainsKey(towerName))
-            towers.Remove(towerName);
+        if (towerDatas.ContainsKey(towerName))
+            towerDatas.Remove(towerName);
     }
 
     /// <summary>
@@ -244,8 +229,8 @@ public class TowerManager : SingletonMono<TowerManager>
     /// <returns>防御塔配置数据</returns>
     public TowerSO GetTowerSO_ByName(string towerName)
     {
-        if (!towerDataDic.ContainsKey(towerName)) return null;
-        return towerDataDic[towerName];
+        if (!towerSODic.ContainsKey(towerName)) return null;
+        return towerSODic[towerName];
     }
 
     /// <summary>
@@ -255,13 +240,13 @@ public class TowerManager : SingletonMono<TowerManager>
     /// <param name="activeEffect">激活效果</param>
     public void SetTowerDataFromName(string towerName, ItemActiveEffect[] activeEffects)
     {
-        if (!towers.ContainsKey(towerName)) 
+        if (!towerDatas.ContainsKey(towerName)) 
         {
             Debug.Log("未找到名为"+towerName+"的防御塔");
             return;
         }
 
-        TowerData data = towers[towerName];
+        TowerData data = towerDatas[towerName];
         foreach (ItemActiveEffect activeEffect in activeEffects)
         {
             switch (activeEffect.effectType)
@@ -299,7 +284,7 @@ public class TowerManager : SingletonMono<TowerManager>
     public void SetTowerDataFromTag(ItemTag[] tags, ItemActiveEffect[] activeEffects)
     {
         bool flag = true; //标记是否满足标签条件
-        foreach (TowerData data in towers.Values)
+        foreach (TowerData data in towerDatas.Values)
         {
             flag = true;
             //只有所有标签满足才行
@@ -319,10 +304,27 @@ public class TowerManager : SingletonMono<TowerManager>
     {
         //清理老数据
         oldTowerDatas.Clear();
-        foreach (string towerName in towers.Keys)
+        foreach (string towerName in towerDatas.Keys)
         {
-            TowerData oldData = new TowerData(towers[towerName]);
+            TowerData oldData = new TowerData(towerDatas[towerName]);
             oldTowerDatas.Add(towerName, oldData);
         }
+    }
+
+    /// <summary>
+    /// 清理战场
+    /// </summary>
+    public void Clear()
+    {
+        //清除动态数据
+        towerDatas.Clear();
+        oldTowerDatas.Clear();
+        //清除核心
+        if (core != null)
+            core.Dead();
+        core = null;
+        //清除场上的防御塔
+        foreach (BaseTower tower in gameTowerList.ToList())
+            tower.Dead();
     }
 }

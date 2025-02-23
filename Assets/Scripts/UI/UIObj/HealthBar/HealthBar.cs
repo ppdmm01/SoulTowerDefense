@@ -104,6 +104,11 @@ public class HealthBar : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
     //private IEnumerator DestroyMe(float time)
     //{
     //    yield return new WaitForSeconds(time);

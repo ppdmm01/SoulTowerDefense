@@ -274,7 +274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 239860164350220261, guid: 7f04c8b471ac22345996dcb93a961e17, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.9981341
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2119933517335043058, guid: 7f04c8b471ac22345996dcb93a961e17, type: 3}
       propertyPath: m_Pivot.x
@@ -358,7 +358,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2945989543324781195, guid: 7f04c8b471ac22345996dcb93a961e17, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.003034487
+      value: 0.00004439365
       objectReference: {fileID: 0}
     - target: {fileID: 4066035355430276057, guid: 7f04c8b471ac22345996dcb93a961e17, type: 3}
       propertyPath: m_AnchorMax.x
@@ -378,7 +378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5880405748011442007, guid: 7f04c8b471ac22345996dcb93a961e17, type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.9999962
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -661,7 +661,6 @@ MonoBehaviour:
   gameTowerList: []
   isPlacing: 0
   target: {fileID: 0}
-  collisonTowerList: []
 --- !u!114 &896336042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -675,6 +674,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInLevel: 0
+  data: {fileID: 0}
+  nowEnemyNum: 0
 --- !u!114 &896336043
 MonoBehaviour:
   m_ObjectHideFlags: 0

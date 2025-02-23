@@ -51,9 +51,11 @@ public class BagManager : SingletonMono<BagManager>
         //背包满了
         if (!bag.TryAutoPlaceItem(item))
         {
-            Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
+            //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
             //删除多余的物品
             item.DeleteMe();
+            //提示
+            UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
         }
     }
 
@@ -70,9 +72,11 @@ public class BagManager : SingletonMono<BagManager>
         //背包满了
         if (!bag.TryAutoPlaceItem(item))
         {
-            Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
+            //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
             //删除多余的物品
             item.DeleteMe();
+            //提示
+            UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
         }
     }
 
@@ -93,9 +97,11 @@ public class BagManager : SingletonMono<BagManager>
             //背包满了
             if (!bag.TryAutoPlaceItem(item))
             {
-                Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
+                //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
                 //删除多余的物品
                 item.DeleteMe();
+                //提示
+                UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
                 break;
             }
         }

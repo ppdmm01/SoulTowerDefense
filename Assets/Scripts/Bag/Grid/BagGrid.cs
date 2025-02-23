@@ -221,8 +221,9 @@ public class BagGrid : MonoBehaviour
         {
             if (!TryAutoPlaceItem(item))
             {
-                Debug.LogError($"物品 {item.data.itemName} 无法放置，背包可能已满");
-                //TODO:后续处理（删除、开新一页等）
+                //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包可能已满");
+                //提示
+                UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
             }
         }
 
@@ -314,14 +315,14 @@ public class BagGrid : MonoBehaviour
     /// </summary>
     public void CalculateTower()
     {
-        TowerManager.Instance.towers.Clear();
+        TowerManager.Instance.towerDatas.Clear();
         foreach (Item item in items)
         {
             if (item.data.itemTags.Contains(ItemTag.Tower))
             {
                 TowerData towerData = new TowerData(TowerManager.Instance.GetTowerSO_ByName(item.data.itemName));
                 //添加防御塔
-                TowerManager.Instance.AddTower(item.data.itemName, towerData);
+                TowerManager.Instance.AddTowerData(item.data.itemName, towerData);
             }
         }
     }

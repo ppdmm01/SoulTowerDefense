@@ -39,14 +39,6 @@ public class EnemyManager : SingletonMono<EnemyManager>
         top = Camera.main.transform.position.y + verticalSize + spawnOffset;
     }
 
-    private void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Space) && LevelManager.Instance.isInLevel)
-        //{
-        //    SpawnEnemies("Enemy1", 20, 5, 0.5f);
-        //}
-    }
-
     /// <summary>
     /// 生成一次敌人
     /// </summary>
@@ -127,11 +119,21 @@ public class EnemyManager : SingletonMono<EnemyManager>
     /// <summary>
     /// 清理当前所有敌人
     /// </summary>
-    public void KillAllEnemies()
+    private void KillAllEnemies()
     {
         foreach (GameObject enemyObj in enemies)
         {
             enemyObj.GetComponent<Enemy>().Dead();
         }
+        enemies.Clear();
+    }
+
+    /// <summary>
+    /// 清理战场上的敌人
+    /// </summary>
+    public void Clear()
+    {
+        KillAllEnemies();
+        StopAllCoroutines(); //停止创建敌人
     }
 }

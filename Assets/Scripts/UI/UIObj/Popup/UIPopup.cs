@@ -56,4 +56,9 @@ public class UIPopup : MonoBehaviour
     {
         DOTween.Kill(transform);
     }
+
+    private void OnDestroy()
+    {
+        DOTween.Kill(transform);
+    }
 }

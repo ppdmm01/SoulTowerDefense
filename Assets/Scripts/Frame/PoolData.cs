@@ -10,13 +10,13 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 public class PoolData
 {
     //存储抽屉中的对象
-    protected Stack<GameObject> dataStack = new Stack<GameObject>();
+    private Stack<GameObject> dataStack = new Stack<GameObject>();
     //存储正在使用中的对象（即抽屉外的对象）
-    protected List<GameObject> usedList = new List<GameObject>();
+    private List<GameObject> usedList = new List<GameObject>();
     //抽屉根对象
-    protected GameObject rootObj;
+    public GameObject rootObj;
     //对象最大上限
-    protected int maxNum;
+    private int maxNum;
 
     public PoolData() { }
 

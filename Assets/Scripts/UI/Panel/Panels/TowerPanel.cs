@@ -22,7 +22,7 @@ public class TowerPanel : BasePanel
     /// </summary>
     public void InitTowerBtn()
     {
-        foreach (TowerData towerData in TowerManager.Instance.towers.Values)
+        foreach (TowerData towerData in TowerManager.Instance.towerDatas.Values)
         {
             GameObject obj = Instantiate(Resources.Load<GameObject>("UI/UIObj/CreateTowerBtn"));
             obj.transform.SetParent(towerBtnContent, false);

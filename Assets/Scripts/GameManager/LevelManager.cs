@@ -15,7 +15,7 @@ public class LevelManager : SingletonMono<LevelManager>
     private int totalWave; //总波次
     private float timer = 0; //计时器
 
-    [SerializeField] private int nowEnemyNum; //当前敌人数量
+    private int nowEnemyNum; //当前敌人数量
 
     protected override void Awake()
     {
@@ -78,6 +78,7 @@ public class LevelManager : SingletonMono<LevelManager>
         {
             nowEnemyNum = 0;
             float totalTime = SpawnWaveEnemies(levelData.GetWaveInfo(nowWave));
+            UIManager.Instance.ShowTipInfo($"第{nowWave}波");
             UIManager.Instance.GetPanel<TowerPanel>().UpdateWaveInfo(nowWave, totalWave);
             timer = totalTime;
             while (timer > 0)
@@ -92,6 +93,9 @@ public class LevelManager : SingletonMono<LevelManager>
             }
             ++nowWave;
         }
+        nowWave = totalWave;
+        //显示胜利面板
+        UIManager.Instance.ShowGameOverPanel(true);
     }
 
     /// <summary>
@@ -116,13 +120,14 @@ public class LevelManager : SingletonMono<LevelManager>
     /// </summary>
     public void SkipThisWave()
     {
-        if (nowWave < totalWave)
+        if (nowWave <= totalWave)
         {
             //清除场上所有敌人
-            EnemyManager.Instance.KillAllEnemies();
+            EnemyManager.Instance.Clear();
             //敌人数量清0
             timer = 0;
             nowEnemyNum = 0; //清0时自动进入下一波
+            UIManager.Instance.GetPanel<TowerPanel>().UpdateEnemyNum(nowEnemyNum);
         }
     }
 
@@ -142,5 +147,17 @@ public class LevelManager : SingletonMono<LevelManager>
     {
         --nowEnemyNum;
         UIManager.Instance.GetPanel<TowerPanel>().UpdateEnemyNum(nowEnemyNum);
+    }
+
+    /// <summary>
+    /// 清理战场
+    /// </summary>
+    public void Clear()
+    {
+        isInLevel = false;
+        nowWave = totalWave = 0;
+        timer = 0;
+        nowEnemyNum = 0;
+        StopAllCoroutines();
     }
 }

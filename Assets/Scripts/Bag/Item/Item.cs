@@ -210,7 +210,8 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
             else
             {
                 Debug.LogError($"物品 {data.itemName} 无法放置，背包可能已满");
-                //TODO:后续处理（删除、开新一页等）
+                //提示
+                UIManager.Instance.CreateUIObj("UI/UIObj/TipInfo",UIManager.Instance.canvasTrans);
             }
         }
     }
