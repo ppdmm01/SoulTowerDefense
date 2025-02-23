@@ -22,12 +22,16 @@ public class GameResManager : Singleton<GameResManager>
     public void AddQiNum(int num)
     {
         qiResNum += num;
-        UIManager.Instance.GetPanel<TowerPanel>().ChangeQiNum(qiResNum);
+        TowerPanel panel = UIManager.Instance.GetPanel<TowerPanel>();
+        if (panel != null)
+            panel.UpdateQiNum(qiResNum);
     }
 
     public void ResetQiNum()
     {
         qiResNum = 0;
-        UIManager.Instance.GetPanel<TowerPanel>().ChangeQiNum(qiResNum);
+        TowerPanel panel = UIManager.Instance.GetPanel<TowerPanel>();
+        if (panel != null)
+            panel.UpdateQiNum(qiResNum);
     }
 }

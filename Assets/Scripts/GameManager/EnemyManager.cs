@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// 怪物管理器
@@ -10,15 +11,25 @@ public class EnemyManager : SingletonMono<EnemyManager>
     [Header("偏移距离")]
     [Tooltip("生成点离屏幕边界的距离")]
     public float spawnOffset = 2f;
+    private float left, right, top, bottom; //上下左右四个方向的边界
 
+    private EnemyManagerSO data; //存储所有敌人数据
     private List<GameObject> enemies; //存储敌人
 
-    private float left,right,top,bottom; //上下左右四个方向的边界
+    protected override void Awake()
+    {
+        base.Awake();
+        enemies = new List<GameObject>();
+        if (data == null)
+        {
+            data = Resources.Load<EnemyManagerSO>("Data/EnemyManagerSO");
+            if (data == null)
+                Debug.LogError("加载EnemyManagerSO失败！");
+        }
+    }
 
     private void Start()
     {
-        enemies = new List<GameObject>();
-
         float verticalSize = Camera.main.orthographicSize; //垂直方向大小
         float horizontalSize = verticalSize * Camera.main.aspect; //水平方向大小
         //计算边界值  
@@ -30,26 +41,29 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && LevelManager.Instance.isInLevel)
-        {
-            SpawnWaveEnemies("Enemy1", 20, 5, 0.5f);
-        }
+        //if (Input.GetKeyDown(KeyCode.Space) && LevelManager.Instance.isInLevel)
+        //{
+        //    SpawnEnemies("Enemy1", 20, 5, 0.5f);
+        //}
     }
 
     /// <summary>
-    /// 生成一波敌人
+    /// 生成一次敌人
     /// </summary>
     /// <param name="enemyName">敌人名字</param>
     /// <param name="totalNum">生成数量</param>
     /// <param name="spawnNum">一次生成的敌人</param>
     /// <param name="frequency">生成频率（多久生成一次）</param>
-    public void SpawnWaveEnemies(string enemyName,int totalNum,int spawnNum,float frequency)
+    /// <param name="delayTime">延时多久才出怪</param>
+    public void SpawnEnemies(string enemyName,int totalNum,int spawnNum,float frequency, float delayTime)
     {
-        StartCoroutine(ReallySpawnWaveEnemies(enemyName,totalNum, spawnNum, frequency));
+        StartCoroutine(SpawnEnemiesRoutine(enemyName,totalNum, spawnNum, frequency, delayTime));
     }
 
-    private IEnumerator ReallySpawnWaveEnemies(string enemyName, int totalNum, int spawnNum, float frequency)
+    private IEnumerator SpawnEnemiesRoutine(string enemyName, int totalNum, int spawnNum, float frequency,float delayTime)
     {
+        yield return new WaitForSeconds(delayTime); //延时
+
         GameObject enemyObj = Resources.Load<GameObject>("Enemy/"+enemyName);
         float timer = 0;
         int nowNum = totalNum;
@@ -83,8 +97,6 @@ public class EnemyManager : SingletonMono<EnemyManager>
     {
         for (int i = 0; i < num; i++)
         {
-            //Vector2 pos = RandomSpawnPoint();
-            //GameObject enemy = Instantiate(Resources.Load<GameObject>("Enemy/"+enemyName), pos, Quaternion.identity);
             GameObject enemy = PoolMgr.Instance.GetObj("Enemy/" + enemyName);
             enemy.transform.position = RandomSpawnPoint();
             enemies.Add(enemy);
@@ -109,6 +121,17 @@ public class EnemyManager : SingletonMono<EnemyManager>
             default:
                 return new Vector2(Random.Range(left, right), bottom); //下 
 
+        }
+    }
+
+    /// <summary>
+    /// 清理当前所有敌人
+    /// </summary>
+    public void KillAllEnemies()
+    {
+        foreach (GameObject enemyObj in enemies)
+        {
+            enemyObj.GetComponent<Enemy>().Dead();
         }
     }
 }

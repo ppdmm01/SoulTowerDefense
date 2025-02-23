@@ -123,7 +123,6 @@ public class BaseTower : MonoBehaviour
     {
         if (target == null) return;
         ani.Play("Attack"); //¶¯»­ÊÂ¼ş´¥·¢¹¥»÷
-        Debug.Log("¹¥»÷");
     }
 
     /// <summary>
@@ -146,11 +145,11 @@ public class BaseTower : MonoBehaviour
             enemyList.Add(collision.transform);
         }
 
-        //·ÀÓùËş·ÅÖÃÏà¹ØÅö×²¼ì²â
-        if (collision.CompareTag("Tower") && TowerManager.Instance.isPlacing && TowerManager.Instance.target == this)
-        {
-            TowerManager.Instance.collisonTowerList.Add(collision.gameObject);
-        }
+        ////·ÀÓùËş·ÅÖÃÏà¹ØÅö×²¼ì²â
+        //if (collision.CompareTag("Tower") && TowerManager.Instance.isPlacing && TowerManager.Instance.target == this)
+        //{
+        //    TowerManager.Instance.collsionTowerList.Add(collision.gameObject);
+        //}
     }
 
     protected virtual void OnTriggerExit2D(Collider2D collision)
@@ -163,11 +162,11 @@ public class BaseTower : MonoBehaviour
             enemyList.Remove(collision.transform);
         }
 
-        //·ÀÓùËş·ÅÖÃÏà¹ØÅö×²¼ì²â
-        if (collision.CompareTag("Tower") && TowerManager.Instance.isPlacing && TowerManager.Instance.target == this)
-        {
-            TowerManager.Instance.collisonTowerList.Remove(collision.gameObject);
-        }
+        ////·ÀÓùËş·ÅÖÃÏà¹ØÅö×²¼ì²â
+        //if (collision.CompareTag("Tower") && TowerManager.Instance.isPlacing && TowerManager.Instance.target == this)
+        //{
+        //    TowerManager.Instance.collsionTowerList.Remove(collision.gameObject);
+        //}
     }
 
     /// <summary>

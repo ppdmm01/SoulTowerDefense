@@ -10,7 +10,16 @@ public class Main : MonoBehaviour
     void Start()
     {
         UIManager.Instance.ShowPanel<BagPanel>();
+    }
 
-        //UIManager.Instance.ShowPanel<TowerPanel>();
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            if (LevelManager.Instance.isInLevel)
+            {
+                LevelManager.Instance.SkipThisWave();
+            }
+        }
     }
 }

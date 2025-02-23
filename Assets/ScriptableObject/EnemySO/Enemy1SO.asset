@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 087af4cc73b9a2842a85033d48d763d3, type: 3}
   m_Name: Enemy1SO
   m_EditorClassIdentifier: 
-  hp: 20
-  moveSpeed: 0.8
-  atk: 2
-  interval: 1
+  hp: 30
+  moveSpeed: 0.55
+  atk: 4
+  interval: 2.5

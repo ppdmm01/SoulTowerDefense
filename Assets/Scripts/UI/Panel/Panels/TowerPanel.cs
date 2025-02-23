@@ -7,12 +7,14 @@ using UnityEngine.UI;
 public class TowerPanel : BasePanel
 {
     public TextMeshProUGUI qiNumText; //“气”资源数量文本
+    public TextMeshProUGUI waveNumText; //波数
+    public TextMeshProUGUI nowEnemyNumText; //剩余敌人数量
     public HealthBar hpBar; //基地血量
     public Transform towerBtnContent; //放置按钮的位置
     private List<CreateTowerBtn> towerBtnList = new List<CreateTowerBtn>(); //存储放置防御塔的按钮
     public override void Init()
     {
-        ChangeQiNum(0);
+
     }
 
     /// <summary>
@@ -40,8 +42,30 @@ public class TowerPanel : BasePanel
         towerBtnList.Clear();
     }
 
-    public void ChangeQiNum(int num)
+    /// <summary>
+    /// 更新气资源数量
+    /// </summary>
+    /// <param name="num"></param>
+    public void UpdateQiNum(int num)
     {
         qiNumText.text = num.ToString();    
+    }
+
+    /// <summary>
+    /// 更新波数
+    /// </summary>
+    /// <param name="waveNum"></param>
+    public void UpdateWaveInfo(int waveNum,int totalWaveNum)
+    {
+        waveNumText.text = $"第{waveNum}/{totalWaveNum}波";
+    }
+
+    /// <summary>
+    /// 更新敌人数量
+    /// </summary>
+    /// <param name="num"></param>
+    public void UpdateEnemyNum(int num)
+    {
+        nowEnemyNumText.text = num.ToString();
     }
 }

@@ -86,6 +86,7 @@ public class Enemy : MonoBehaviour
     public void Dead()
     {
         target = null;
+        LevelManager.Instance.SubEnemyNum(); //¹ÖÎïÊıÁ¿-1
         PoolMgr.Instance.PushObj(gameObject);
     }
 

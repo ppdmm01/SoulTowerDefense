@@ -25,7 +25,7 @@ public class TowerManager : SingletonMono<TowerManager>
     [Header("防御塔放置相关")]
     public bool isPlacing; //是否放置塔防中
     public BaseTower target; //正在放置的目标
-    public List<GameObject> collisonTowerList; //记录在碰撞范围内的防御塔
+    //public List<GameObject> collsionTowerList; //记录在碰撞范围内的防御塔
     private BaseTower nowTower; //当前检测的防御塔
 
     protected override void Awake()
@@ -51,7 +51,7 @@ public class TowerManager : SingletonMono<TowerManager>
         oldTowerDatas = new Dictionary<string, TowerData>();
 
         gameTowerList = new List<BaseTower>();
-        collisonTowerList = new List<GameObject>();
+        //collsionTowerList = new List<GameObject>();
         nowTower = null;
     }
 
@@ -114,9 +114,9 @@ public class TowerManager : SingletonMono<TowerManager>
             target.isUsed = true;
             isPlacing = false;
             target.HideRange();
-            target = null;
             //记录
             gameTowerList.Add(target);
+            target = null;
         }
         else
         {
@@ -124,7 +124,7 @@ public class TowerManager : SingletonMono<TowerManager>
             //CancelPlaceTower();
         }
 
-        collisonTowerList.Clear(); //清空数据，方便下一次放置塔防时调用
+        //collsionTowerList.Clear(); //清空数据，方便下一次放置塔防时调用
     }
 
     /// <summary>
@@ -207,7 +207,7 @@ public class TowerManager : SingletonMono<TowerManager>
     }
 
     /// <summary>
-    /// 清理所有防御塔
+    /// 清理场上所有防御塔
     /// </summary>
     public void ClearAllTower()
     {

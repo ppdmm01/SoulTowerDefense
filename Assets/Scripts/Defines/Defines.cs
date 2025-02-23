@@ -18,4 +18,7 @@ public static class Defines
     //塔防相关常量
     public static readonly Color validRangeColor = new Color(0, 0, 0, 0.2f); //合法范围的颜色
     public static readonly Color invalidRangeColor = new Color(1f, 0f, 0f, 0.2f); //无效范围的颜色
+
+    //波次相关常量
+    public static readonly float waitTime = 5f; //每波之间的休息时间
 }
