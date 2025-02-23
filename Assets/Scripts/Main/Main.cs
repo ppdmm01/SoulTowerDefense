@@ -14,12 +14,17 @@ public class Main : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (LevelManager.Instance.isInLevel)
             {
                 LevelManager.Instance.SkipThisWave();
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit(); //ÍË³öÓÎÏ·
         }
     }
 }

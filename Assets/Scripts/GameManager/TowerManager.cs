@@ -25,6 +25,7 @@ public class TowerManager : SingletonMono<TowerManager>
 
     //操作相关
     private bool isPlacing; //是否放置塔防中
+    public bool isOpenPanel; //是否正在打开防御塔操作面板
     private BaseTower target; //当前放置的目标防御塔
     private BaseTower nowTower; //当前检测范围的防御塔
 
@@ -56,8 +57,9 @@ public class TowerManager : SingletonMono<TowerManager>
 
     void Update()
     {
-        TowerRangeOperation();
-        PlaceTowerOperation();
+        TowerRangeOperation(); //查看防御塔范围操作
+        SellTowerOperation(); //售卖防御塔操作
+        PlaceTowerOperation(); //放置防御塔操作（放在最后，避免放置时的bool变化影响前面操作）
     }
 
     /// <summary>
@@ -98,6 +100,88 @@ public class TowerManager : SingletonMono<TowerManager>
         this.core = core;
     }
 
+    #region 操作相关
+    /// <summary>
+    /// 检测防御塔范围的操作
+    /// </summary>
+    private void TowerRangeOperation()
+    {
+        if (isPlacing || isOpenPanel) return; //如果正在放置防御塔或者操作面板已打开，则跳过
+
+        // 将鼠标位置从屏幕坐标转换为世界坐标  
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        // 检测鼠标是否悬停在防御塔本体上  
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, 1 << LayerMask.NameToLayer("Tower"));
+        if (hit.collider != null)
+        {
+            if (nowTower != hit.collider.GetComponent<BaseTower>()) //如果和之前的防御塔不一样
+            {
+                if (nowTower != null)
+                    nowTower.HideRange(); //把之前塔范围隐藏了
+                nowTower = hit.collider.GetComponent<BaseTower>();
+            }
+            if (nowTower != null)
+                nowTower.ShowRange();
+        }
+        else if (nowTower != null)
+        {
+            nowTower.HideRange();
+            nowTower = null;
+        }
+    }
+
+    /// <summary>
+    /// 卖塔操作（返还50%）
+    /// </summary>
+    private void SellTowerOperation()
+    {
+        if (isPlacing) return;
+
+        //打开面板操作
+        if (nowTower != null && core != nowTower) //防御塔存在并且不是核心
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                nowTower.HideRange();
+                //同时也要显示血条
+                nowTower.ShowHpBar();
+                //显示卖塔界面
+                TowerOperationPanel panel = UIManager.Instance.ShowPanel<TowerOperationPanel>();
+                panel.SetInfo(nowTower);
+                isOpenPanel = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 放置防御塔的操作
+    /// </summary>
+    private void PlaceTowerOperation()
+    {
+        if (isPlacing)
+        {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            target.transform.position = mousePos;
+            //显示防御塔范围
+            target.ShowRange();
+            if (HasResources())
+                target.SetRangeColor(Defines.validRangeColor);
+            else
+                target.SetRangeColor(Defines.invalidRangeColor);
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                PlaceTower();
+            }
+            if (Input.GetMouseButtonDown(1))
+            {
+                CancelPlaceTower();
+            }
+        }
+    }
+
+
     /// <summary>
     /// 放置防御塔
     /// </summary>
@@ -133,68 +217,8 @@ public class TowerManager : SingletonMono<TowerManager>
             Destroy(target.gameObject);
         target = null;
     }
+    #endregion
 
-    /// <summary>
-    /// 检测防御塔范围的操作
-    /// </summary>
-    private void TowerRangeOperation()
-    {
-        if (isPlacing) return; //如果正在放置防御塔，则不要显示其他的防御塔范围
-
-        // 将鼠标位置从屏幕坐标转换为世界坐标  
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        // 检测鼠标是否悬停在防御塔本体上  
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, 1 << LayerMask.GetMask("Tower"));
-        if (hit.collider != null)
-        {
-            if (nowTower != hit.collider.GetComponent<BaseTower>())
-            {
-                if (nowTower != null)
-                    nowTower.HideRange(); //把之前塔范围隐藏了
-                nowTower = hit.collider.GetComponent<BaseTower>();
-            }
-            if (nowTower != null)
-                nowTower.ShowRange();
-        }
-        else
-        {
-            if (nowTower != null)
-            {
-                nowTower.HideRange();
-                nowTower = null;
-            }
-        }
-    }
-
-    /// <summary>
-    /// 放置防御塔的操作
-    /// </summary>
-    private void PlaceTowerOperation()
-    {
-        if (isPlacing)
-        {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            target.transform.position = mousePos;
-            //显示防御塔范围
-            target.ShowRange();
-            if (HasResources())
-                target.SetRangeColor(Defines.validRangeColor);
-            else
-                target.SetRangeColor(Defines.invalidRangeColor);
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                PlaceTower();
-            }
-            if (Input.GetMouseButtonDown(1))
-            {
-                Debug.Log("取消放置");
-                CancelPlaceTower();
-            }
-        }
-    }
-    
     /// <summary>
     /// 是否有放置该防御塔的资源
     /// </summary>
