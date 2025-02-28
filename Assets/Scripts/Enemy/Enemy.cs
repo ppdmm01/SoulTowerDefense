@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
 {
     [Header("敌人数据")]
     public EnemySO data;
-    private int nowHp;
+    public int nowHp;
 
     private Vector3 dir; //敌人移动方向
     private BaseTower target; //敌人攻击的目标
@@ -20,8 +20,11 @@ public class Enemy : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originColor; //记录原来的颜色
 
+    public bool isDead; //是否死亡
+
     void Start()
     {
+        isDead = false;
         nowHp = data.hp;
         attackTimer = 0;
         target = null;
@@ -75,6 +78,7 @@ public class Enemy : MonoBehaviour
         if (nowHp < 0)
         {
             Dead();
+            return;
         }
         //闪白
         Flash(0.1f);
@@ -85,9 +89,12 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void Dead()
     {
+        if (isDead) return;
+        isDead = true;
         target = null;
         LevelManager.Instance.SubEnemyNum(); //怪物数量-1
         PoolMgr.Instance.PushObj(gameObject);
+
     }
 
     /// <summary>
@@ -137,8 +144,14 @@ public class Enemy : MonoBehaviour
 
     private void OnDisable()
     {
+        StopAllCoroutines();
         target = null;
         spriteRenderer.color = originColor;
         towerList.Clear();
+    }
+
+    private void OnEnable()
+    {
+        isDead = false;
     }
 }

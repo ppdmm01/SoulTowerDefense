@@ -21,7 +21,7 @@ MonoBehaviour:
   isAttacker: 1
   damage: 8
   range: 5
-  interval: 1.5
+  interval: 0.5
   isProducer: 0
   output: 0
   cooldown: 0

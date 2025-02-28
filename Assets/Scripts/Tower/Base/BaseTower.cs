@@ -34,6 +34,7 @@ public class BaseTower : MonoBehaviour
     public List<Transform> enemyList; //记录在范围内的敌人
 
     [HideInInspector] public bool isUsed; //是否启用
+    private bool isDead; //是否死亡
 
     protected virtual void Update()
     {
@@ -85,6 +86,7 @@ public class BaseTower : MonoBehaviour
     public void Init(TowerData data)
     {
         this.data = data;
+        isDead = false;
 
         enemyList = new List<Transform>();
         ani = GetComponent<Animator>();
@@ -284,6 +286,7 @@ public class BaseTower : MonoBehaviour
         if (nowHp < 0)
         {
             Dead();
+            return;
         }
         //闪白
         Flash(0.1f,Color.white);
@@ -294,6 +297,8 @@ public class BaseTower : MonoBehaviour
     /// </summary>
     public virtual void Dead()
     {
+        if (isDead) return;
+        isDead = true;
         //删除血条
         UIManager.Instance.DestroyUIObjByPoolMgr(hpBar.gameObject);
         hpBar = null;
@@ -303,9 +308,15 @@ public class BaseTower : MonoBehaviour
 
     private void OnDisable()
     {
+        StopAllCoroutines();
         //清除防御塔管理器的记录
         if (TowerManager.Instance.gameTowerList.Contains(this))
             TowerManager.Instance.gameTowerList.Remove(this);
+    }
+
+    private void OnEnable()
+    {
+        isDead = false;
     }
     #endregion
 
