@@ -23,7 +23,7 @@ public class ItemInfo : MonoBehaviour
         //类型
         string typeInfo;
         if (data.itemTags.Contains(ItemTag.Tower)) typeInfo = ColorTextTools.ColorText("【防御塔】", "#FF3030");
-        else typeInfo = ColorTextTools.ColorText("【道具】", "yellow");
+        else typeInfo = ColorTextTools.ColorText("【道具】", "#00B6FF");
         CreateAttributeInfo("Type", "物品类型：" + typeInfo);
         //描述
         CreateAttributeInfo("Description", "物品描述：" + data.description);
@@ -108,7 +108,7 @@ public class ItemInfo : MonoBehaviour
             attributeInfo = itemAttributes[name];
         }
         //设置信息
-        attributeInfo.SetInfo(info, 36);
+        attributeInfo.SetInfo(info);
         //计算高度
         nowHeight += attributeInfo.GetHeight();
     }

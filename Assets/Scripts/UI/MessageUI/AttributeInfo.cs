@@ -17,7 +17,7 @@ public class AttributeInfo : MonoBehaviour
     /// </summary>
     /// <param name="info">信息</param>
     /// <param name="fontSize">字体大小</param>
-    public void SetInfo(string info,float fontSize = 36f)
+    public void SetInfo(string info,float fontSize = 32f)
     {
         infoTxt.text = info;
         infoTxt.fontSize = fontSize;
@@ -34,7 +34,7 @@ public class AttributeInfo : MonoBehaviour
     /// <param name="info">信息</param>
     /// <param name="changedInfo">变化的信息</param>
     /// <param name="fontSize">字体大小</param>
-    public void SetChangedInfo(string info,string changedInfo, float fontSize = 36f)
+    public void SetChangedInfo(string info,string changedInfo, float fontSize = 32f)
     {
         SetInfo(info, fontSize);
         changedInfoTxt.fontSize = fontSize;

@@ -8,6 +8,7 @@ public class TowerInfo : MonoBehaviour
 {
     public RectTransform towerBaseInfoTrans; //获取防御塔基础信息高度
     public Image towerIcon; //防御塔图片
+    public Image towerIconBg; //防御塔背景图片
     public TextMeshProUGUI towerName; //防御塔名字
     public TextMeshProUGUI towerDescription; //防御塔描述
     private Dictionary<string,AttributeInfo> towerAttributes = new Dictionary<string, AttributeInfo>(); //防御塔属性信息
@@ -18,9 +19,10 @@ public class TowerInfo : MonoBehaviour
     /// </summary>
     /// <param name="data">防御塔数据</param>
     /// <param name="startHeight">信息面板起始高度</param>
-    public void SetInfo(TowerData data, float startHeight)
+    public void SetInfo(TowerData data)
     {
-        (transform as RectTransform).anchoredPosition = new Vector2((transform as RectTransform).anchoredPosition.x, startHeight);
+        towerIconBg.gameObject.SetActive(true);
+        (transform as RectTransform).anchoredPosition = new Vector2((transform as RectTransform).anchoredPosition.x,0);
 
         towerIcon.sprite = data.towerIcon;
         towerName.text = data.towerChineseName;
@@ -47,9 +49,10 @@ public class TowerInfo : MonoBehaviour
     /// <summary>
     /// 设置变化的信息
     /// </summary>
-    public void SetChangedInfo(TowerData data,TowerData oldData,float startHeight)
+    public void SetChangedInfo(TowerData data,TowerData oldData)
     {
-        (transform as RectTransform).anchoredPosition = new Vector2((transform as RectTransform).anchoredPosition.x, startHeight);
+        towerIconBg.gameObject.SetActive(true);
+        (transform as RectTransform).anchoredPosition = new Vector2((transform as RectTransform).anchoredPosition.x, 0);
 
         towerIcon.sprite = data.towerIcon;
         towerName.text = data.towerChineseName;
@@ -100,9 +103,9 @@ public class TowerInfo : MonoBehaviour
         }
         //设置信息
         if (changedInfo != null)
-            attributeInfo.SetChangedInfo(info, changedInfo, 36);
+            attributeInfo.SetChangedInfo(info, changedInfo);
         else
-            attributeInfo.SetInfo(info,36);
+            attributeInfo.SetInfo(info);
         //计算高度
         nowHeight += attributeInfo.GetHeight();
     }
@@ -127,5 +130,16 @@ public class TowerInfo : MonoBehaviour
     public float GetHeight()
     {
         return (transform as RectTransform).sizeDelta.y;
+    }
+
+    /// <summary>
+    /// 置空
+    /// </summary>
+    public void SetNull()
+    {
+        towerIconBg.gameObject.SetActive(false);
+        towerIcon.sprite = towerIconBg.sprite; //设置为背景的图片
+        towerName.text = "";
+        towerDescription.text = "";
     }
 }

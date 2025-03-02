@@ -37,7 +37,7 @@ public class UIManager : Singleton<UIManager>
         if (panelDic.ContainsKey(panelName))
             return panelDic[panelName] as T;
         //加载面板对象
-        GameObject panelObj = GameObject.Instantiate(Resources.Load<GameObject>("UI/" + panelName));
+        GameObject panelObj = GameObject.Instantiate(Resources.Load<GameObject>("UI/Panel/" + panelName));
         //设置父对象
         panelObj.transform.SetParent(canvasTrans, false);
         //获取面板脚本
@@ -160,7 +160,7 @@ public class UIManager : Singleton<UIManager>
     /// <param name="pos">位置</param>
     public void ShowTxtPopup(string txt,Color color, Vector2 pos)
     {
-        GameObject obj = CreateUIObjByPoolMgr("UI/Popup/TxtPopup");
+        GameObject obj = CreateUIObjByPoolMgr("UI/UIObj/TxtPopup");
         UIPopup txtPopup = obj.GetComponent<UIPopup>();
         txtPopup.Init(txt, color, pos);
     }
@@ -206,13 +206,13 @@ public class UIManager : Singleton<UIManager>
         {
             //返回背包面板（TODO:跳到胜利选奖励面板）
             HidePanel<TowerPanel>();
-            SceneManager.LoadSceneAsync("BagScene");
+            SceneManager.LoadSceneAsync("BeginScene");
         });
         panel.AddCancelBtnCallBack(() =>
         {
             //返回背包面板，和确认按钮逻辑一样
             HidePanel<TowerPanel>();
-            SceneManager.LoadSceneAsync("BagScene");
+            SceneManager.LoadSceneAsync("BeginScene");
         });
     }
 }

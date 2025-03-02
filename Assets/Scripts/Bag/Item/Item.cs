@@ -15,8 +15,8 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
 {
     [Header("物品数据")]
     public ItemSO data; //物品数据
-    public int currentRotation; //当前旋转度数
-    private int lastCurrentRotation; //记录移动物品前的旋转度数
+    [HideInInspector] public int currentRotation; //当前旋转度数
+    [HideInInspector] public int lastCurrentRotation; //记录移动物品前的旋转度数
     private Coroutine rotateCoroutine; //旋转动画协程
 
     [Header("相关记录数据")]

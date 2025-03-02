@@ -198,7 +198,7 @@ public class BaseTower : MonoBehaviour
     public virtual void CreateHpBar()
     {
         //´´½¨ÑªÌõ
-        GameObject HpBarObj = UIManager.Instance.CreateUIObjByPoolMgr("UI/HealthBar/HealthBar");
+        GameObject HpBarObj = UIManager.Instance.CreateUIObjByPoolMgr("UI/UIObj/HealthBar");
         HealthBar hpBar = HpBarObj.GetComponent<HealthBar>();
         hpBar.Init(nowHp, data.hp, Color.green,true);
         this.hpBar = hpBar;

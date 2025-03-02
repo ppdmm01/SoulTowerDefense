@@ -37,6 +37,7 @@ public class BagGrid : MonoBehaviour
     {
         gridLayoutGroup.constraintCount = gridWidth;
         gridLayoutGroup.cellSize = new Vector2(Defines.cellSize,Defines.cellSize);
+        gridLayoutGroup.spacing = new Vector2(Defines.spacing, Defines.spacing);
         slots = new ItemSlot[gridWidth, gridHeight];
         //将物品格填充背包
         for (int y = 0; y < gridHeight; y++)
@@ -307,7 +308,9 @@ public class BagGrid : MonoBehaviour
         TowerManager.Instance.RecordOldData(); //数据变化前先记录老数据
         CalculateTower();
         CalculateItemAttribute();
-        UIManager.Instance.GetPanel<BagPanel>().UpdateTowerInfo();
+        BagPanel panel = UIManager.Instance.GetPanel<BagPanel>();
+        panel.UpdateTowerInfoBtn(); //更新信息按钮
+        panel.UpdateTowerInfo(panel.nowTowerInfoName); //更新当前展示的防御塔属性信息
     }
 
     /// <summary>
