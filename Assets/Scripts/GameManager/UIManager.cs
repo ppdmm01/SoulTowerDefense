@@ -204,15 +204,17 @@ public class UIManager : Singleton<UIManager>
         string info = isWin ? "胜利！" : "失败！";
         panel.SetInfo(info, () =>
         {
-            //返回背包面板（TODO:跳到胜利选奖励面板）
+            //返回地图面板（TODO:跳到胜利选奖励面板）
             HidePanel<TowerPanel>();
-            SceneManager.LoadSceneAsync("BeginScene");
+            ShowPanel<MapPanel>();
+            SceneManager.LoadSceneAsync("MapScene");
         });
         panel.AddCancelBtnCallBack(() =>
         {
-            //返回背包面板，和确认按钮逻辑一样
+            //返回地图面板，和确认按钮逻辑一样
             HidePanel<TowerPanel>();
-            SceneManager.LoadSceneAsync("BeginScene");
+            ShowPanel<MapPanel>();
+            SceneManager.LoadSceneAsync("MapScene");
         });
     }
 }

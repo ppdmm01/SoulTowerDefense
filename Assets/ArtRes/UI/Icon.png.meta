@@ -136,7 +136,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Icon_0
+      name: shopIcon
       rect:
         serializedVersion: 2
         x: 859
@@ -157,7 +157,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Icon_1
+      name: forgeIcon
       rect:
         serializedVersion: 2
         x: 482
@@ -178,7 +178,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Icon_2
+      name: EnemyIcon
       rect:
         serializedVersion: 2
         x: 476
@@ -199,7 +199,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Icon_3
+      name: bossIcon
       rect:
         serializedVersion: 2
         x: 541
@@ -220,7 +220,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Icon_4
+      name: chestIcon
       rect:
         serializedVersion: 2
         x: 643
@@ -262,7 +262,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Icon_6
+      name: bookIcon
       rect:
         serializedVersion: 2
         x: 730
@@ -283,7 +283,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Icon_7
+      name: crystalIcon
       rect:
         serializedVersion: 2
         x: 712
@@ -304,7 +304,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Icon_8
+      name: menuIcon
       rect:
         serializedVersion: 2
         x: 777
@@ -333,7 +333,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -356,16 +356,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Icon_0: 6530691
-      Icon_1: 1103941922
-      Icon_2: -156154286
-      Icon_3: -1586344685
-      Icon_4: 1697677423
+      EnemyIcon: -156154286
       Icon_5: 2132008449
-      Icon_6: -1460163548
-      Icon_7: -2123041178
-      Icon_8: -1253220240
       Icon_9: 692626249
+      bookIcon: -1460163548
+      bossIcon: -1586344685
+      chestIcon: 1697677423
+      crystalIcon: -2123041178
+      forgeIcon: 1103941922
+      menuIcon: -1253220240
+      shopIcon: 6530691
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

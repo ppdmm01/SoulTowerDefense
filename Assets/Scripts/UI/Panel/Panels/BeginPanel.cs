@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BeginPanel : BasePanel
@@ -16,7 +17,8 @@ public class BeginPanel : BasePanel
         {
             //TODO£º¿ªÊ¼ÓÎÏ·
             UIManager.Instance.HidePanel<BeginPanel>();
-            UIManager.Instance.ShowPanel<BagPanel>();
+            UIManager.Instance.ShowPanel<MapPanel>();
+            SceneManager.LoadSceneAsync("MapScene");
         });
 
         settingBtn.onClick.AddListener(() =>
