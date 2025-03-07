@@ -99,7 +99,6 @@ public class MapGenerator
             {
                 position = new Vector2(-offset + i * layer.nodesApartDistance, GetDistanceToLayer(layerIndex)),
             };
-            Debug.Log("LayerIndex:"+layerIndex + ":" + (-offset + i * layer.nodesApartDistance));
             nodesOnThisLayer.Add(node);
         }
 

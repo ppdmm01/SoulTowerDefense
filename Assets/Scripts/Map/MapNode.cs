@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -131,11 +132,11 @@ public class MapNode : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler,
     {
         if (visitedCircleImage == null)
             return;
-
         const float fillDuration = 0.2f;
         visitedCircleImage.fillAmount = 0;
 
-        DOTween.To(() => visitedCircleImage.fillAmount, x => visitedCircleImage.fillAmount = x, 1f, fillDuration);
+        DOTween.To(() => visitedCircleImage.fillAmount, x => visitedCircleImage.fillAmount = x, 1f, fillDuration)
+            .SetLink(visitedCircleImage.gameObject);
     }
 
     private void OnDestroy()
@@ -144,6 +145,10 @@ public class MapNode : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler,
         {
             sr.transform.DOKill();
             sr.DOKill();
+        }
+        if (visitedCircleImage != null)
+        {
+            visitedCircleImage.DOKill();
         }
     }
 }

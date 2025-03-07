@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91eab69eecc674243bef6bb4223a1c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockAfterSelecting: 0
+  lockAfterSelecting: 1
   enterNodeDelay: 1
   mapManager: {fileID: 1354865546978509517}
   view: {fileID: 421332705494924351}
@@ -182,7 +182,7 @@ MonoBehaviour:
   backgroundColor:
     serializedVersion: 2
     rgba: 4294967295
-  xSize: 12
+  xSize: 11
   yOffset: 2
   linePrefab: {fileID: 5185977783809457595, guid: 24ea1018235eba14aac33fd0e9369944, type: 3}
   linePointsCount: 10

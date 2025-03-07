@@ -77,10 +77,12 @@ public class MapPlayerTracker : MonoBehaviour
             case NodeType.MinorEnemy:
                 UIManager.Instance.HidePanel<MapPanel>();
                 UIManager.Instance.ShowPanel<BagPanel>();
+                Instance.Locked = false;
                 break;
             case NodeType.Boss:
                 UIManager.Instance.HidePanel<MapPanel>();
                 UIManager.Instance.ShowPanel<BagPanel>();
+                Instance.Locked = false;
                 break;
             case NodeType.Crystal:
                 break;

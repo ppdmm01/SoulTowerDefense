@@ -83,4 +83,9 @@ public class ScrollNonUI : MonoBehaviour
             transform.DOLocalMoveY(targetY, tweenBackDuration).SetEase(tweenBackEase);
         }
     }
+
+    private void OnDestroy()
+    {
+        transform.DOKill();
+    }
 }
