@@ -10,12 +10,12 @@ using UnityEngine.UI;
 public class ItemSlot : MonoBehaviour
 {
     [HideInInspector] public bool isUsed; //是否被占用
-    private BagGrid bagGrid; //物品格属于哪个背包
+    private BaseGrid grid; //物品格属于哪个网格
     [HideInInspector] public Item nowItem; //当前物品格的物品
 
     private Image slotImg;
 
-    void Start()
+    void Awake()
     {
         nowItem = null;
         slotImg = GetComponent<Image>();
@@ -45,9 +45,9 @@ public class ItemSlot : MonoBehaviour
     /// 设置所属背包
     /// </summary>
     /// <param name="bagGrid">背包</param>
-    public void SetBelongs(BagGrid bagGrid)
+    public void SetBelongs(BaseGrid grid)
     {
-        this.bagGrid = bagGrid;
+        this.grid = grid;
     }
 
     /// <summary>
@@ -70,5 +70,13 @@ public class ItemSlot : MonoBehaviour
     public void SetColor(Color color)
     {
         slotImg.color = color;
+    }
+
+    /// <summary>
+    /// 隐藏图片
+    /// </summary>
+    public void HideImg()
+    {
+        slotImg.enabled = false;
     }
 }

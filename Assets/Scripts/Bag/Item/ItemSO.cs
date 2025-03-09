@@ -7,13 +7,15 @@ using UnityEngine;
 /// <summary>
 /// 物品数据
 /// </summary>
-[CreateAssetMenu(fileName = "ItemSO",menuName = "ScriptableObject/ItemSO")]
+[CreateAssetMenu(fileName = "ItemSO", menuName = "ScriptableObject/ItemSO")]
 public class ItemSO : ScriptableObject
 {
     [Header("基础属性")]
     public int id; //物品id
     public string itemName; //物品名称
     public string itemChineseName; //物品中文名称
+    [Header("价格")]
+    public int price; //价格
     [TextArea]
     public string description; //物品描述
     [Header("物品形状")]
@@ -32,7 +34,7 @@ public class ItemSO : ScriptableObject
 /// 物品形状
 /// </summary>
 [Serializable]
-public class ItemShape 
+public class ItemShape
 {
     public static int MatrixLen = 4; //矩阵边长
 
@@ -156,4 +158,3 @@ public class DetectionPoint
         }
     }
 }
-

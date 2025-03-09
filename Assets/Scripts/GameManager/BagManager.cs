@@ -6,50 +6,70 @@ using UnityEngine.UI;
 
 public class BagManager : SingletonMono<BagManager>
 {
-    private BagManager() {}
+    private BagManager() { }
 
     protected override void Awake()
     {
         base.Awake();
-        BagDic = new Dictionary<string, BagGrid>();
+        itemsTrans = UIManager.Instance.itemTrans;
+        gridDic = new Dictionary<string, BaseGrid>();
         itemPrefab = Resources.Load<GameObject>("Bag/ItemPrefab");
     }
 
     [HideInInspector] public Transform itemsTrans; //放置物品的父对象
-    public Dictionary<string, BagGrid> BagDic; //通过字典（背包可能有多个，比如一个背包，一个储物箱）
+    public Dictionary<string, BaseGrid> gridDic; //通过字典（背包可能有多个，比如一个背包，一个储物箱）
     private GameObject itemPrefab;
 
-    //检测鼠标点是否在指定背包里
-    public bool IsInsideBag(Vector2 screenPoint,string bagName)
+    //检测鼠标点是否在指定网格里
+    public bool IsInsideGrid(Vector2 screenPoint, string bagName)
     {
         bool isInside = RectTransformUtility.RectangleContainsScreenPoint(
-           BagDic[bagName].transform as RectTransform,
-           screenPoint,
-           null
+            gridDic[bagName].transform as RectTransform,
+            screenPoint,
+            null
         );
 
-       return isInside;
+        return isInside;
+    }
+
+    /// <summary>
+    /// 向管理器添加网格
+    /// </summary>
+    public void AddGrid(BaseGrid grid)
+    {
+        if (gridDic.ContainsKey(grid.gridName)) return;
+        gridDic.Add(grid.gridName, grid);
+    }
+
+    /// <summary>
+    /// 向管理器移除网格
+    /// </summary>
+    /// <param name="grid"></param>
+    public void RemoveGrid(BaseGrid grid)
+    {
+        if (gridDic.ContainsKey(grid.gridName))
+            gridDic.Remove(grid.gridName);
     }
 
     //获取背包
-    public BagGrid GetBagByName(string bagName)
+    public BaseGrid GetBagByName(string bagName)
     {
-        return BagDic[bagName];
+        return gridDic[bagName];
     }
 
     //朝指定背包添加指定名称物品
-    public void AddItemByName(string itemName,BagGrid bag)
+    public void AddItemByName(string itemName, BaseGrid grid)
     {
         //GameObject itemObj = Instantiate(Resources.Load<GameObject>("Items/"+name));
         //创建物体
         GameObject itemObj = Instantiate(itemPrefab);
-        itemObj.transform.SetParent(itemsTrans,false);
+        itemObj.transform.SetParent(itemsTrans, false);
         //添加并初始化Item脚本
         Item item = itemObj.AddComponent<Item>();
         ItemSO data = ItemManager.Instance.GetItemDataByName(itemName);
-        item.Init(data, bag);
+        item.Init(data, grid);
         //背包满了
-        if (!bag.TryAutoPlaceItem(item))
+        if (!grid.TryAutoPlaceItem(item))
         {
             //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
             //删除多余的物品
@@ -60,7 +80,7 @@ public class BagManager : SingletonMono<BagManager>
     }
 
     //朝指定背包添加指定Id的物品
-    public void AddItemById(int id,BagGrid bag)
+    public void AddItemById(int id, BaseGrid grid)
     {
         //创建物体
         GameObject itemObj = Instantiate(itemPrefab);
@@ -68,9 +88,9 @@ public class BagManager : SingletonMono<BagManager>
         //添加并初始化Item脚本
         Item item = itemObj.AddComponent<Item>();
         ItemSO data = ItemManager.Instance.GetItemDataById(id);
-        item.Init(data,bag);
+        item.Init(data, grid);
         //背包满了
-        if (!bag.TryAutoPlaceItem(item))
+        if (!grid.TryAutoPlaceItem(item))
         {
             //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
             //删除多余的物品
@@ -81,7 +101,7 @@ public class BagManager : SingletonMono<BagManager>
     }
 
     //添加指定数量的随机道具
-    public void AddRandomItem(int num, BagGrid bag)
+    public void AddRandomItem(int num, BaseGrid grid)
     {
         List<ItemSO> list = ItemManager.Instance.GetRandomItemData(num);
         GameObject itemObj;
@@ -93,9 +113,9 @@ public class BagManager : SingletonMono<BagManager>
             itemObj.transform.SetParent(itemsTrans, false);
             //添加并初始化Item脚本
             item = itemObj.AddComponent<Item>();
-            item.Init(itemData, bag);
+            item.Init(itemData, grid);
             //背包满了
-            if (!bag.TryAutoPlaceItem(item))
+            if (!grid.TryAutoPlaceItem(item))
             {
                 //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
                 //删除多余的物品
@@ -110,10 +130,11 @@ public class BagManager : SingletonMono<BagManager>
     /// <summary>
     /// 清理指定背包的所有物品
     /// </summary>
-    /// <param name="bag"></param>
-    public void ClearAllItem(BagGrid bag)
+    /// <param name="grid"></param>
+    public void ClearAllItem(BaseGrid grid)
     {
-        bag.DestroyAllItems();
+        Debug.Log("清理全部物品");
+        grid.DestroyAllItems();
     }
 
     /// <summary>
@@ -122,6 +143,6 @@ public class BagManager : SingletonMono<BagManager>
     public void UpdateMainBagInfo()
     {
         //这里先默认存在，后面可能需要判空
-        GetBagByName("bag").CalculateAttribute();
+        (GetBagByName("Bag") as BagGrid).CalculateAttribute();
     }
 }

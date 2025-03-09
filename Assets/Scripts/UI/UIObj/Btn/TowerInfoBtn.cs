@@ -23,9 +23,12 @@ public class TowerInfoBtn : MonoBehaviour
         icon.sprite = data.towerIcon;
         btn.onClick.AddListener(() =>
         {
-            BagPanel panel = UIManager.Instance.GetPanel<BagPanel>();
-            panel.UpdateTowerInfo(data.towerName); //更新面板信息
-            panel.nowTowerInfoName = data.towerName; //更新当前展示的防御塔名
+            PreFightPanel panel = UIManager.Instance.GetPanel<PreFightPanel>();
+            if (panel != null)
+            {
+                panel.UpdateTowerInfo(data.towerName); //更新面板信息
+                panel.nowTowerInfoName = data.towerName; //更新当前展示的防御塔名
+            }
         });
     }
 

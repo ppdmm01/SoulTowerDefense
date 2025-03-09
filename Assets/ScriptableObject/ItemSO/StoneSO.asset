@@ -15,6 +15,7 @@ MonoBehaviour:
   id: 6
   itemName: Stone
   itemChineseName: "\u790C\u77F3"
+  price: 20
   description: "\u6548\u679C\u5F3A\u5927\uFF0C\u4F46\u5360\u4F4D\u7F6E"
   shape:
     shapeMatrix: 01010000010100000000000000000000

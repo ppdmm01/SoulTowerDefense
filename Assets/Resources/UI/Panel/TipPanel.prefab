@@ -193,6 +193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alphaSpeed: 5
+  isOnTop: 1
   closeBtn: {fileID: 4629464313860899916}
   cancelBtn: {fileID: 2312552963088822408}
   sureBtn: {fileID: 3106965941908615970}

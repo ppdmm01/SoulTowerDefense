@@ -11,7 +11,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 物品
 /// </summary>
-public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHandler,IPointerEnterHandler,IPointerExitHandler
+public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("物品数据")]
     public ItemSO data; //物品数据
@@ -24,8 +24,8 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     [HideInInspector] public Vector2Int gridPos; //物品当前放置起始坐标（网格坐标位置，物品新位置）
     [HideInInspector] public Vector2Int oldGridPos; //记录物品移动前的起始坐标（网格坐标位置，物品旧位置）
     private Vector2Int lastFrameGridPos; //记录上一帧起始坐标（网格坐标位置，物品移动过程中的上一帧位置）
-    private BagGrid bagGrid; //当前属于哪个背包
-    private BagGrid oldBagGrid; //原本属于哪个背包
+    [HideInInspector] public BaseGrid grid; //当前属于哪个网格
+    [HideInInspector] public BaseGrid oldGrid; //原本属于哪个网格
 
     private List<GameObject> starPoints; //记录目前亮的星星
     private List<GameObject> itemFrameList; //记录物品边框
@@ -58,16 +58,14 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         if (isDrag)
         {
             //检测是否在背包中
-            if (BagManager.Instance.IsInsideBag(Input.mousePosition,"bag") && bagGrid.bagName != "bag")
+            if (BagManager.Instance.IsInsideGrid(Input.mousePosition, "Bag") && grid.gridName != "Bag")
             {
-                oldBagGrid = bagGrid;
-                bagGrid = BagManager.Instance.BagDic["bag"];
+                grid = BagManager.Instance.GetBagByName("Bag");
             }
             //检测是否在储物箱中
-            if (BagManager.Instance.IsInsideBag(Input.mousePosition, "storageBox") && bagGrid.bagName != "storageBox")
+            if (BagManager.Instance.IsInsideGrid(Input.mousePosition, "StorageBox") && grid.gridName != "StorageBox")
             {
-                oldBagGrid = bagGrid;
-                bagGrid = BagManager.Instance.BagDic["storageBox"];
+                grid = BagManager.Instance.GetBagByName("StorageBox");
             }
         }
     }
@@ -76,8 +74,8 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     /// 初始化
     /// </summary>
     /// <param name="data">物品数据</param>
-    /// <param name="bagGrid">创建在哪个背包</param>
-    public void Init(ItemSO data,BagGrid bagGrid)
+    /// <param name="grid">创建在哪个网格里</param>
+    public void Init(ItemSO data, BaseGrid grid)
     {
         this.data = data;
 
@@ -88,11 +86,11 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         oldGridPos = Defines.nullValue;
         lastFrameGridPos = gridPos;
 
-        this.bagGrid = bagGrid;
-        oldBagGrid = this.bagGrid;
+        this.grid = grid;
+        oldGrid = this.grid;
 
         Icon.sprite = data.icon; //更换图片
-        //Icon.alphaHitTestMinimumThreshold = 1f; //设置透明度阈值
+                                    //Icon.alphaHitTestMinimumThreshold = 1f; //设置透明度阈值
 
         Vector2Int size = GetSize();
         rectTransform.sizeDelta = new Vector2(size.x * Defines.cellSize, size.y * Defines.cellSize); //根据数据设置物品大小  
@@ -131,7 +129,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         if (ItemManager.Instance.dragTarget == null)
         {
             GetConnectItems(true);
-            UIManager.Instance.GetPanel<BagPanel>().ShowItemInfo(data);
+            UIManager.Instance.GetPanel<BagPanel>()?.ShowItemInfo(data);
         }
     }
 
@@ -139,7 +137,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     public void OnPointerExit(PointerEventData eventData)
     {
         HideAllStar();
-        UIManager.Instance.GetPanel<BagPanel>().HideItemInfo();
+        UIManager.Instance.GetPanel<BagPanel>()?.HideItemInfo();
     }
 
     private void Begin(PointerEventData eventData)
@@ -154,8 +152,8 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         isDrag = true;
 
         //取消当前格子占用
-        if (bagGrid.CheckBound(this, gridPos))
-            bagGrid.RemoveItem(this, gridPos);
+        if (grid.CheckBound(this, gridPos))
+            grid.RemoveItem(this, gridPos);
 
         UpdatePreview(); //更新预览
         ShowItemFrame(); //显示边框
@@ -182,35 +180,47 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
         if (isDelete) return; //如果准备删除，则跳过
 
         //尝试放置物品
-        if (bagGrid.CanPlaceItem(this, gridPos))
+        if (grid.CanPlaceItem(this, gridPos) 
+            && (!oldGrid.isLocked || (oldGrid.isLocked && grid != oldGrid))) //原来网格不带锁 或者 带锁了但是移动到别的网格去了就算放置成功
         {
-            bagGrid.PlaceItem(this, gridPos); //放置物品
-            oldBagGrid = bagGrid; //更新老背包
+            grid.PlaceItem(this, gridPos); //放置物品
+            if (oldGrid.gridName == "StoreGrid")
+            {
+                //购买物品
+                BuyThisItem();
+            }
+            oldGrid = grid; //更新老背包
             oldGridPos = gridPos; //更新老位置坐标
         }
         else
         {
-            if (oldBagGrid != bagGrid)
-                bagGrid = oldBagGrid; //背包回溯到原来的
+            RecoverItem(); //恢复物品位置
+        }
+    }
 
-            if (lastCurrentRotation != currentRotation)
-            {
-                RotateItem(lastCurrentRotation - currentRotation); //回溯到原来的角度
-                CancelPreview(gridPos); //旋转时会更新预览，需要再次关掉
-            }
+    //恢复道具位置状态
+    public void RecoverItem()
+    {
+        if (oldGrid != grid)
+            grid = oldGrid; //背包回溯到原来的
 
-            if (bagGrid.CanPlaceItem(this, oldGridPos))
-            {
-                bagGrid.PlaceItem(this, oldGridPos); //恢复原本格子占用
-                gridPos = oldGridPos; //位置回溯到原来的
-                transform.position = oldPos; //回弹  
-            }
-            else
-            {
-                Debug.LogError($"物品 {data.itemName} 无法放置，背包可能已满");
-                //提示
-                UIManager.Instance.CreateUIObj("UI/UIObj/TipInfo",UIManager.Instance.canvasTrans);
-            }
+        if (lastCurrentRotation != currentRotation)
+        {
+            RotateItem(lastCurrentRotation - currentRotation); //回溯到原来的角度
+            CancelPreview(gridPos); //旋转时会更新预览，需要再次关掉
+        }
+
+        if (grid.CanPlaceItem(this, oldGridPos))
+        {
+            grid.PlaceItem(this, oldGridPos); //恢复原本格子占用
+            gridPos = oldGridPos; //位置回溯到原来的
+            transform.position = oldPos; //回弹  
+        }
+        else
+        {
+            Debug.LogError($"物品 {data.itemName} 无法放置，背包可能已满");
+            //提示
+            UIManager.Instance.CreateUIObj("UI/UIObj/TipInfo", UIManager.Instance.topCanvasTrans);
         }
     }
     #endregion
@@ -231,15 +241,16 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     //取消指定位置的预览
     public void CancelPreview(Vector2Int gridPos)
     {
-        bagGrid.ItemPreview(this, gridPos, false);
+        grid.ItemPreview(this, gridPos, false);
         HideAllStar();
     }
 
     //显示指定位置的预览
     public void ShowPreview(Vector2Int gridPos)
     {
-        bagGrid.ItemPreview(this, gridPos, true);
-        GetConnectItems(true);
+        grid.ItemPreview(this, gridPos, true);
+        if (grid.isOpenPreview || !isDrag) //网格开启预览或者没有拖拽时则显示星星
+            GetConnectItems(true);
         transform.SetAsLastSibling(); //设置在父级的最后一层，拖拽的物品要显示在最前面
     }
 
@@ -257,13 +268,13 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
             {
                 if (matrix[x, y])
                 {
-                    GameObject itemFrameObj = UIManager.Instance.CreateUIObj("Bag/ItemFrame",transform);
-                    Vector2Int point = new Vector2Int(x,y) - originOffset; //计算转换后物品位置坐标（转换成从(0,0)开始，方便计算）
+                    GameObject itemFrameObj = UIManager.Instance.CreateUIObj("Bag/ItemFrame", transform);
+                    Vector2Int point = new Vector2Int(x, y) - originOffset; //计算转换后物品位置坐标（转换成从(0,0)开始，方便计算）
                     Vector2 mousePoint = new Vector2((size.x - 1) / 2, (size.y - 1) / 2); //计算鼠标点的位置下标（含小数点）
                     Vector2 offset = point - mousePoint; //计算鼠标与该边框所在位置的偏移
-             
+
                     itemFrameObj.transform.localPosition = new Vector3(offset.x * Defines.cellSize, offset.y * Defines.cellSize, 0);
-                    itemFrameList.Add(itemFrameObj);    
+                    itemFrameList.Add(itemFrameObj);
                 }
             }
         }
@@ -300,7 +311,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     private Vector2Int ScreenToGridPoint(Vector2 screenPos)
     {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            bagGrid.transform as RectTransform, //以背包为父对象
+            grid.transform as RectTransform, //以背包为父对象
             screenPos,
             null,
             out Vector2 localPos
@@ -400,10 +411,10 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
             Vector2Int checkPos = gridPos + rotatedOffset; //在背包中的位置
 
             //边界检查  
-            if (!bagGrid.CheckPoint(checkPos)) continue;
+            if (!grid.CheckPoint(checkPos)) continue;
 
             //获取目标物品  
-            ItemSlot slot = bagGrid.slots[checkPos.x, checkPos.y];
+            ItemSlot slot = grid.slots[checkPos.x, checkPos.y];
             if (slot.nowItem != null && IsMatchLinkAttribute(slot.nowItem) && !neighbors.Contains(slot.nowItem))
             {
                 if (isShowStar)
@@ -421,7 +432,7 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     }
 
     //设置星星图片
-    public void CreateStar(Vector2 pos,bool isShow)
+    public void CreateStar(Vector2 pos, bool isShow)
     {
         GameObject starObj = UIManager.Instance.CreateUIObjByPoolMgr("Bag/StarPoint");
         starObj.transform.position = pos;
@@ -451,15 +462,23 @@ public class Item : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHa
     }
     #endregion
 
+    #region 商店相关
+    //购买该物品
+    private void BuyThisItem()
+    {
+        Debug.Log("购买成功");
+    }
+    #endregion
+
     /// <summary>
     /// 删除自己
     /// </summary>
     public void DeleteMe()
     {
-        if (oldBagGrid.CheckBound(this, oldGridPos))
-            oldBagGrid.RemoveItem(this, oldGridPos);
+        if (oldGrid.CheckBound(this, oldGridPos))
+            oldGrid.RemoveItem(this, oldGridPos);
         else
-            oldBagGrid.items.Remove(this);
+            oldGrid.items.Remove(this);
 
         //测试：更新信息
         BagManager.Instance.UpdateMainBagInfo();

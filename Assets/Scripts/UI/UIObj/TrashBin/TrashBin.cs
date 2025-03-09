@@ -12,9 +12,15 @@ public class TrashBin : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     {
         Item item = eventData.pointerDrag.GetComponent<Item>();
         if (item == null) return;
+        if (item.oldGrid.gridName == "StoreGrid")
+        {
+            item.RecoverItem();
+            return;
+        }
         item.currentRotation = item.lastCurrentRotation; //恢复到原来的角度
         if (eventData.pointerDrag != null)
             item.DeleteMe();
+        //TODO:获取资源
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -413,6 +413,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Map
       objectReference: {fileID: 0}
+    - target: {fileID: 8159262871216947803, guid: cba8c57dc122c95458e0cb4c5ef280c5, type: 3}
+      propertyPath: enterNodeDelay
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

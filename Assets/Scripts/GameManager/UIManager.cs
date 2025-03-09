@@ -8,6 +8,9 @@ public class UIManager : Singleton<UIManager>
 {
     //场景上的Canvas
     public Transform canvasTrans;
+    //放置物品的容器
+    public Transform topCanvasTrans;
+    public Transform itemTrans;
 
     //存储面板的容器
     private Dictionary<string, BasePanel> panelDic = new Dictionary<string, BasePanel>();
@@ -20,8 +23,12 @@ public class UIManager : Singleton<UIManager>
         //创建Canvas
         GameObject canvasObj = GameObject.Instantiate(Resources.Load<GameObject>("UI/Canvas"));
         canvasTrans = canvasObj.transform;
+        GameObject topCanvasObj = GameObject.Instantiate(Resources.Load<GameObject>("UI/TopCanvas"));
+        topCanvasTrans = topCanvasObj.transform;
+        itemTrans = topCanvasTrans.Find("ItemTrans");
         //过场景不删除
         GameObject.DontDestroyOnLoad(canvasObj);
+        GameObject.DontDestroyOnLoad(topCanvasObj);
     }
 
     /// <summary>
@@ -38,10 +45,11 @@ public class UIManager : Singleton<UIManager>
             return panelDic[panelName] as T;
         //加载面板对象
         GameObject panelObj = GameObject.Instantiate(Resources.Load<GameObject>("UI/Panel/" + panelName));
-        //设置父对象
-        panelObj.transform.SetParent(canvasTrans, false);
         //获取面板脚本
         T panel = panelObj.GetComponent<T>();
+        //设置父对象
+        if (panel.isOnTop) panelObj.transform.SetParent(topCanvasTrans, false);
+        else panelObj.transform.SetParent(canvasTrans, false);
         //执行显示方法
         panel.ShowMe();
         //添加进容器中
@@ -171,7 +179,7 @@ public class UIManager : Singleton<UIManager>
     /// <param name="info">信息</param>
     public void ShowTipInfo(string info)
     {
-        GameObject obj = CreateUIObj("UI/UIObj/TipInfo", canvasTrans);
+        GameObject obj = CreateUIObj("UI/UIObj/TipInfo", topCanvasTrans);
         obj.GetComponent<TipInfo>().Init(info);
     }
     /// <summary>

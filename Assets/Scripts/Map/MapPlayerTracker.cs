@@ -76,21 +76,27 @@ public class MapPlayerTracker : MonoBehaviour
         {
             case NodeType.MinorEnemy:
                 UIManager.Instance.HidePanel<MapPanel>();
-                UIManager.Instance.ShowPanel<BagPanel>();
+                UIManager.Instance.ShowPanel<PreFightPanel>();
                 Instance.Locked = false;
                 break;
             case NodeType.Boss:
-                UIManager.Instance.HidePanel<MapPanel>();
-                UIManager.Instance.ShowPanel<BagPanel>();
+                //UIManager.Instance.HidePanel<MapPanel>();
+                //UIManager.Instance.ShowPanel<PreFightPanel>();
                 Instance.Locked = false;
                 break;
             case NodeType.Crystal:
+                Instance.Locked = false;
                 break;
             case NodeType.Store:
+                UIManager.Instance.HidePanel<MapPanel>();
+                UIManager.Instance.ShowPanel<StorePanel>();
+                Instance.Locked = false;
                 break;
             case NodeType.Forge:
+                Instance.Locked = false;
                 break;
             case NodeType.Treasure:
+                Instance.Locked = false;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

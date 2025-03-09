@@ -15,6 +15,7 @@ MonoBehaviour:
   id: 7
   itemName: Sulfur
   itemChineseName: "\u786B\u78FA"
+  price: 25
   description: "\u6682\u65E0\u7528\u5904"
   shape:
     shapeMatrix: 01000000000000000000000000000000

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Crystal
   m_EditorClassIdentifier: 
   icon: {fileID: -2123041178, guid: d07485b782dcab54aa497adf36f40e29, type: 3}
-  nodeType: 3
+  nodeType: 2

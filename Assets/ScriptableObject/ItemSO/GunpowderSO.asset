@@ -15,6 +15,7 @@ MonoBehaviour:
   id: 3
   itemName: Gunpowder
   itemChineseName: "\u706B\u836F"
+  price: 60
   description: "\u5A01\u529B\u5DE8\u5927\u7684\u706B\u836F"
   shape:
     shapeMatrix: 01000000010000000000000000000000

@@ -15,6 +15,7 @@ MonoBehaviour:
   id: 4
   itemName: MoJing
   itemChineseName: "\u58A8\u7ECF"
+  price: 50
   description: "\u6682\u65E0\u7528\u5904"
   shape:
     shapeMatrix: 01010000000000000000000000000000

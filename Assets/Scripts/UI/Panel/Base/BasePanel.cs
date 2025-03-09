@@ -13,6 +13,8 @@ public abstract class BasePanel : MonoBehaviour
     private UnityAction hideCallBack;
     //显隐速度
     public float alphaSpeed = 5f;
+    //是否显示在顶层
+    public bool isOnTop = false;
 
     protected void Awake()
     {

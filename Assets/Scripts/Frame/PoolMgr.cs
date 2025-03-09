@@ -73,7 +73,7 @@ public class PoolMgr : Singleton<PoolMgr>
     {
         //如果柜子根对象为空，则创建根对象
         if (UIPoolObj == null)
-            UIPoolObj = UIManager.Instance.canvasTrans.gameObject;
+            UIPoolObj = UIManager.Instance.topCanvasTrans.gameObject;
 
         GameObject obj;
         //如果没有抽屉，则动态创建一个对象并记录到创建的抽屉中
