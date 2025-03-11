@@ -67,6 +67,11 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
             {
                 grid = BagManager.Instance.GetBagByName("StorageBox");
             }
+            //检测是否在锻造炉中
+            if (BagManager.Instance.IsInsideGrid(Input.mousePosition, "ForgeGrid") && grid.gridName != "ForgeGrid")
+            {
+                grid = BagManager.Instance.GetBagByName("ForgeGrid");
+            }
         }
     }
 

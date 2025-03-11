@@ -23,6 +23,7 @@ public class BagManager : SingletonMono<BagManager>
     //检测鼠标点是否在指定网格里
     public bool IsInsideGrid(Vector2 screenPoint, string bagName)
     {
+        if (!gridDic.ContainsKey(bagName)) return false;
         bool isInside = RectTransformUtility.RectangleContainsScreenPoint(
             gridDic[bagName].transform as RectTransform,
             screenPoint,
@@ -133,7 +134,6 @@ public class BagManager : SingletonMono<BagManager>
     /// <param name="grid"></param>
     public void ClearAllItem(BaseGrid grid)
     {
-        Debug.Log("清理全部物品");
         grid.DestroyAllItems();
     }
 

@@ -14,8 +14,6 @@ public class BagPanel : BasePanel
     [Header("物品信息")]
     public GameObject ItemInfoObj;
 
-    ////放置物品的地方
-    //private Transform itemsTrans;
     [Header("背包相关")]
     public BagGrid bag;
     public BagGrid storageBox;

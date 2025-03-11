@@ -9,9 +9,10 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class ScaleEff : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    public float scale = 1.2f;
     public void OnPointerEnter(PointerEventData eventData)
     {
-        transform.DOScale(Vector3.one*1.2f,0.2f);
+        transform.DOScale(Vector3.one* scale, 0.2f);
     }
 
     public void OnPointerExit(PointerEventData eventData)
