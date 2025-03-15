@@ -49,17 +49,17 @@ public class ForgePanel : BasePanel
     {
         base.ShowMe();
         //向背包管理器中添加背包
-        BagManager.Instance.AddGrid(forgeGrid);
-        BagManager.Instance.AddGrid(productGrid);
+        GridManager.Instance.AddGrid(forgeGrid);
+        GridManager.Instance.AddGrid(productGrid);
     }
 
     public override void HideMe(UnityAction action)
     {
         base.HideMe(action);
-        BagManager.Instance.ClearAllItem(forgeGrid);
-        BagManager.Instance.ClearAllItem(productGrid);
+        GridManager.Instance.ClearAllItem(forgeGrid);
+        GridManager.Instance.ClearAllItem(productGrid);
         //向背包管理器中移除背包
-        BagManager.Instance.RemoveGrid(forgeGrid);
-        BagManager.Instance.RemoveGrid(productGrid);
+        GridManager.Instance.RemoveGrid(forgeGrid);
+        GridManager.Instance.RemoveGrid(productGrid);
     }
 }

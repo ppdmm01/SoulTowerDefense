@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,8 +24,11 @@ public class BaseGrid : MonoBehaviour
 
     protected GridLayoutGroup gridLayoutGroup;
 
+    private bool isInit; //是否初始化
+
     protected virtual void Awake()
     {
+        isInit = false;
         ItemSlotObj = Resources.Load<GameObject>("Bag/ItemSlot");
         gridLayoutGroup = GetComponent<GridLayoutGroup>();
         items = new List<Item>();
@@ -55,6 +59,31 @@ public class BaseGrid : MonoBehaviour
                     slot.HideImg();
             }
         }
+        isInit = true;
+    }
+
+    /// <summary>
+    /// 根据数据更新网格信息
+    /// </summary>
+    public virtual void UpdateGrid(GridData gridData)
+    {
+        if (!isInit) Init();
+
+        ForceUpdateGridLayout();
+        //开始还原数据内的物品及位置
+        foreach (ItemData itemData in gridData.itemDatas)
+        {
+            GridManager.Instance.AddItem(itemData, this);
+        }
+    }
+
+    //强制立即更新布局
+    public void ForceUpdateGridLayout()
+    {
+        //发现的一个问题：如果在Grid刚初始化完就添加物品，GridLayoutGroup很可能还没布置好slot的位置，所以会出现物品位置不合理的情况
+        //解决方法是等一帧再执行，或者强制布局，我采用强制布局的方式
+        if (gridLayoutGroup != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(gridLayoutGroup.GetComponent<RectTransform>());
     }
 
     #region 物品放置与检测
@@ -71,7 +100,6 @@ public class BaseGrid : MonoBehaviour
 
         Vector2Int size = item.GetSize();
         bool[,] matrix = item.GetRotateMatrix();
-
         //检查格子是否被占用  
         for (int x = 0; x < ItemShape.MatrixLen; x++)
         {
@@ -151,6 +179,7 @@ public class BaseGrid : MonoBehaviour
         ItemSlot endSlot = slots[gridPos.x + maxOffset.x, gridPos.y + maxOffset.y]; //右上角格子坐标
         Vector2 centerPos = (beginSlot.transform.position + endSlot.transform.position) / 2; //计算中心坐标
         item.transform.position = centerPos;
+        Debug.Log(item.transform.position);
     }
 
     /// <summary>

@@ -20,7 +20,7 @@ public class StoreGrid : BaseGrid
         //清楚货架上的物品
         DestroyAllItems();
         //添加物品
-        BagManager.Instance.AddItemByName(itemData.itemName,this);
+        GridManager.Instance.AddItem(itemData.itemName,this);
         //设置价格
         priceTxt.text = itemData.price.ToString();
     }

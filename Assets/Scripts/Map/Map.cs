@@ -14,6 +14,8 @@ public class Map
     public string bossNodeName;
     public string configName; //µØÍ¼Ãû
 
+    public Map() { }
+
     public Map(string configName, string bossNodeName, List<Node> nodes, List<Vector2Int> path)
     {
         this.configName = configName;

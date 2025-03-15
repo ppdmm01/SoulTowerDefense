@@ -75,13 +75,13 @@ public class MapPlayerTracker : MonoBehaviour
         switch (mapNode.Node.nodeType)
         {
             case NodeType.MinorEnemy:
-                //UIManager.Instance.HidePanel<MapPanel>();
+               // UIManager.Instance.HidePanel<MapPanel>();
                 //UIManager.Instance.ShowPanel<PreFightPanel>();
                 Instance.Locked = false;
                 break;
             case NodeType.Boss:
-                //UIManager.Instance.HidePanel<MapPanel>();
-                //UIManager.Instance.ShowPanel<PreFightPanel>();
+                UIManager.Instance.HidePanel<MapPanel>();
+                UIManager.Instance.ShowPanel<PreFightPanel>();
                 Instance.Locked = false;
                 break;
             case NodeType.Crystal:

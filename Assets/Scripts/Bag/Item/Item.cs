@@ -58,19 +58,19 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         if (isDrag)
         {
             //检测是否在背包中
-            if (BagManager.Instance.IsInsideGrid(Input.mousePosition, "Bag") && grid.gridName != "Bag")
+            if (GridManager.Instance.IsInsideGrid(Input.mousePosition, "Bag") && grid.gridName != "Bag")
             {
-                grid = BagManager.Instance.GetBagByName("Bag");
+                grid = GridManager.Instance.GetBagByName("Bag");
             }
             //检测是否在储物箱中
-            if (BagManager.Instance.IsInsideGrid(Input.mousePosition, "StorageBox") && grid.gridName != "StorageBox")
+            if (GridManager.Instance.IsInsideGrid(Input.mousePosition, "StorageBox") && grid.gridName != "StorageBox")
             {
-                grid = BagManager.Instance.GetBagByName("StorageBox");
+                grid = GridManager.Instance.GetBagByName("StorageBox");
             }
             //检测是否在锻造炉中
-            if (BagManager.Instance.IsInsideGrid(Input.mousePosition, "ForgeGrid") && grid.gridName != "ForgeGrid")
+            if (GridManager.Instance.IsInsideGrid(Input.mousePosition, "ForgeGrid") && grid.gridName != "ForgeGrid")
             {
-                grid = BagManager.Instance.GetBagByName("ForgeGrid");
+                grid = GridManager.Instance.GetBagByName("ForgeGrid");
             }
         }
     }
@@ -485,8 +485,8 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         else
             oldGrid.items.Remove(this);
 
-        //测试：更新信息
-        BagManager.Instance.UpdateMainBagInfo();
+        //更新防御塔信息
+        GridManager.Instance.UpdateFightTowerInfo();
 
         //销毁
         foreach (GameObject obj in itemFrameList)

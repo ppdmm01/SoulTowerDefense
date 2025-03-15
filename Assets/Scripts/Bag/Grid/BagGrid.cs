@@ -14,8 +14,15 @@ public class BagGrid : BaseGrid
     public override void PlaceItem(Item item, Vector2Int gridPos)
     {
         base.PlaceItem(item, gridPos);
-        //同时更新面板信息
-        BagManager.Instance.UpdateMainBagInfo();
+        //同时更新面板信息防御塔
+        GridManager.Instance.UpdateFightTowerInfo();
+    }
+
+    public override void UpdateGrid(GridData gridData)
+    {
+        base.UpdateGrid(gridData);
+        //同时更新面板信息防御塔
+        GridManager.Instance.UpdateFightTowerInfo();
     }
 
     #region 物品属性效果计算（计算最终玩家实力）

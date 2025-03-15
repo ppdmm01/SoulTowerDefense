@@ -24,9 +24,9 @@ public class ForgeGrid : BaseGrid
                     return;
                 }
                 //合成成功
-                BagManager.Instance.AddItemById(s.product.id, productGrid);
+                GridManager.Instance.AddItem(s.product.id, productGrid);
                 //销毁炉子内的所有物品
-                BagManager.Instance.ClearAllItem(this);
+                GridManager.Instance.ClearAllItem(this);
                 UIManager.Instance.ShowTipInfo("合成成功");
                 return;
             }

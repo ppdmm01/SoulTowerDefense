@@ -16,7 +16,7 @@ public class BagPanel : BasePanel
 
     [Header("背包相关")]
     public BagGrid bag;
-    public BagGrid storageBox;
+    public BaseGrid storageBox;
 
     public override void Init()
     {
@@ -25,15 +25,15 @@ public class BagPanel : BasePanel
 
         arrangeBtn.onClick.AddListener(() =>
         {
-            BagManager.Instance.GetBagByName(storageBox.gridName).AutoArrange();
+            GridManager.Instance.GetBagByName(storageBox.gridName).AutoArrange();
         });
         addItemBtn.onClick.AddListener(() =>
         {
-            BagManager.Instance.AddRandomItem(3, storageBox);
+            GridManager.Instance.AddRandomItem(3, storageBox);
         });
         clearItemBtn.onClick.AddListener(() =>
         {
-            BagManager.Instance.ClearAllItem(storageBox);
+            GridManager.Instance.ClearAllItem(storageBox);
         });
     }
 
@@ -41,18 +41,33 @@ public class BagPanel : BasePanel
     {
         base.ShowMe();
         //向背包管理器中添加背包
-        BagManager.Instance.AddGrid(bag);
-        BagManager.Instance.AddGrid(storageBox);
+        GridManager.Instance.AddGrid(bag);
+        GridManager.Instance.AddGrid(storageBox);
+        //读取网格数据并更新
+        GridData bagData = GameDataManager.Instance.GetGridData(bag.gridName);
+        GridData storageBoxData = GameDataManager.Instance.GetGridData(storageBox.gridName);
+        if (bagData != null)
+            bag.UpdateGrid(bagData);
+        if (storageBoxData != null)
+            storageBox.UpdateGrid(storageBoxData);
+
     }
 
     public override void HideMe(UnityAction action)
     {
         base.HideMe(action);
-        BagManager.Instance.ClearAllItem(storageBox);
-        BagManager.Instance.ClearAllItem(bag);
+        //保存网格数据
+        GridData bagData = new GridData(bag.gridName,bag.items);
+        GridData storageBoxData = new GridData(storageBox.gridName, storageBox.items);
+        GameDataManager.Instance.UpdateGridData(bagData);
+        GameDataManager.Instance.UpdateGridData(storageBoxData);
+        GameDataManager.Instance.SaveGridData();
+        //清空物品
+        GridManager.Instance.ClearAllItem(storageBox);
+        GridManager.Instance.ClearAllItem(bag);
         //向背包管理器中移除背包
-        BagManager.Instance.RemoveGrid(bag);
-        BagManager.Instance.RemoveGrid(storageBox);
+        GridManager.Instance.RemoveGrid(bag);
+        GridManager.Instance.RemoveGrid(storageBox);
     }
 
     /// <summary>

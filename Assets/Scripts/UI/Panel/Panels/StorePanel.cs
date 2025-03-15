@@ -48,7 +48,7 @@ public class StorePanel : BasePanel
         panel.SetTitle("商铺");
 
         //刷新物品
-        StartCoroutine(RefreshRoutine()); //晚一帧再刷新物品
+        RefreshItems();
     }
 
     public override void ShowMe()
@@ -56,7 +56,7 @@ public class StorePanel : BasePanel
         base.ShowMe();
         //向背包管理器中添加商品网格
         foreach (var storeGrid in storeGrids)
-            BagManager.Instance.AddGrid(storeGrid);
+            GridManager.Instance.AddGrid(storeGrid);
     }
 
     public override void HideMe(UnityAction action)
@@ -65,8 +65,8 @@ public class StorePanel : BasePanel
         //向背包管理器中移除商品网格
         foreach (var storeGrid in storeGrids)
         {
-            BagManager.Instance.ClearAllItem(storeGrid);
-            BagManager.Instance.RemoveGrid(storeGrid);
+            GridManager.Instance.ClearAllItem(storeGrid);
+            GridManager.Instance.RemoveGrid(storeGrid);
         }
     }
 
@@ -76,17 +76,9 @@ public class StorePanel : BasePanel
     public void RefreshItems()
     {
         foreach (var storeGrid in storeGrids)
+        {
+            storeGrid.ForceUpdateGridLayout();
             storeGrid.RefreshItem(ItemManager.Instance.GetRandomItemData(1)[0]);
-    }
-
-    private IEnumerator RefreshRoutine()
-    {
-        yield return null;
-        RefreshItems();
-    }
-
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
+        }
     }
 }

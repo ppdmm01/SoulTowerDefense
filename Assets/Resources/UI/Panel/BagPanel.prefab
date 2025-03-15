@@ -134,6 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3bda2002d6a514408b16e4d6ff82690, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scale: 1.2
 --- !u!1 &440930777260768339
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,7 +222,7 @@ GameObject:
   - component: {fileID: 3368363851299163600}
   - component: {fileID: 2613593985080501557}
   - component: {fileID: 1413117708973138495}
-  - component: {fileID: 4869092728492849147}
+  - component: {fileID: 5858114146302176719}
   m_Layer: 5
   m_Name: StorageBox
   m_TagString: Untagged
@@ -310,7 +311,7 @@ MonoBehaviour:
   m_Spacing: {x: 5, y: 5}
   m_Constraint: 1
   m_ConstraintCount: 10
---- !u!114 &4869092728492849147
+--- !u!114 &5858114146302176719
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -319,11 +320,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 960216838692093875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: add8f1ffcdfba3d4cb7ffbe1dd6eb017, type: 3}
+  m_Script: {fileID: 11500000, guid: a21ac31309d2c3b40878ebc965848211, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gridName: StorageBox
   isOpenPreview: 1
+  isShowSlot: 1
+  isLocked: 0
   gridWidth: 8
   gridHeight: 5
   items: []
@@ -981,12 +984,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alphaSpeed: 5
+  isOnTop: 0
   arrangeBtn: {fileID: 3202153457184826886}
   addItemBtn: {fileID: 9103925849213595349}
   clearItemBtn: {fileID: 6058891444928874618}
   ItemInfoObj: {fileID: 3929365669522344570}
   bag: {fileID: 5638232670014994175}
-  storageBox: {fileID: 4869092728492849147}
+  storageBox: {fileID: 5858114146302176719}
 --- !u!1 &5351238332118332071
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,6 +1429,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridName: Bag
   isOpenPreview: 1
+  isShowSlot: 1
+  isLocked: 0
   gridWidth: 6
   gridHeight: 6
   items: []

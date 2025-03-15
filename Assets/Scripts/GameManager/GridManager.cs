@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
-public class BagManager : SingletonMono<BagManager>
+public class GridManager : SingletonMono<GridManager>
 {
-    private BagManager() { }
+    private GridManager() { }
 
     protected override void Awake()
     {
@@ -59,7 +60,7 @@ public class BagManager : SingletonMono<BagManager>
     }
 
     //朝指定背包添加指定名称物品
-    public void AddItemByName(string itemName, BaseGrid grid)
+    public void AddItem(string itemName, BaseGrid grid)
     {
         //GameObject itemObj = Instantiate(Resources.Load<GameObject>("Items/"+name));
         //创建物体
@@ -81,7 +82,7 @@ public class BagManager : SingletonMono<BagManager>
     }
 
     //朝指定背包添加指定Id的物品
-    public void AddItemById(int id, BaseGrid grid)
+    public void AddItem(int id, BaseGrid grid)
     {
         //创建物体
         GameObject itemObj = Instantiate(itemPrefab);
@@ -94,6 +95,33 @@ public class BagManager : SingletonMono<BagManager>
         if (!grid.TryAutoPlaceItem(item))
         {
             //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
+            //删除多余的物品
+            item.DeleteMe();
+            //提示
+            UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
+        }
+    }
+
+    public void AddItem(ItemData itemData, BaseGrid grid)
+    {
+        //创建物体
+        GameObject itemObj = Instantiate(itemPrefab);
+        itemObj.transform.SetParent(itemsTrans, false);
+        //添加并初始化Item脚本
+        Item item = itemObj.AddComponent<Item>();
+        ItemSO data = ItemManager.Instance.GetItemDataById(itemData.id);
+        item.Init(data, grid);
+        item.gridPos = itemData.gridPos;
+        item.currentRotation = itemData.currentRotation;
+        item.rectTransform.rotation = Quaternion.Euler(0, 0, item.currentRotation);
+        //放置
+        if (grid.CanPlaceItem(item, item.gridPos))
+        {
+            grid.PlaceItem(item, item.gridPos);
+            item.oldGridPos = item.gridPos; //更新老位置坐标
+        }
+        else
+        {
             //删除多余的物品
             item.DeleteMe();
             //提示
@@ -138,11 +166,15 @@ public class BagManager : SingletonMono<BagManager>
     }
 
     /// <summary>
-    /// 更新主背包信息
+    /// 更新战前准备阶段的防御塔信息
     /// </summary>
-    public void UpdateMainBagInfo()
+    public void UpdateFightTowerInfo()
     {
         //这里先默认存在，后面可能需要判空
-        (GetBagByName("Bag") as BagGrid).CalculateAttribute();
+        BagGrid bagGrid = GetBagByName("Bag") as BagGrid;
+        if (bagGrid != null)
+        {
+            bagGrid.CalculateAttribute();
+        }
     }
 }
