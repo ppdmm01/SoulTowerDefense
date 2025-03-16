@@ -8,6 +8,8 @@ public class Projectile : MonoBehaviour
     protected int damage; //伤害
     protected float explosionRange; //爆炸范围
 
+    protected BuffApplier buffApplier; //可以施加的buff
+
     private void OnEnable()
     {
         StartCoroutine(DestroyMe(5f));
@@ -21,8 +23,9 @@ public class Projectile : MonoBehaviour
     /// <summary>
     /// 初始化
     /// </summary>
-    public void Init(int damage,float explosionRange = 0f)
+    public void Init(BuffApplier buffApplier, int damage,float explosionRange = 0f)
     {
+        this.buffApplier = buffApplier;
         this.damage = damage;
         this.explosionRange = explosionRange;
     }

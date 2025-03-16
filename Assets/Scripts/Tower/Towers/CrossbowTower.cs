@@ -14,9 +14,10 @@ public class CrossbowTower : BaseTower
     /// </summary>
     public void CreateProjectile()
     {
+        AudioManager.Instance.PlaySound("SoundEffect/BowAttack");
         GameObject arrowObj = PoolMgr.Instance.GetObj(projectilePath);
         Arrow arrow = arrowObj.GetComponent<Arrow>();
-        arrow.Init(data.damage);
+        arrow.Init(this.buffApplier,data.damage);
         arrow.transform.position = firePos.position;
         arrow.transform.rotation = firePos.rotation;
     }

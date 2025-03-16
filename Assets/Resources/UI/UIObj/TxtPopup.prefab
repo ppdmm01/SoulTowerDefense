@@ -148,9 +148,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fdf826d57d63844bbdad302ee6d1ebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveHeight: 50
+  moveHeight: 30
   duration: 0.8
-  maxOffset: 30
+  xOffset: 5
 --- !u!114 &-173254709218094866
 MonoBehaviour:
   m_ObjectHideFlags: 0

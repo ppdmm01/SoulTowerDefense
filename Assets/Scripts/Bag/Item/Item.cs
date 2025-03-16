@@ -478,7 +478,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     /// <summary>
     /// 删除自己
     /// </summary>
-    public void DeleteMe()
+    public void DeleteMe(bool isUpdateInfo = true)
     {
         if (oldGrid.CheckBound(this, oldGridPos))
             oldGrid.RemoveItem(this, oldGridPos);
@@ -486,7 +486,8 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
             oldGrid.items.Remove(this);
 
         //更新防御塔信息
-        GridManager.Instance.UpdateFightTowerInfo();
+        if (isUpdateInfo)
+            GridManager.Instance.UpdateFightTowerInfo();
 
         //销毁
         foreach (GameObject obj in itemFrameList)

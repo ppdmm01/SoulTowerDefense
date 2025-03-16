@@ -9,7 +9,8 @@ public class Arrow : Projectile
     /// </summary>
     public void Attack(Enemy enemy)
     {
-        enemy.Wound(damage);
+        buffApplier.TryApplyBuff(enemy);
+        enemy.Wound(damage,Color.yellow);
         //É¾³ý×Ô¼º
         PoolMgr.Instance.PushObj(gameObject);
     }

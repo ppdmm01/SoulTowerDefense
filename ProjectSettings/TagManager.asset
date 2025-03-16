@@ -50,6 +50,9 @@ TagManager:
   - name: Tower
     uniqueID: 4019285899
     locked: 0
+  - name: Enemy
+    uniqueID: 2663280359
+    locked: 0
   - name: Effect
     uniqueID: 2028882763
     locked: 0

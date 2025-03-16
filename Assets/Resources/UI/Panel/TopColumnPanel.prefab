@@ -268,6 +268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3bda2002d6a514408b16e4d6ff82690, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scale: 1.2
 --- !u!1 &3151524462627821813
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,6 +403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3bda2002d6a514408b16e4d6ff82690, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scale: 1.2
 --- !u!1 &3404348048928455558
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,8 +863,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: -0.000061035156}
-  m_SizeDelta: {x: 0, y: 150}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 20, y: 150}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &6189022469333421161
 CanvasRenderer:
@@ -1608,6 +1610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3bda2002d6a514408b16e4d6ff82690, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scale: 1.2
 --- !u!1 &7480064560579288085
 GameObject:
   m_ObjectHideFlags: 0
@@ -1881,6 +1884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3bda2002d6a514408b16e4d6ff82690, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scale: 1.2
 --- !u!1 &8303471740884150034
 GameObject:
   m_ObjectHideFlags: 0
@@ -2261,7 +2265,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5346694123271854981
 CanvasRenderer:
@@ -2284,6 +2288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alphaSpeed: 5
+  isOnTop: 0
   titleText: {fileID: 2789989213308073269}
   timerText: {fileID: 7632893623461890273}
   taixuText: {fileID: 7474615712711854086}
@@ -2292,7 +2297,8 @@ MonoBehaviour:
   mapBtn: {fileID: 2600514060051371662}
   menuBtn: {fileID: 8151634241692768555}
   crystalBtn: {fileID: 8546440357856403898}
-  HpBar: {fileID: 4170601162525558923}
+  hpBar: {fileID: 4170601162525558923}
+  hpText: {fileID: 7977045552510882561}
 --- !u!1 &9172670126578592903
 GameObject:
   m_ObjectHideFlags: 0

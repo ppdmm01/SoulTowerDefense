@@ -34,7 +34,8 @@ public class TopColumnPanel : BasePanel
     public Button crystalBtn; //元气水晶按钮
 
     [Header("血条相关")]
-    public HealthBar HpBar; //血条
+    public HealthBar hpBar; //血条
+    public TextMeshProUGUI hpText;
 
     private float startTime; //计时器（到时放进管理器里）
 
@@ -57,6 +58,7 @@ public class TopColumnPanel : BasePanel
         {
             //打开元气水晶面板
         });
+
     }
 
     protected override void Update()
@@ -68,7 +70,8 @@ public class TopColumnPanel : BasePanel
     //更新血条
     public void UpdateHp(int nowHp,int maxHp)
     {
-        HpBar.UpdateHp(nowHp, maxHp);
+        hpBar.UpdateHp(nowHp, maxHp);
+        hpText.text = nowHp + "/" + maxHp;
     }
 
     //更新太虚数量文本

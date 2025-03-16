@@ -36,6 +36,7 @@ public class LevelManager : SingletonMono<LevelManager>
         AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName);
         ao.completed += (obj) =>
         {
+            AudioManager.Instance.PlayBGM("BGM/FightMusic");
             //关卡加载完成，显示战斗面板，初始化资源，开始出怪等逻辑
             isInLevel = true;
             //创建防御塔按钮

@@ -73,9 +73,8 @@ public class GridManager : SingletonMono<GridManager>
         //背包满了
         if (!grid.TryAutoPlaceItem(item))
         {
-            //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
             //删除多余的物品
-            item.DeleteMe();
+            item.DeleteMe(false);
             //提示
             UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
         }
@@ -94,9 +93,8 @@ public class GridManager : SingletonMono<GridManager>
         //背包满了
         if (!grid.TryAutoPlaceItem(item))
         {
-            //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
             //删除多余的物品
-            item.DeleteMe();
+            item.DeleteMe(false);
             //提示
             UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
         }
@@ -123,7 +121,7 @@ public class GridManager : SingletonMono<GridManager>
         else
         {
             //删除多余的物品
-            item.DeleteMe();
+            item.DeleteMe(false);
             //提示
             UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
         }
@@ -146,9 +144,8 @@ public class GridManager : SingletonMono<GridManager>
             //背包满了
             if (!grid.TryAutoPlaceItem(item))
             {
-                //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包已满");
                 //删除多余的物品
-                item.DeleteMe();
+                item.DeleteMe(false);
                 //提示
                 UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
                 break;
@@ -160,9 +157,9 @@ public class GridManager : SingletonMono<GridManager>
     /// 清理指定背包的所有物品
     /// </summary>
     /// <param name="grid"></param>
-    public void ClearAllItem(BaseGrid grid)
+    public void ClearAllItem(BaseGrid grid,bool isUpdateInfo)
     {
-        grid.DestroyAllItems();
+        grid.DestroyAllItems(isUpdateInfo);
     }
 
     /// <summary>

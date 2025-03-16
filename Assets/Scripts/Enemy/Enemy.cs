@@ -10,6 +10,8 @@ public class Enemy : MonoBehaviour
     [Header("敌人数据")]
     public EnemySO data;
     public int nowHp;
+    public float speedMultiplier = 1f; //移动倍率
+    public float damageMultiplier = 1f; //受伤倍率
 
     private Vector3 dir; //敌人移动方向
     private BaseTower target; //敌人攻击的目标
@@ -18,7 +20,15 @@ public class Enemy : MonoBehaviour
 
     //闪白特效相关
     private SpriteRenderer spriteRenderer;
-    private Color originColor; //记录原来的颜色
+    private Color oldColor; //记录原来的颜色
+    private Color originColor; //初始颜色
+    private Color slowColor; //减速时的颜色
+    private Color stunColor; //眩晕时的颜色
+
+    //眩晕图标
+    public GameObject stunIcon;
+    //减速图标
+    public GameObject slowIcon;
 
     public bool isDead; //是否死亡
 
@@ -30,7 +40,13 @@ public class Enemy : MonoBehaviour
         target = null;
         towerList = new List<BaseTower>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        oldColor = spriteRenderer.color;
         originColor = spriteRenderer.color;
+        slowColor = Color.blue;
+        stunColor = Color.gray;
+
+        stunIcon.SetActive(false);
+        slowIcon.SetActive(false);
     }
 
     void Update()
@@ -56,9 +72,32 @@ public class Enemy : MonoBehaviour
         {
             if (TowerManager.Instance.core != null)
             {
+                if (speedMultiplier == 0)
+                    oldColor = stunColor; //眩晕色
+                else if (speedMultiplier < 1)
+                    oldColor = slowColor; //减速色
+                else
+                    oldColor = originColor; //正常色
+
+                if (speedMultiplier == 0)
+                {
+                    slowIcon.SetActive(false);
+                    stunIcon.SetActive(true); //眩晕图标
+                }
+                else if (speedMultiplier < 1)
+                {
+                    slowIcon.SetActive(true); //减速图标
+                    stunIcon.SetActive(false);
+                }
+                else
+                {
+                    slowIcon.SetActive(false);
+                    stunIcon.SetActive(false);
+                }
+
                 //移动
                 dir = (TowerManager.Instance.core.transform.position - transform.position).normalized;
-                transform.position += dir * Time.deltaTime * data.moveSpeed;
+                transform.position += dir * Time.deltaTime * data.moveSpeed * speedMultiplier;
             }
         }
     }
@@ -66,16 +105,13 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// 受伤
     /// </summary>
-    public void Wound(int dmg)
+    public void Wound(int dmg,Color txtColor)
     {
-        nowHp -= dmg;
-        //特效
-        GameObject effObj = PoolMgr.Instance.GetObj("Effect/BloodEffect");
-        effObj.transform.position = transform.position;
+        nowHp -= (int)(dmg * damageMultiplier);
         //受击数字
-        UIManager.Instance.ShowTxtPopup(dmg.ToString(),Color.red,transform.position);
+        UIManager.Instance.ShowTxtPopup(dmg.ToString(), txtColor, transform.position);
         //判断死亡
-        if (nowHp < 0)
+        if (nowHp <= 0)
         {
             Dead();
             return;
@@ -111,7 +147,7 @@ public class Enemy : MonoBehaviour
     {
         spriteRenderer.color = Color.white;
         yield return new WaitForSeconds(time);
-        spriteRenderer.color = originColor;
+        spriteRenderer.color = oldColor;
     }
 
     private BaseTower FindTarget()
@@ -125,9 +161,12 @@ public class Enemy : MonoBehaviour
         if (collision.CompareTag("Tower"))
         {
             BaseTower tower = collision.GetComponent<BaseTower>();
-            if (!tower.isUsed) return;
-            if (!towerList.Contains(tower))
-                towerList.Add(tower);
+            if (tower.data.canBeAttack)
+            {
+                if (!tower.isUsed) return;
+                if (!towerList.Contains(tower))
+                    towerList.Add(tower);
+            }
         }
     }
 
@@ -146,12 +185,23 @@ public class Enemy : MonoBehaviour
     {
         StopAllCoroutines();
         target = null;
-        spriteRenderer.color = originColor;
+        oldColor = originColor;
+        spriteRenderer.color = oldColor;
+        slowIcon.SetActive(false);
+        stunIcon.SetActive(false);
         towerList.Clear();
+
+        //清理身上的所有buff
+        Buff[] buffs = GetComponents<Buff>();
+        foreach (Buff buff in buffs)
+            Destroy(buff);
     }
 
     private void OnEnable()
     {
         isDead = false;
+        nowHp = data.hp;
+        attackTimer = 0;
+        target = null;
     }
 }

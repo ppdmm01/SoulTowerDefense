@@ -26,7 +26,7 @@ public class ForgeGrid : BaseGrid
                 //合成成功
                 GridManager.Instance.AddItem(s.product.id, productGrid);
                 //销毁炉子内的所有物品
-                GridManager.Instance.ClearAllItem(this);
+                GridManager.Instance.ClearAllItem(this,false);
                 UIManager.Instance.ShowTipInfo("合成成功");
                 return;
             }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FireDragon : Projectile
 {
+    public Transform explosionPos; //爆炸位置
     /// <summary>
     /// 攻击
     /// </summary>
@@ -14,9 +15,15 @@ public class FireDragon : Projectile
         {
             Enemy enemy = hit.GetComponent<Enemy>();
             if (enemy != null)
-                enemy.Wound(damage);
+            {
+                buffApplier.TryApplyBuff(enemy);
+                enemy.Wound(damage,Color.yellow);
+            }
         }
-
+        AudioManager.Instance.PlaySound("SoundEffect/Explosion");
+        //特效
+        GameObject effObj = PoolMgr.Instance.GetObj("Effect/ExplosionEffect");
+        effObj.transform.position = explosionPos.position;
         //删除自己
         PoolMgr.Instance.PushObj(gameObject);
     }
@@ -29,8 +36,8 @@ public class FireDragon : Projectile
         }
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.DrawWireSphere(transform.position,explosionRange);
-    //}
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, explosionRange);
+    }
 }

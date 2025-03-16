@@ -9,7 +9,6 @@ public class TowerPanel : BasePanel
     public TextMeshProUGUI qiNumText; //“气”资源数量文本
     public TextMeshProUGUI waveNumText; //波数
     public TextMeshProUGUI nowEnemyNumText; //剩余敌人数量
-    public HealthBar hpBar; //基地血量
     public Transform towerBtnContent; //放置按钮的位置
     private List<CreateTowerBtn> towerBtnList = new List<CreateTowerBtn>(); //存储放置防御塔的按钮
     public override void Init()

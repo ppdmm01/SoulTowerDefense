@@ -16,6 +16,7 @@ public class TowerData
     [Header("基础属性")]
     public int hp; //血量
     public int cost; //花费
+    public bool canBeAttack; //是否能被攻击
 
     [Header("攻击相关")]
     public bool isAttacker; //是否是攻击者
@@ -28,8 +29,13 @@ public class TowerData
     public int output; //每次产量
     public float cooldown; //生产冷却时间
 
+    [Header("Buff相关")]
+    public List<BuffData> buffDatas; //Buff数据
+
     [Header("标签")]
     public List<ItemTag> itemTags; //用于与物品产生联动
+
+
 
     public TowerData(TowerSO towerSO)
     {
@@ -44,12 +50,14 @@ public class TowerData
         towerIcon = other.towerIcon;
         hp = other.hp;
         cost = other.cost;
+        canBeAttack = other.canBeAttack;
         isAttacker = other.isAttacker;
         damage = other.damage;
         range = other.range;
         interval = other.interval;
         output = other.output;
         cooldown = other.cooldown;
+        buffDatas = other.GetBuffDatas();
         itemTags = other.itemTags;
     }
 
@@ -66,12 +74,28 @@ public class TowerData
         isAttacker = towerSO.isAttacker;
         hp = towerSO.hp;
         cost = towerSO.cost;
+        canBeAttack = towerSO.canBeAttack;
         damage = towerSO.damage;
         range = towerSO.range;
         interval = towerSO.interval;
         isProducer = towerSO.isProducer;
         output = towerSO.output;
         cooldown = towerSO.cooldown;
+        buffDatas = towerSO.GetBuffDatas();
         itemTags = towerSO.itemTags;
+    }
+
+    /// <summary>
+    /// 获取拷贝后的buff数据
+    /// </summary>
+    /// <returns></returns>
+    public List<BuffData> GetBuffDatas()
+    {
+        List<BuffData> list = new List<BuffData>();
+        for(int i = 0; i < buffDatas.Count; i++)
+        {
+            list.Add(buffDatas[i]);
+        }
+        return list;
     }
 }

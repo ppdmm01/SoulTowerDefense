@@ -65,7 +65,7 @@ public class StorePanel : BasePanel
         //向背包管理器中移除商品网格
         foreach (var storeGrid in storeGrids)
         {
-            GridManager.Instance.ClearAllItem(storeGrid);
+            GridManager.Instance.ClearAllItem(storeGrid, false);
             GridManager.Instance.RemoveGrid(storeGrid);
         }
     }

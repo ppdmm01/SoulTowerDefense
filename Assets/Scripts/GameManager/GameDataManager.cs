@@ -8,9 +8,9 @@ using UnityEngine;
 /// </summary>
 public class GameDataManager : Singleton<GameDataManager>
 {
-    public MusicData musicData;
-    public List<GridData> gridDatas;
-    public Map mapData;
+    public MusicData musicData = new MusicData();
+    public List<GridData> gridDatas = new List<GridData>();
+    public Map mapData = new Map();
 
     private GameDataManager()
     {
@@ -35,6 +35,11 @@ public class GameDataManager : Singleton<GameDataManager>
     /// <returns></returns>
     public GridData GetGridData(string gridName)
     {
+        if (gridDatas == null)
+        {
+            gridDatas = new List<GridData>();
+        }
+
         if (gridDatas.Any(data => data.gridName == gridName))
         {
             return gridDatas.FirstOrDefault(data => data.gridName == gridName);
@@ -47,6 +52,10 @@ public class GameDataManager : Singleton<GameDataManager>
 
     public void UpdateGridData(GridData newData)
     {
+        if (gridDatas == null)
+        {
+            gridDatas = new List<GridData>();
+        }
         //如果已存在，则更新
         int index = gridDatas.FindIndex(data => data.gridName == newData.gridName);
         if (index != -1)
@@ -61,6 +70,10 @@ public class GameDataManager : Singleton<GameDataManager>
 
     public void RemoveGridData(string gridName)
     {
+        if (gridDatas == null)
+        {
+            gridDatas = new List<GridData>();
+        }
         if (gridDatas.Any(data => data.gridName == gridName))
             gridDatas.RemoveAll(data => data.gridName == gridName);
     }

@@ -18,7 +18,7 @@ public class StoreGrid : BaseGrid
     public void RefreshItem(ItemSO itemData)
     {
         //清楚货架上的物品
-        DestroyAllItems();
+        DestroyAllItems(false);
         //添加物品
         GridManager.Instance.AddItem(itemData.itemName,this);
         //设置价格

@@ -56,8 +56,8 @@ public class ForgePanel : BasePanel
     public override void HideMe(UnityAction action)
     {
         base.HideMe(action);
-        GridManager.Instance.ClearAllItem(forgeGrid);
-        GridManager.Instance.ClearAllItem(productGrid);
+        GridManager.Instance.ClearAllItem(forgeGrid, false);
+        GridManager.Instance.ClearAllItem(productGrid, false);
         //向背包管理器中移除背包
         GridManager.Instance.RemoveGrid(forgeGrid);
         GridManager.Instance.RemoveGrid(productGrid);

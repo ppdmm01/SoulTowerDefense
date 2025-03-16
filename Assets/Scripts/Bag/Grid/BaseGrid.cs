@@ -290,10 +290,10 @@ public class BaseGrid : MonoBehaviour
     /// <summary>
     /// 销毁所有物品
     /// </summary>
-    public void DestroyAllItems()
+    public void DestroyAllItems(bool isUpdateInfo)
     {
         for (int i = items.Count - 1; i >= 0; i--)
-            items[i].DeleteMe();
+            items[i].DeleteMe(isUpdateInfo);
     }
     #endregion
 

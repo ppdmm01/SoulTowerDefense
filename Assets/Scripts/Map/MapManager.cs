@@ -12,7 +12,7 @@ public class MapManager : MonoBehaviour
     private void Start()
     {
         Map map = GameDataManager.Instance.mapData;
-        if (map.nodes != null && map.path != null)
+        if (map != null && map.nodes != null && map.path != null)
         {
             if (map.path.Any(p => p.Equals(map.GetBossNode().point)))
             {

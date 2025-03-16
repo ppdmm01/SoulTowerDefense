@@ -18,11 +18,22 @@ MonoBehaviour:
   towerIcon: {fileID: -760889985, guid: 2f2241beb7d677848aa78d696cf9e668, type: 3}
   hp: 35
   cost: 15
+  canBeAttack: 1
   isAttacker: 1
   damage: 8
   range: 5
-  interval: 0.5
+  interval: 2.5
   isProducer: 0
   output: 0
   cooldown: 0
+  buffDatas:
+  - triggerChance: 100
+    buffName: Burn
+    IsTriggerOverTime: 1
+    isStack: 0
+    duration: 3
+    triggerInterval: 1
+    damage: 3
+    speedMultiplier: 1
+    damageMultiplier: 1
   itemTags: 0100000005000000

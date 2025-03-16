@@ -25,6 +25,9 @@ public class BaseTower : MonoBehaviour
     [Header("防御塔碰撞范围")]
     public CircleCollider2D towerCollider; //防御塔碰撞范围
 
+    [Header("Buff施加器")]
+    public BuffApplier buffApplier; //防御塔可以施加的buff
+
     protected Transform target; //瞄准目标
     protected float attackTimer; //发射计时器
     protected float produceTimer; //生产计时器
@@ -34,7 +37,7 @@ public class BaseTower : MonoBehaviour
     public List<Transform> enemyList; //记录在范围内的敌人
 
     [HideInInspector] public bool isUsed; //是否启用
-    private bool isDead; //是否死亡
+    protected bool isDead; //是否死亡
 
     protected virtual void Update()
     {
@@ -76,14 +79,14 @@ public class BaseTower : MonoBehaviour
         }
 
         //更新血条位置
-        if (hpBar.gameObject.activeSelf)
+        if (hpBar != null && hpBar.gameObject.activeSelf)
             SetHpBarPos(transform.position + Vector3.up);
     }
 
     /// <summary>
     /// 初始化
     /// </summary>
-    public void Init(TowerData data)
+    public virtual void Init(TowerData data)
     {
         this.data = data;
         isDead = false;
@@ -91,12 +94,16 @@ public class BaseTower : MonoBehaviour
         enemyList = new List<Transform>();
         ani = GetComponent<Animator>();
 
+        //获取防御塔的buff
+        buffApplier = new BuffApplier(data.buffDatas);
+
         if (data.isAttacker)
         {
             float atkSpeed = TowerManager.Instance.GetTowerSO_ByName(data.towerName).interval / data.interval; //计算攻击速度增长了多少
             ani.SetFloat("AttackSpeed", atkSpeed); //设置攻击动画速度
         }
 
+        //闪白材质
         Material material = Resources.Load<Material>("Material/FlashMaterial");
         foreach (SpriteRenderer renderer in renderers)
         {
@@ -110,6 +117,7 @@ public class BaseTower : MonoBehaviour
 
         target = null;
 
+        //防御塔范围
         rangeTrigger.radius = data.range;
         rangeObj.transform.localScale = Vector3.one * (data.range * 2);
         rangeObj.SetActive(false);
@@ -134,7 +142,7 @@ public class BaseTower : MonoBehaviour
     {
         FlashSmoothly(1f, Color.yellow, () =>
         {
-            UIManager.Instance.ShowTxtPopup(data.output.ToString(), Color.yellow, transform.position);
+            UIManager.Instance.ShowTxtPopup(data.output.ToString(), Color.white, transform.position);
             GameResManager.Instance.AddQiNum(data.output);
         });
     }
@@ -283,7 +291,7 @@ public class BaseTower : MonoBehaviour
         ShowHpBar();
         UpdateHpBar();
         //死亡
-        if (nowHp < 0)
+        if (nowHp <= 0)
         {
             Dead();
             return;
@@ -300,7 +308,8 @@ public class BaseTower : MonoBehaviour
         if (isDead) return;
         isDead = true;
         //删除血条
-        UIManager.Instance.DestroyUIObjByPoolMgr(hpBar.gameObject);
+        if (hpBar != null)
+            UIManager.Instance.DestroyUIObjByPoolMgr(hpBar.gameObject);
         hpBar = null;
         enemyList.Clear();
         Destroy(gameObject);

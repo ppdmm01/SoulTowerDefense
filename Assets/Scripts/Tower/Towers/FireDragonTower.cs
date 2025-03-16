@@ -16,7 +16,7 @@ public class FireDragonTower : BaseTower
     {
         GameObject obj = PoolMgr.Instance.GetObj(projectilePath);
         FireDragon fireDragon = obj.GetComponent<FireDragon>();
-        fireDragon.Init(data.damage,2f);
+        fireDragon.Init(this.buffApplier,data.damage,1f);
         fireDragon.transform.position = firePos.position;
         fireDragon.transform.rotation = firePos.rotation;
     }

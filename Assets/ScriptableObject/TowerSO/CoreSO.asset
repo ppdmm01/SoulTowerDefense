@@ -18,6 +18,7 @@ MonoBehaviour:
   towerIcon: {fileID: -1650095065, guid: 3667d243f5e2ea54ba985deb4ff0ddca, type: 3}
   hp: 250
   cost: 0
+  canBeAttack: 1
   isAttacker: 0
   damage: 0
   range: 0
@@ -25,4 +26,5 @@ MonoBehaviour:
   isProducer: 1
   output: 10
   cooldown: 5
+  buffDatas: []
   itemTags: 

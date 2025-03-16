@@ -33,7 +33,7 @@ public class BagPanel : BasePanel
         });
         clearItemBtn.onClick.AddListener(() =>
         {
-            GridManager.Instance.ClearAllItem(storageBox);
+            GridManager.Instance.ClearAllItem(storageBox, false);
         });
     }
 
@@ -50,7 +50,6 @@ public class BagPanel : BasePanel
             bag.UpdateGrid(bagData);
         if (storageBoxData != null)
             storageBox.UpdateGrid(storageBoxData);
-
     }
 
     public override void HideMe(UnityAction action)
@@ -63,8 +62,8 @@ public class BagPanel : BasePanel
         GameDataManager.Instance.UpdateGridData(storageBoxData);
         GameDataManager.Instance.SaveGridData();
         //清空物品
-        GridManager.Instance.ClearAllItem(storageBox);
-        GridManager.Instance.ClearAllItem(bag);
+        GridManager.Instance.ClearAllItem(storageBox,false);
+        GridManager.Instance.ClearAllItem(bag, false);
         //向背包管理器中移除背包
         GridManager.Instance.RemoveGrid(bag);
         GridManager.Instance.RemoveGrid(storageBox);
