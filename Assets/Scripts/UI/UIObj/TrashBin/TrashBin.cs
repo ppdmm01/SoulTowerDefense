@@ -19,7 +19,10 @@ public class TrashBin : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         }
         item.currentRotation = item.lastCurrentRotation; //恢复到原来的角度
         if (eventData.pointerDrag != null)
+        {
+            item.SetIsUpdateInfo(true);
             item.DeleteMe();
+        }
         //TODO:获取资源
     }
 

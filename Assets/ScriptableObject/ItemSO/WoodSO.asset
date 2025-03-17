@@ -22,15 +22,22 @@ MonoBehaviour:
     allowRotation: 1
   detectionPoints:
   - pos: {x: 2, y: 0}
+    pointType: 0
   - pos: {x: 0, y: 1}
+    pointType: 0
   - pos: {x: 1, y: 1}
+    pointType: 0
   - pos: {x: 0, y: -1}
+    pointType: 0
   - pos: {x: 1, y: -1}
+    pointType: 0
   - pos: {x: -1, y: 0}
+    pointType: 0
   itemAttributes:
   - attributeType: 0
     condition:
       conditionType: 0
+      pointType: 0
       name: 
       tags: 0500000000000000
     activeEffects:
@@ -40,11 +47,12 @@ MonoBehaviour:
   - attributeType: 1
     condition:
       conditionType: 0
+      pointType: 0
       name: 
       tags: 0000000005000000
     activeEffects:
     - effectType: 4
       value: 0.05
-    description: "\u661F\u661F\u89E6\u53D1\u7684\u529B\u5B66\u5854\uFF1A\u4F24\u5BB3\u518D\u52A0+5%"
+    description: "\u661F\u661F\u6FC0\u6D3B\u7684\u529B\u5B66\u5854\uFF1A\u4F24\u5BB3\u518D\u52A0+5%"
   icon: {fileID: -1025332416, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
   itemTags: 00000000

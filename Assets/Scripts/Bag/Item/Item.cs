@@ -36,6 +36,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     [HideInInspector] public RectTransform rectTransform; //变换组件
     private bool isDrag; //是否被拖拽
     [HideInInspector] public bool isDelete; //是否准备删除
+    public bool isUpdateInfo; //位置或角度变动时是否更新信息
 
     void Awake()
     {
@@ -84,6 +85,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     {
         this.data = data;
 
+        isUpdateInfo = true;
         isDrag = false;
         currentRotation = 0;
         lastCurrentRotation = currentRotation;
@@ -406,9 +408,9 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     #region 检测周围物品相关（检测物品联动属性）
 
     //获取周围物品并显示星星（isShowStar是否显示星星）
-    public List<Item> GetConnectItems(bool isShowStar = false)
+    public List<ConnectItemInfo> GetConnectItems(bool isShowStar = false)
     {
-        List<Item> neighbors = new List<Item>();
+        List<ConnectItemInfo> neighborItemInfos = new List<ConnectItemInfo>();
         foreach (DetectionPoint point in data.detectionPoints)
         {
             //计算实际检测位置
@@ -418,30 +420,50 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
             //边界检查  
             if (!grid.CheckPoint(checkPos)) continue;
 
-            //获取目标物品  
+            //获取目标物品格 
             ItemSlot slot = grid.slots[checkPos.x, checkPos.y];
-            if (slot.nowItem != null && IsMatchLinkAttribute(slot.nowItem) && !neighbors.Contains(slot.nowItem))
+            //获取激活的属性
+            ItemAttribute attribute = null;
+            if (slot.nowItem != null)
+                attribute = MatchLinkAttribute(slot.nowItem, point.pointType);
+            //判断是否激活成功
+            if (slot.nowItem == null ||  attribute == null || 
+                neighborItemInfos.Any(info => info.item == slot.nowItem))
             {
                 if (isShowStar)
-                    CreateStar(slot.transform.position, true); //星星处有物品，并且物品满足激活条件，并且没重复
-                neighbors.Add(slot.nowItem);
+                    CreateStar(slot.transform.position, false, point.pointType); //激活失败
             }
             else
             {
+                ConnectItemInfo connectItem = new ConnectItemInfo(slot.nowItem,attribute);
                 if (isShowStar)
-                    CreateStar(slot.transform.position, false);
+                    CreateStar(slot.transform.position, true, point.pointType); //激活成功
+                neighborItemInfos.Add(connectItem);
             }
+
+            //if (slot.nowItem != null && MatchLinkAttribute(slot.nowItem, point.pointType) 
+            //    && !neighbors.Contains(slot.nowItem))
+            //{
+            //    if (isShowStar)
+            //        CreateStar(slot.transform.position, true, point.pointType); //星星处有物品，并且物品满足激活条件，并且没重复
+            //    neighbors.Add(slot.nowItem);
+            //}
+            //else
+            //{
+            //    if (isShowStar)
+            //        CreateStar(slot.transform.position, false, point.pointType);
+            //}
         }
 
-        return neighbors.ToList();
+        return neighborItemInfos.ToList();
     }
 
     //设置星星图片
-    public void CreateStar(Vector2 pos, bool isShow)
+    public void CreateStar(Vector2 pos, bool isShow, DetectionPoint.PointType type)
     {
         GameObject starObj = UIManager.Instance.CreateUIObjByPoolMgr("Bag/StarPoint");
         starObj.transform.position = pos;
-        starObj.GetComponent<StarPoint>().SetStarActive(isShow);
+        starObj.GetComponent<StarPoint>().SetStarActive(isShow, type);
         starPoints.Add(starObj);
     }
 
@@ -455,15 +477,19 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         starPoints.Clear();
     }
 
-    //检测指定物品是否满足该物品的 联动属性激活要求
-    public bool IsMatchLinkAttribute(Item item)
+    //匹配指定物品是否满足该物品的 联动属性激活要求
+    //2025.3.17更改：加入不同的 检测点类型，所以不能检测所有要求了，只检测对应 检测点类型 的要求即可
+    public ItemAttribute MatchLinkAttribute(Item item,DetectionPoint.PointType pointType)
     {
         foreach (ItemAttribute attribute in data.itemAttributes)
         {
             if (attribute.attributeType == ItemAttribute.AttributeType.Global) continue; //全局的不考虑
-            if (attribute.IsMatch(item)) return true; //如果匹配其中一个属性要求，则属性激活成功
+            if (attribute.condition.pointType != pointType) continue; //要求的检测点类型不一致，不考虑
+
+            if (attribute.IsMatch(item)) 
+                return attribute; //如果匹配其中一个属性要求，则属性激活成功
         }
-        return false;
+        return null;
     }
     #endregion
 
@@ -478,7 +504,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     /// <summary>
     /// 删除自己
     /// </summary>
-    public void DeleteMe(bool isUpdateInfo = true)
+    public void DeleteMe()
     {
         if (oldGrid.CheckBound(this, oldGridPos))
             oldGrid.RemoveItem(this, oldGridPos);
@@ -494,5 +520,10 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
             UIManager.Instance.DestroyUIObj(obj);
         itemFrameList.Clear();
         Destroy(this.gameObject);
+    }
+
+    public void SetIsUpdateInfo(bool isUpdateInfo)
+    {
+        this.isUpdateInfo = isUpdateInfo;
     }
 }

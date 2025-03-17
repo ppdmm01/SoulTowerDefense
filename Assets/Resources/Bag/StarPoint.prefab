@@ -211,3 +211,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   starShow: {fileID: 2960783123899121588}
   starHide: {fileID: 2477387184676714906}
+  showIcon: {fileID: 7304669065645539542}
+  hideIcon: {fileID: 2223003943876769446}
+  starShowIcon: {fileID: 1180353999, guid: 898948b5862157548bdcc03344cde63f, type: 3}
+  starHideIcon: {fileID: -1182490181, guid: 898948b5862157548bdcc03344cde63f, type: 3}
+  fireShowIcon: {fileID: 2142465780, guid: 898948b5862157548bdcc03344cde63f, type: 3}
+  fireHideIcon: {fileID: -99035784, guid: 898948b5862157548bdcc03344cde63f, type: 3}

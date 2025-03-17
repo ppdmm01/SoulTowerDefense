@@ -20,7 +20,7 @@ MonoBehaviour:
   cost: 15
   canBeAttack: 1
   isAttacker: 1
-  damage: 100
+  damage: 3
   range: 5
   interval: 2.5
   isProducer: 0
@@ -30,7 +30,7 @@ MonoBehaviour:
   - triggerChance: 50
     buffType: 0
     buffName: "\u707C\u70E7"
-    isTriggerOverTime: 0
+    isTriggerOverTime: 1
     isStack: 0
     duration: 3
     triggerInterval: 1

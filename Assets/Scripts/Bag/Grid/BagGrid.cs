@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -5,6 +6,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 /// <summary>
 /// 背包网格
@@ -15,14 +18,16 @@ public class BagGrid : BaseGrid
     {
         base.PlaceItem(item, gridPos);
         //同时更新面板信息防御塔
-        GridManager.Instance.UpdateFightTowerInfo();
+        if (item.isUpdateInfo)
+            GridManager.Instance.UpdateFightTowerInfo();
     }
 
     public override void RemoveItem(Item item, Vector2Int gridPos)
     {
         base.RemoveItem(item, gridPos);
         //同时更新面板信息防御塔
-        GridManager.Instance.UpdateFightTowerInfo();
+        if (item.isUpdateInfo)
+            GridManager.Instance.UpdateFightTowerInfo();
     }
 
     public override void UpdateGrid(GridData gridData)
@@ -74,9 +79,9 @@ public class BagGrid : BaseGrid
         //遍历背包中所有物品
         foreach (Item item in items)
         {
-            List<Item> neighbors = item.GetConnectItems(); //获取该物品周围有效的激活物品（无法知道激活的是哪个属性）
+            List<ConnectItemInfo> neighborItemInfos = item.GetConnectItems(); //获取该物品周围有效的激活物品（无法知道激活的是哪个属性）
 
-            //遍历物品的所有属性
+            //先计算该物品所有的全局属性
             foreach (ItemAttribute attribute in item.data.itemAttributes)
             {
                 //全局属性
@@ -87,17 +92,21 @@ public class BagGrid : BaseGrid
                     else
                         TowerManager.Instance.SetTowerDataFromName(attribute.condition.name, attribute.activeEffects);
                 }
-                //联动属性
-                else
-                {
-                    //对激活物品进行遍历，检查是否满足该物品属性（一个物品可能会有许多个联动属性）
-                    foreach (Item neighborItem in neighbors)
-                    {
-                        if (attribute.IsMatch(neighborItem))
-                            TowerManager.Instance.SetTowerDataFromName(neighborItem.data.itemName, attribute.activeEffects);
-                    }
-                }
             }
+            //再计算已激活的联动属性
+            foreach (ConnectItemInfo info in neighborItemInfos)
+            {
+                TowerManager.Instance.SetTowerDataFromName(info.item.data.itemName, info.activateAttribute.activeEffects);
+            }
+            //    else
+            //{
+            //    //对激活物品进行遍历，检查是否满足该物品属性（一个物品可能会有许多个联动属性）
+            //    foreach (Item neighborItem in neighbors)
+            //    {
+            //        if (attribute.IsMatch(neighborItem))
+            //            TowerManager.Instance.SetTowerDataFromName(neighborItem.data.itemName, attribute.activeEffects);
+            //    }
+            //}
         }
     }
     #endregion

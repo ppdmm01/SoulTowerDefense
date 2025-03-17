@@ -34,6 +34,7 @@ public class ItemAttribute
     /// 检测其他物品是否满足激活条件
     /// </summary>
     /// <param name="item">要检测的物品</param>
+    /// <param name="pointType">检测点类型</param>
     /// <returns>是否满足</returns>
     public bool IsMatch(Item item)
     {
@@ -98,6 +99,8 @@ public class ItemActiveCondition
 
     [Header("激活条件类型")]
     public ConditionType conditionType;
+    [Header("激活的检测点类型")]
+    public DetectionPoint.PointType pointType;
     [Header("条件")]
     public string name;
     public ItemTag[] tags;

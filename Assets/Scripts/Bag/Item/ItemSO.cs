@@ -141,8 +141,14 @@ public class DetectionPoint
     [Tooltip("相对物品原点的偏移量")]
     public Vector2Int pos;
 
-    //[Tooltip("需要匹配的标签")]
-    //public ItemTag[] requiredTags;
+    [Tooltip("检测点类型")]
+    public PointType pointType;
+
+    public enum PointType
+    {
+        Star, //星星图标
+        Fire, //火焰图标
+    }
 
     //获取指定角度的检测点相对原点位置
     public Vector2Int GetRotatePoint(int rotation)

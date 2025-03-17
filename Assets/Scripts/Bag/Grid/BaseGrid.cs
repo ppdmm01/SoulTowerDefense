@@ -292,7 +292,10 @@ public class BaseGrid : MonoBehaviour
     public void DestroyAllItems(bool isUpdateInfo)
     {
         for (int i = items.Count - 1; i >= 0; i--)
-            items[i].DeleteMe(isUpdateInfo);
+        {
+            items[i].SetIsUpdateInfo(isUpdateInfo);
+            items[i].DeleteMe();
+        }
     }
     #endregion
 

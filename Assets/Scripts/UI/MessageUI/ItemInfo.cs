@@ -25,8 +25,6 @@ public class ItemInfo : MonoBehaviour
         if (data.itemTags.Contains(ItemTag.Tower)) typeInfo = ColorTextTools.ColorText("【防御塔】", "#FF3030");
         else typeInfo = ColorTextTools.ColorText("【道具】", "#00B6FF");
         CreateAttributeInfo("Type", "物品类型：" + typeInfo);
-        //描述
-        CreateAttributeInfo("Description", "物品描述：" + data.description);
         //塔
         if (data.itemTags.Contains(ItemTag.Tower))
         {
@@ -48,8 +46,10 @@ public class ItemInfo : MonoBehaviour
                 else
                     itemAttributeInfo2 += attribute.description + "\n";
             }
-            CreateAttributeInfo("GlobalAttribute", itemAttributeInfo);
-            CreateAttributeInfo("LinkAttribute", itemAttributeInfo2);
+            if (itemAttributeInfo != "基础属性：\n")
+                CreateAttributeInfo("GlobalAttribute", itemAttributeInfo);
+            if (itemAttributeInfo2 != "联动属性：\n")
+                CreateAttributeInfo("LinkAttribute", itemAttributeInfo2);
         }
         //标签
         string tagInfo = "标签：";

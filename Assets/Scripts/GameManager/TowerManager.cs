@@ -325,13 +325,13 @@ public class TowerManager : SingletonMono<TowerManager>
     /// </summary>
     /// <param name="tags">标签</param>
     /// <param name="activeEffects">激活效果</param>
-    public void SetTowerDataFromTag(ItemTag[] tags, ItemActiveEffect[] activeEffects)
+    public void SetTowerDataFromTag(ItemTag[] tags,ItemActiveEffect[] activeEffects)
     {
         bool flag = true; //标记是否满足标签条件
         foreach (TowerData data in towerDatas.Values)
         {
             flag = true;
-            //只有所有标签满足才行
+            //只有所有标签满足并且检测点类型对应才行
             foreach (ItemTag tag in tags)
                 if (!data.itemTags.Contains(tag)) 
                     flag = false;
@@ -360,6 +360,7 @@ public class TowerManager : SingletonMono<TowerManager>
     /// </summary>
     public void Clear()
     {
+        Debug.Log("清理战场");
         //清除动态数据
         towerDatas.Clear();
         oldTowerDatas.Clear();

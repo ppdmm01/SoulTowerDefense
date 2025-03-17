@@ -22,13 +22,18 @@ MonoBehaviour:
     allowRotation: 1
   detectionPoints:
   - pos: {x: -1, y: 0}
+    pointType: 0
   - pos: {x: 1, y: 0}
+    pointType: 0
   - pos: {x: 0, y: 1}
+    pointType: 0
   - pos: {x: 0, y: -1}
+    pointType: 0
   itemAttributes:
   - attributeType: 0
     condition:
       conditionType: 0
+      pointType: 0
       name: 
       tags: 0100000005000000
     activeEffects:
@@ -38,6 +43,7 @@ MonoBehaviour:
   - attributeType: 1
     condition:
       conditionType: 0
+      pointType: 0
       name: 
       tags: 0100000005000000
     activeEffects:

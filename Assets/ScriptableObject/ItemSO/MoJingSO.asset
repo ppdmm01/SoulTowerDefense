@@ -22,6 +22,17 @@ MonoBehaviour:
     allowRotation: 1
   detectionPoints:
   - pos: {x: 0, y: 2}
-  itemAttributes: []
+    pointType: 0
+  itemAttributes:
+  - attributeType: 0
+    condition:
+      conditionType: 0
+      pointType: 0
+      name: 
+      tags: 0200000005000000
+    activeEffects:
+    - effectType: 5
+      value: 0.1
+    description: "\uFF08\u672A\u5B9E\u73B0\uFF09\u6240\u6709\u5149\u5B66\u5854\uFF1A\u5C04\u7A0B+10%\uFF0C\u51CF\u901F\u6301\u7EED\u65F6\u95F4+25%"
   icon: {fileID: 1469814840, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
   itemTags: 0200000004000000
