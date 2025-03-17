@@ -20,7 +20,7 @@ MonoBehaviour:
   cost: 10
   canBeAttack: 1
   isAttacker: 1
-  damage: 5
+  damage: 100
   range: 4
   interval: 1
   isProducer: 0

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -24,6 +25,8 @@ public class Enemy : MonoBehaviour
     private Color originColor; //³õÊ¼ÑÕÉ«
     private Color slowColor; //¼õËÙÊ±µÄÑÕÉ«
     private Color stunColor; //Ñ£ÔÎÊ±µÄÑÕÉ«
+
+    public CircleCollider2D attackRange; //¹¥»÷·¶Î§
 
     //Ñ£ÔÎÍ¼±ê
     public GameObject stunIcon;
@@ -52,6 +55,8 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         attackTimer += Time.deltaTime;
+
+        CheckTower();
 
         if (target == null)
         {
@@ -156,28 +161,46 @@ public class Enemy : MonoBehaviour
         return towerList[0];
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Tower"))
-        {
-            BaseTower tower = collision.GetComponent<BaseTower>();
-            if (tower.data.canBeAttack)
-            {
-                if (!tower.isUsed) return;
-                if (!towerList.Contains(tower))
-                    towerList.Add(tower);
-            }
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Tower"))
+    //    {
+    //        BaseTower tower = collision.GetComponent<BaseTower>();
+    //        if (tower.data.canBeAttack)
+    //        {
+    //            if (!tower.isUsed) return;
+    //            if (!towerList.Contains(tower))
+    //                towerList.Add(tower);
+    //        }
+    //    }
+    //}
 
-    private void OnTriggerExit2D(Collider2D collision)
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Tower"))
+    //    {
+    //        BaseTower tower = collision.GetComponent<BaseTower>();
+    //        if (!tower.isUsed) return;
+    //        if (towerList.Contains(tower))
+    //            towerList.Remove(tower);
+    //    }
+    //}
+
+    //¼ì²â·ÀÓùËþ
+    public void CheckTower()
     {
-        if (collision.CompareTag("Tower"))
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, attackRange.radius,
+            1 << LayerMask.NameToLayer("Tower"));
+        towerList.Clear();
+        foreach (Collider2D collider in colliders)
         {
-            BaseTower tower = collision.GetComponent<BaseTower>();
-            if (!tower.isUsed) return;
-            if (towerList.Contains(tower))
-                towerList.Remove(tower);
+            BaseTower tower = collider.GetComponent<BaseTower>();
+            if (tower != null && tower.data.canBeAttack)
+                towerList.Add(collider.GetComponent<BaseTower>());
+        }
+        if (!towerList.Any(tower => tower == target))
+        {
+            target = null;
         }
     }
 

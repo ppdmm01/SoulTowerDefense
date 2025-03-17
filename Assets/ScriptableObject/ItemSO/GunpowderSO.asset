@@ -24,14 +24,27 @@ MonoBehaviour:
   - pos: {x: 0, y: 1}
   - pos: {x: 1, y: 1}
   itemAttributes:
+  - attributeType: 0
+    condition:
+      conditionType: 0
+      name: 
+      tags: 0100000005000000
+    activeEffects:
+    - effectType: 7
+      value: 0.5
+    - effectType: 4
+      value: 0.08
+    - effectType: 8
+      value: 0.15
+    description: "\u6240\u6709\u70ED\u5B66\u5854\uFF1A\u71C3\u70E7\u65F6\u95F4+0.5s\uFF0C\u4F24\u5BB3+8%\uFF0C\u707C\u70E7\u4F24\u5BB3+15%"
   - attributeType: 1
     condition:
       conditionType: 0
       name: 
       tags: 0100000005000000
     activeEffects:
-    - effectType: 2
-      value: 4
-    description: "\u88AB\u661F\u661F\u89E6\u53D1\u7684\u70ED\u5B66\u5854\uFF1A\u4F24\u5BB3+4"
+    - effectType: 9
+      value: 8
+    description: "\u661F\u661F\u6FC0\u6D3B\u7684\u70ED\u5B66\u5854\uFF1A\u707C\u70E7\u89E6\u53D1\u51E0\u7387+8%"
   icon: {fileID: -741162250, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
   itemTags: 01000000

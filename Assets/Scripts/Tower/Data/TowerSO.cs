@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -46,8 +47,19 @@ public class TowerSO : ScriptableObject
         List<BuffData> list = new List<BuffData>();
         for (int i = 0; i < buffDatas.Count; i++)
         {
-            list.Add(buffDatas[i]);
+            list.Add(new BuffData(buffDatas[i]));
         }
         return list;
+    }
+
+    /// <summary>
+    /// 获取Buff数据
+    /// </summary>
+    public BuffData GetBuffData(BuffType type)
+    {
+        if (buffDatas.Any(data => data.buffType == type))
+            return buffDatas.FirstOrDefault(data => data.buffType == type);
+        else
+            return null;
     }
 }

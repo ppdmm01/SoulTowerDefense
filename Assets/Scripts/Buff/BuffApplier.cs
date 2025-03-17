@@ -41,10 +41,10 @@ public class BuffApplier
         else
         {
             Buff[] buffs = target.GetComponents<Buff>();
-            if (buffs.Any(b => b.data.buffName == data.buffName))
+            if (buffs.Any(b => b.data.buffType == data.buffType))
             {
                 //已经存在该脚本了
-                Buff buff = buffs.FirstOrDefault(b => b.data.buffName == data.buffName);
+                Buff buff = buffs.FirstOrDefault(b => b.data.buffType == data.buffType);
                 //延长buff时间
                 buff.ResetTime();
             }

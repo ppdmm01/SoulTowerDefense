@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Sulfur
   itemChineseName: "\u786B\u78FA"
   price: 25
-  description: "\u6682\u65E0\u7528\u5904"
+  description: 
   shape:
     shapeMatrix: 01000000000000000000000000000000
     allowRotation: 1
@@ -25,6 +25,15 @@ MonoBehaviour:
   - pos: {x: 0, y: 1}
   - pos: {x: 1, y: 0}
   - pos: {x: 0, y: -1}
-  itemAttributes: []
+  itemAttributes:
+  - attributeType: 1
+    condition:
+      conditionType: 0
+      name: 
+      tags: 0100000005000000
+    activeEffects:
+    - effectType: 8
+      value: 0.12
+    description: "\u661F\u661F\u6FC0\u6D3B\u7684\u70ED\u5B66\u5854\uFF1A\u707C\u70E7\u4F24\u5BB3+12%"
   icon: {fileID: 804243622, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
   itemTags: 01000000

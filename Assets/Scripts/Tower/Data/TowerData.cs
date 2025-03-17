@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -7,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class TowerData
 {
+    public TowerSO originData; //原始数据
+
     [Header("防御塔描述")]
     public string towerName;
     public string towerChineseName;
@@ -35,7 +38,10 @@ public class TowerData
     [Header("标签")]
     public List<ItemTag> itemTags; //用于与物品产生联动
 
-
+    [Header("属性倍率计算")]
+    public float damageMultiplier = 1f;
+    public float rangeMultiplier = 1f;
+    public float intervalMultiplier = 1f;
 
     public TowerData(TowerSO towerSO)
     {
@@ -44,6 +50,7 @@ public class TowerData
 
     public TowerData(TowerData other)
     {
+        originData = other.originData;
         towerName = other.towerName;
         towerChineseName = other.towerChineseName;
         description = other.description;
@@ -59,6 +66,10 @@ public class TowerData
         cooldown = other.cooldown;
         buffDatas = other.GetBuffDatas();
         itemTags = other.itemTags;
+
+        damageMultiplier = other.damageMultiplier;
+        rangeMultiplier = other.rangeMultiplier;
+        intervalMultiplier = other.intervalMultiplier;
     }
 
     /// <summary>
@@ -67,6 +78,7 @@ public class TowerData
     /// <param name="towerSO"></param>
     public void Init(TowerSO towerSO)
     {
+        originData = towerSO;
         towerName = towerSO.towerName;
         towerChineseName = towerSO.towerChineseName;
         description = towerSO.description;
@@ -83,6 +95,10 @@ public class TowerData
         cooldown = towerSO.cooldown;
         buffDatas = towerSO.GetBuffDatas();
         itemTags = towerSO.itemTags;
+
+        damageMultiplier = 1f;
+        rangeMultiplier = 1f;
+        intervalMultiplier = 1f;
     }
 
     /// <summary>
@@ -94,8 +110,33 @@ public class TowerData
         List<BuffData> list = new List<BuffData>();
         for(int i = 0; i < buffDatas.Count; i++)
         {
-            list.Add(buffDatas[i]);
+            list.Add(new BuffData(buffDatas[i]));
         }
         return list;
+    }
+
+    /// <summary>
+    /// 更新属性
+    /// </summary>
+    public void UpdateAttribute()
+    {
+        damage = (int)(originData.damage * damageMultiplier);
+        range = originData.range * rangeMultiplier;
+        interval = originData.interval * intervalMultiplier;
+        foreach (BuffData data in buffDatas)
+        {
+            data.damage = (int)(originData.GetBuffData(data.buffType).damage * data.damageMultiplier); //最终伤害：配置数据 * 当前倍率
+        }
+    }
+
+    /// <summary>
+    /// 获取buff数据
+    /// </summary>
+    public BuffData GetBuffData(BuffType type)
+    {
+        if (buffDatas.Any(data => data.buffType == type))
+            return buffDatas.FirstOrDefault(data => data.buffType == type);
+        else
+            return null;
     }
 }

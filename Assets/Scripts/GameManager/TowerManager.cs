@@ -271,6 +271,7 @@ public class TowerManager : SingletonMono<TowerManager>
         }
 
         TowerData data = towerDatas[towerName];
+        BuffData buffData;
         foreach (ItemActiveEffect activeEffect in activeEffects)
         {
             switch (activeEffect.effectType)
@@ -281,20 +282,39 @@ public class TowerManager : SingletonMono<TowerManager>
                 case ItemActiveEffect.EffectType.Cost:
                     data.cost += (int)activeEffect.value;
                     break;
-                case ItemActiveEffect.EffectType.Damage:
-                    data.damage += (int)activeEffect.value;
-                    break;
-                case ItemActiveEffect.EffectType.Range:
-                    data.range += activeEffect.value;
-                    break;
-                case ItemActiveEffect.EffectType.Interval:
-                    data.interval += activeEffect.value;
-                    break;
                 case ItemActiveEffect.EffectType.Output:
                     data.output += (int)activeEffect.value;
                     break;
                 case ItemActiveEffect.EffectType.Cooldown:
                     data.cooldown += activeEffect.value;
+                    break;
+                case ItemActiveEffect.EffectType.DamageMultiplier:
+                    data.damageMultiplier += activeEffect.value;
+                    data.UpdateAttribute();
+                    break;
+                case ItemActiveEffect.EffectType.RangeMultiplier:
+                    data.rangeMultiplier += activeEffect.value;
+                    data.UpdateAttribute();
+                    break;
+                case ItemActiveEffect.EffectType.IntervalMultiplier:
+                    data.intervalMultiplier += activeEffect.value;
+                    data.UpdateAttribute();
+                    break;
+                case ItemActiveEffect.EffectType.BurnBuff_Duration:
+                    buffData = data.GetBuffData(BuffType.Burn);
+                    if (buffData != null)
+                        buffData.duration += activeEffect.value;
+                    break;
+                case ItemActiveEffect.EffectType.BurnBuff_Damage:
+                    buffData = data.GetBuffData(BuffType.Burn);
+                    if (buffData != null)
+                        buffData.damageMultiplier += activeEffect.value;
+                    data.UpdateAttribute();
+                    break;
+                case ItemActiveEffect.EffectType.BurnBuff_TriggerChance:
+                    buffData = data.GetBuffData(BuffType.Burn);
+                    if (buffData != null)
+                        buffData.triggerChance += activeEffect.value;
                     break;
             }
         }

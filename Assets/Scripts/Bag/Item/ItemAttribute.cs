@@ -62,13 +62,19 @@ public class ItemActiveEffect
     /// </summary>
     public enum EffectType
     {
+        [Header("防御塔属性")]
         Hp, //血量
         Cost, //花费
-        Damage, //攻击伤害
-        Range, //攻击范围
-        Interval, //攻击间隔
         Output, //产量
         Cooldown, //生产冷却
+
+        DamageMultiplier, //攻击倍率
+        RangeMultiplier, //射程倍率
+        IntervalMultiplier, //攻击间隔倍率
+        [Header("Buff相关")]
+        BurnBuff_Duration, //灼烧时间
+        BurnBuff_Damage, //灼烧伤害
+        BurnBuff_TriggerChance, //灼烧几率
     }
 
     public EffectType effectType; //效果类型

@@ -53,13 +53,13 @@ public class Buff : MonoBehaviour
     public void OnApply()
     {
         target.speedMultiplier = data.speedMultiplier;
-        target.damageMultiplier = data.damageMultiplier;
+        target.damageMultiplier = data.woundMultiplier;
     }
 
     //每隔一段时间触发
     public void OnTrigger()
     {
-        if (data.IsTriggerOverTime)
+        if (data.isTriggerOverTime)
         {
             if (data.damage != 0)
                 target.Wound(data.damage,Color.red);

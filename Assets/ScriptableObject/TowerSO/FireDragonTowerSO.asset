@@ -20,20 +20,22 @@ MonoBehaviour:
   cost: 15
   canBeAttack: 1
   isAttacker: 1
-  damage: 8
+  damage: 100
   range: 5
   interval: 2.5
   isProducer: 0
   output: 0
   cooldown: 0
   buffDatas:
-  - triggerChance: 100
-    buffName: Burn
-    IsTriggerOverTime: 1
+  - triggerChance: 50
+    buffType: 0
+    buffName: "\u707C\u70E7"
+    isTriggerOverTime: 0
     isStack: 0
     duration: 3
     triggerInterval: 1
-    damage: 3
+    damage: 5
     speedMultiplier: 1
+    woundMultiplier: 1
     damageMultiplier: 1
   itemTags: 0100000005000000

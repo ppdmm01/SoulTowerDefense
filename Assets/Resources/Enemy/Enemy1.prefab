@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 3553520944389347420}
   - component: {fileID: -6387242507907503140}
   - component: {fileID: 1772088125059586302}
-  - component: {fileID: 6916302537658897564}
   m_Layer: 6
   m_Name: Enemy1
   m_TagString: Enemy
@@ -107,6 +106,7 @@ MonoBehaviour:
   nowHp: 0
   speedMultiplier: 1
   damageMultiplier: 1
+  attackRange: {fileID: 1772088125059586302}
   stunIcon: {fileID: 6791159782987713120}
   slowIcon: {fileID: 8253676700829986366}
   isDead: 0
@@ -185,41 +185,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.7
---- !u!58 &6916302537658897564
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2579470402839484374}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!1 &6791159782987713120
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,9 +19,20 @@ public class PreFightPanel : BasePanel
     public TowerInfo towerInfo; //防御塔信息
     private float nowWeight; //当前所有防御塔信息宽度
 
+    [Header("防御塔buff相关")]
+    public TextMeshProUGUI buffTxt; //buff描述
+    public TextMeshProUGUI buffTitle; //buff标题
+    public GameObject buffInfo; //buff信息面板
+    public Button closeBtn; //关闭buff信息按钮
+    public List<TowerBuffInfoBtn> towerBuffBtnList; //防御塔buff信息按钮列表
+
+    public Transform buffBtnContainer; //存放buff按钮
+    public BuffType nowBuffType; //当前展示的buff类型
+
     public override void Init()
     {
         towerInfoBtnList = new List<TowerInfoBtn>();
+        towerBuffBtnList = new List<TowerBuffInfoBtn>();
         nowTowerInfoName = "";
         nowWeight = 0;
 
@@ -33,6 +46,11 @@ public class PreFightPanel : BasePanel
             {
                 StartFight();
             }
+        });
+
+        closeBtn.onClick.AddListener(() =>
+        {
+            buffInfo.SetActive(false);
         });
 
         //显示背包面板
@@ -50,6 +68,8 @@ public class PreFightPanel : BasePanel
             topPanel.ShowBtn(TopColumnBtnType.Book, TopColumnBtnType.Map, TopColumnBtnType.Menu);
         }
         topPanel.SetTitle("战前准备");
+
+        buffInfo.SetActive(false);
     }
 
     /// <summary>
@@ -75,6 +95,15 @@ public class PreFightPanel : BasePanel
         }
         else
             towerInfo.SetInfo(data);
+
+        //更新buff按钮
+        UpdateTowerBuffInfoBtn(data);
+        //更新变化（buff和防御塔都没变过则更新）
+        if (data.buffDatas.Any(buffData => buffData.buffType == nowBuffType)
+            && TowerManager.Instance.oldTowerDatas.ContainsKey(towerName) && towerName == nowTowerInfoName)
+        {
+            UpdateBuffInfo(data.buffDatas.FirstOrDefault(buffData => buffData.buffType == nowBuffType));
+        }
     }
 
     /// <summary>
@@ -130,6 +159,51 @@ public class PreFightPanel : BasePanel
         }
         //更新ScrollView内容宽度
         towerSr.content.sizeDelta = new Vector2(nowWeight, towerSr.content.sizeDelta.y);
+    }
+
+    /// <summary>
+    /// 更新防御塔buff信息
+    /// </summary>
+    public void UpdateBuffInfo(BuffData data)
+    {
+        buffTitle.text = data.buffName;
+        string info = "";
+        switch (data.buffType)
+        {
+            case BuffType.Burn:
+                info = $"攻击时<color=red>{data.triggerChance}%</color>几率附带<color=red>灼烧</color>：" +
+                    $"每秒造成<color=red>{data.damage}</color>点伤害，持续<color=red>{data.duration}s</color>。";
+                break;
+            case BuffType.Slow:
+                info = $"攻击时<color=red>{data.triggerChance}%</color>几率附带<color=red>缓慢</color>：" +
+                    $"敌人速度变为<color=red>50%</color>,持续<color=red>{data.duration}s</color>。";
+                break;
+            case BuffType.Stun:
+                info = $"攻击时<color=red>{data.triggerChance}%</color>几率附带<color=red>眩晕</color>：" +
+                    $"敌人停住不动，持续<color=red>{data.duration}s</color>。";
+                break;
+        }
+        buffTxt.text = info;
+    }
+
+    public void UpdateTowerBuffInfoBtn(TowerData towerData)
+    {
+        foreach (TowerBuffInfoBtn btn in towerBuffBtnList)
+        {
+            Destroy(btn.gameObject);
+        }
+        towerBuffBtnList.Clear();
+        
+        foreach (BuffData data in towerData.buffDatas)
+        {
+            //创建对象
+            GameObject towerBuffInfoObj = Instantiate(Resources.Load<GameObject>("UI/UIObj/TowerBuffInfoBtn"));
+            towerBuffInfoObj.transform.SetParent(buffBtnContainer, false);
+            TowerBuffInfoBtn towerBuffInfoBtn = towerBuffInfoObj.GetComponent<TowerBuffInfoBtn>();
+            towerBuffInfoBtn.InitInfo(data);
+            //添加数据
+            towerBuffBtnList.Add(towerBuffInfoBtn);
+        }
     }
 
     /// <summary>

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   itemName: Charcoal
-  itemChineseName: "\u6728\u70AD"
+  itemChineseName: "\u70AD"
   price: 30
   description: "\u6682\u65E0\u7528\u5904"
   shape:
@@ -25,6 +25,15 @@ MonoBehaviour:
   - pos: {x: 1, y: 0}
   - pos: {x: 0, y: 1}
   - pos: {x: 0, y: -1}
-  itemAttributes: []
+  itemAttributes:
+  - attributeType: 1
+    condition:
+      conditionType: 0
+      name: 
+      tags: 0100000005000000
+    activeEffects:
+    - effectType: 7
+      value: 0.2
+    description: "\u661F\u661F\u6FC0\u6D3B\u7684\u70ED\u5B66\u5854\uFF1A\u71C3\u70E7\u65F6\u95F4+0.2s"
   icon: {fileID: 1620226355, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
   itemTags: 01000000

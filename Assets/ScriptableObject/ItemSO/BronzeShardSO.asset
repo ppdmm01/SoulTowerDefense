@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: BronzeShard
   itemChineseName: "\u9752\u94DC\u788E\u7247"
   price: 20
-  description: "\u589E\u52A0\u653B\u51FB\u901F\u5EA6"
+  description: "\u589E\u52A0\u4F24\u5BB3"
   shape:
     shapeMatrix: 01000000000000000000000000000000
     allowRotation: 1
@@ -26,15 +26,6 @@ MonoBehaviour:
   - pos: {x: 0, y: 1}
   - pos: {x: 0, y: -1}
   itemAttributes:
-  - attributeType: 0
-    condition:
-      conditionType: 0
-      name: 
-      tags: 05000000
-    activeEffects:
-    - effectType: 4
-      value: -0.05
-    description: "\u6240\u6709\u5854\uFF1A\u653B\u51FB\u95F4\u9694-0.05"
   - attributeType: 1
     condition:
       conditionType: 0
@@ -42,7 +33,7 @@ MonoBehaviour:
       tags: 05000000
     activeEffects:
     - effectType: 4
-      value: -0.05
-    description: "\u88AB\u661F\u661F\u89E6\u53D1\u7684\u5854\uFF1A\u653B\u51FB\u95F4\u9694\u518D-0.05"
+      value: 0.05
+    description: "\u661F\u661F\u6FC0\u6D3B\u7684\u5854\uFF1A\u4F24\u5BB3+5%"
   icon: {fileID: 570316726, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
   itemTags: 00000000

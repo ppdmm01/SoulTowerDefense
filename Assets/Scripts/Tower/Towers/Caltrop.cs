@@ -53,6 +53,8 @@ public class Caltrop : BaseTower
         attackTimer += Time.deltaTime;
         produceTimer += Time.deltaTime;
 
+        CheckEnemy();
+
         if (data.isAttacker)
         {
             //я╟урд©╠Й

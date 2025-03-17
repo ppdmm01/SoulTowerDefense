@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -44,7 +45,9 @@ public class BaseTower : MonoBehaviour
         if (!isUsed) return;
 
         attackTimer += Time.deltaTime;
-        produceTimer += Time.deltaTime; 
+        produceTimer += Time.deltaTime;
+
+        CheckEnemy();
 
         if (data.isAttacker)
         {
@@ -147,25 +150,41 @@ public class BaseTower : MonoBehaviour
         });
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    //检测敌人
+    public void CheckEnemy()
     {
-        //检测敌人是否进入范围
-        if (collision.CompareTag("Enemy") && !enemyList.Contains(collision.transform))
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, data.range, 
+            1 << LayerMask.NameToLayer("Enemy"));
+        enemyList.Clear();
+        foreach (Collider2D collider in colliders)
         {
-            enemyList.Add(collision.transform);
+            enemyList.Add(collider.transform);
+        }
+        if (target != null && !enemyList.Any(enemyTrans => enemyTrans == target))
+        {
+            target = null;
         }
     }
 
-    protected virtual void OnTriggerExit2D(Collider2D collision)
-    {
-        //检测敌人是否退出范围
-        if (collision.CompareTag("Enemy") && enemyList.Contains(collision.transform))
-        {
-            if (target == collision.transform)
-                target = null; //目标已消失，置空
-            enemyList.Remove(collision.transform);
-        }
-    }
+    //protected virtual void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    //检测敌人是否进入范围
+    //    if (collision.CompareTag("Enemy") && !enemyList.Contains(collision.transform))
+    //    {
+    //        enemyList.Add(collision.transform);
+    //    }
+    //}
+
+    //protected virtual void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    //检测敌人是否退出范围
+    //    if (collision.CompareTag("Enemy") && enemyList.Contains(collision.transform))
+    //    {
+    //        if (target == collision.transform)
+    //            target = null; //目标已消失，置空
+    //        enemyList.Remove(collision.transform);
+    //    }
+    //}
 
     /// <summary>
     /// 寻找目标（离基地最近的）

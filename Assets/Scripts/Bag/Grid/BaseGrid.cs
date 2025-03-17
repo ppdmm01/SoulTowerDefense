@@ -179,7 +179,6 @@ public class BaseGrid : MonoBehaviour
         ItemSlot endSlot = slots[gridPos.x + maxOffset.x, gridPos.y + maxOffset.y]; //右上角格子坐标
         Vector2 centerPos = (beginSlot.transform.position + endSlot.transform.position) / 2; //计算中心坐标
         item.transform.position = centerPos;
-        Debug.Log(item.transform.position);
     }
 
     /// <summary>
@@ -187,7 +186,7 @@ public class BaseGrid : MonoBehaviour
     /// </summary>
     /// <param name="item">放入的物品</param>
     /// <param name="gridPos">物品放置的起始坐标</param>
-    public void RemoveItem(Item item, Vector2Int gridPos)
+    public virtual void RemoveItem(Item item, Vector2Int gridPos)
     {
         bool[,] matrix = item.GetRotateMatrix();
         //对应物品格更新状态

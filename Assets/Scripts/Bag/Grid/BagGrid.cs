@@ -18,6 +18,13 @@ public class BagGrid : BaseGrid
         GridManager.Instance.UpdateFightTowerInfo();
     }
 
+    public override void RemoveItem(Item item, Vector2Int gridPos)
+    {
+        base.RemoveItem(item, gridPos);
+        //同时更新面板信息防御塔
+        GridManager.Instance.UpdateFightTowerInfo();
+    }
+
     public override void UpdateGrid(GridData gridData)
     {
         base.UpdateGrid(gridData);
