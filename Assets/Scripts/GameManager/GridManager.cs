@@ -100,7 +100,8 @@ public class GridManager : SingletonMono<GridManager>
         }
     }
 
-    public void AddItem(ItemData itemData, BaseGrid grid)
+    //初始化网格内物品
+    public void InitGridItems(ItemData itemData, BaseGrid grid)
     {
         //创建物体
         GameObject itemObj = Instantiate(itemPrefab);
@@ -115,7 +116,7 @@ public class GridManager : SingletonMono<GridManager>
         //放置
         if (grid.CanPlaceItem(item, item.gridPos))
         {
-            grid.PlaceItem(item, item.gridPos);
+            grid.PlaceItem(item, item.gridPos,false);  //初始化放置不需要显示组合信息 
             item.oldGridPos = item.gridPos; //更新老位置坐标
         }
         else

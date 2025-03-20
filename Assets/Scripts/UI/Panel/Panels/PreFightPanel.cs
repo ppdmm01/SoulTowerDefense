@@ -11,6 +11,7 @@ public class PreFightPanel : BasePanel
 {
     [Header("按钮")]
     public Button startFightBtn; //开始战斗按钮
+    public Button CombinationBtn; //组合信息按钮
 
     [Header("防御塔信息")]
     public ScrollRect towerSr;
@@ -18,6 +19,7 @@ public class PreFightPanel : BasePanel
     private List<TowerInfoBtn> towerInfoBtnList; //防御塔信息按钮列表
     public TowerInfo towerInfo; //防御塔信息
     private float nowWeight; //当前所有防御塔信息宽度
+    private List<CombinationSO> combinationList; //激活的组合信息列表
 
     [Header("防御塔buff相关")]
     public TextMeshProUGUI buffTxt; //buff描述
@@ -33,6 +35,7 @@ public class PreFightPanel : BasePanel
     {
         towerInfoBtnList = new List<TowerInfoBtn>();
         towerBuffBtnList = new List<TowerBuffInfoBtn>();
+        combinationList = new List<CombinationSO>();
         nowTowerInfoName = "";
         nowWeight = 0;
 
@@ -51,6 +54,12 @@ public class PreFightPanel : BasePanel
         closeBtn.onClick.AddListener(() =>
         {
             buffInfo.SetActive(false);
+        });
+
+        CombinationBtn.onClick.AddListener(() =>
+        {
+            CombinationPanel panel = UIManager.Instance.ShowPanel<CombinationPanel>();
+            panel.UpdateCombinationInfo();
         });
 
         //显示背包面板
@@ -81,6 +90,7 @@ public class PreFightPanel : BasePanel
         {
             towerInfo.SetNull();
             towerInfo.RemoveAllAttributeInfo();
+            UpdateTowerBuffInfoBtn(null);
             return;
         }
 
@@ -186,6 +196,10 @@ public class PreFightPanel : BasePanel
         buffTxt.text = info;
     }
 
+    /// <summary>
+    /// 更新防御塔buff按钮
+    /// </summary>
+    /// <param name="towerData"></param>
     public void UpdateTowerBuffInfoBtn(TowerData towerData)
     {
         foreach (TowerBuffInfoBtn btn in towerBuffBtnList)
@@ -193,7 +207,9 @@ public class PreFightPanel : BasePanel
             Destroy(btn.gameObject);
         }
         towerBuffBtnList.Clear();
-        
+
+        if (towerData == null) return; //如果传null，代表清空不展示
+
         foreach (BuffData data in towerData.buffDatas)
         {
             //创建对象

@@ -22,6 +22,7 @@ public class TrashBin : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         {
             item.SetIsUpdateInfo(true);
             item.DeleteMe();
+            EffectManager.Instance.PlayUIEffect("SmokeUIEffect",item.transform.position);
         }
         //TODO:获取资源
     }

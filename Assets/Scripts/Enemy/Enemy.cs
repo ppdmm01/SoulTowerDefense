@@ -114,7 +114,7 @@ public class Enemy : MonoBehaviour
     {
         nowHp -= (int)(dmg * damageMultiplier);
         //ÊÜ»÷Êý×Ö
-        UIManager.Instance.ShowTxtPopup(dmg.ToString(), txtColor, transform.position);
+        UIManager.Instance.ShowTxtPopup(dmg.ToString(), txtColor,36, transform.position);
         //ÅÐ¶ÏËÀÍö
         if (nowHp <= 0)
         {

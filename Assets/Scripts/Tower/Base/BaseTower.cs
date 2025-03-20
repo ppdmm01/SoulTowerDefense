@@ -69,8 +69,13 @@ public class BaseTower : MonoBehaviour
             //攻击
             if (target != null && attackTimer > data.interval)
             {
-                attackTimer = 0;
-                Attack();
+                //防御塔与敌人的角度小于5时才可以攻击
+                Vector2 dir = target.transform.position - transform.position;
+                if (Vector2.Angle(launcher.up, dir) < 5)
+                {
+                    attackTimer = 0;
+                    Attack();
+                }
             }
         }
 
@@ -145,7 +150,7 @@ public class BaseTower : MonoBehaviour
     {
         FlashSmoothly(1f, Color.yellow, () =>
         {
-            UIManager.Instance.ShowTxtPopup(data.output.ToString(), Color.white, transform.position);
+            UIManager.Instance.ShowTxtPopup(data.output.ToString(), Color.white,36, transform.position);
             GameResManager.Instance.AddQiNum(data.output);
         });
     }

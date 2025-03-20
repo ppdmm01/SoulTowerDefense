@@ -219,7 +219,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc8699fb4fc9a3b4c8c71f7c0990a97d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 80fa0ca4c6b1225438cbdd5c252bf1c7, type: 2}
   launcher: {fileID: 6929012133789070809}
   renderers:
   - {fileID: 7992520723325156052}
@@ -227,6 +226,7 @@ MonoBehaviour:
   rangeObj: {fileID: 5121000868150954919}
   rangeTrigger: {fileID: 5392686551458607112}
   towerCollider: {fileID: 8391033360610666029}
+  hpBar: {fileID: 0}
   enemyList: []
   isUsed: 0
   projectilePath: Projectiles/Arrow

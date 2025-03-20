@@ -1,6 +1,4 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -15,22 +13,45 @@ public class UIPopup : MonoBehaviour
     [SerializeField] private float duration = 0.8f; //持续时间
     [SerializeField] private float xOffset = 5f; //水平偏移
 
-    public void Init(string txt,Color color, Vector2 pos)
+    public void Init(string txt,Color color,float size, Vector2 worldPos)
     {
         digitalText = GetComponent<TextMeshProUGUI>();
 
         Camera mainCamera = Camera.main;
 
         //世界坐标转屏幕坐标  
-        Vector2 screenPos = mainCamera.WorldToScreenPoint(pos);
+        Vector2 screenPos = mainCamera.WorldToScreenPoint(worldPos);
         transform.position = screenPos + Vector2.right*Random.value*xOffset;
         transform.localScale = Vector3.one;
 
         // 设置数值和初始状态  
         digitalText.text = txt;
+        digitalText.fontSize = size;
         digitalText.color = color;
         digitalText.alpha = 1f;
-        
+
+        DOAnimate(screenPos);
+    }
+
+    public void InitUI(string txt, Color color, float size, Vector2 uiPos)
+    {
+        digitalText = GetComponent<TextMeshProUGUI>();
+
+        //世界坐标转屏幕坐标  
+        transform.position = uiPos + Vector2.right * Random.value * xOffset;
+        transform.localScale = Vector3.one;
+
+        // 设置数值和初始状态  
+        digitalText.text = txt;
+        digitalText.fontSize = size;
+        digitalText.color = color;
+        digitalText.alpha = 1f;
+
+        DOAnimate(uiPos);
+    }
+
+    public void DOAnimate(Vector2 screenPos)
+    {
         //动画序列  
         seq = DOTween.Sequence();
         //垂直移动
@@ -40,11 +61,10 @@ public class UIPopup : MonoBehaviour
         //缩放动画  
         seq.Join(transform.DOPunchScale(Vector3.one * 0.3f, 0.3f, 2));
         //动画完成后销毁  
-        seq.OnComplete(() => 
+        seq.OnComplete(() =>
         {
             UIManager.Instance.DestroyUIObjByPoolMgr(gameObject);
         });
-
     }
 
     private void OnDisable()

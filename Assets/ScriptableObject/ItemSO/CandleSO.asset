@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: CandleSO
   m_EditorClassIdentifier: 
   id: 11
-  itemName: MoJing
+  itemName: Candle
   itemChineseName: "\u8721\u70DB"
   price: 50
   description: "\u6682\u65E0\u7528\u5904"
+  slotColorType: 0
   shape:
     shapeMatrix: 01010000000000000000000000000000
     allowRotation: 1
@@ -26,10 +27,6 @@ MonoBehaviour:
   - pos: {x: 1, y: 1}
     pointType: 0
   - pos: {x: -1, y: 1}
-    pointType: 0
-  - pos: {x: 1, y: 2}
-    pointType: 0
-  - pos: {x: -1, y: 2}
     pointType: 0
   itemAttributes:
   - attributeType: 1

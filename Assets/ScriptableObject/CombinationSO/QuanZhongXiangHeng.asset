@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b69d9de411d7641a33567c0d90e7ac, type: 3}
+  m_Name: QuanZhongXiangHeng
+  m_EditorClassIdentifier: 
+  type: 1
+  combinationName: "\u6743\u91CD\u76F8\u6052"
+  activeAttribute:
+    attributeType: 0
+    condition:
+      conditionType: 0
+      pointType: 0
+      name: 
+      tags: 0000000005000000
+    activeEffects:
+    - effectType: 4
+      value: 0.1
+    description: "\u6240\u6709\u529B\u5B66\u5854\u4F24\u5BB3+10%"
+  items: []
+  item1: {fileID: 11400000, guid: 56627fd106d1a4f41b807a4b9b09a150, type: 2}
+  item2: {fileID: 11400000, guid: 1d3f8662a451bde43bf760c6dccd59f1, type: 2}

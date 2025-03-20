@@ -73,7 +73,7 @@ public class BaseGrid : MonoBehaviour
         //开始还原数据内的物品及位置
         foreach (ItemData itemData in gridData.itemDatas)
         {
-            GridManager.Instance.AddItem(itemData, this);
+            GridManager.Instance.InitGridItems(itemData, this);
         }
     }
 
@@ -156,8 +156,9 @@ public class BaseGrid : MonoBehaviour
     /// </summary>
     /// <param name="item">放入的物品</param>
     /// <param name="gridPos">物品放置的起始坐标</param>
-    public virtual void PlaceItem(Item item, Vector2Int gridPos)
+    public virtual void PlaceItem(Item item, Vector2Int gridPos, bool isUpdateCombination = true)
     {
+        item.ClearUsedPos();
         bool[,] matrix = item.GetRotateMatrix();
         //对应物品格更新状态
         for (int x = 0; x < ItemShape.MatrixLen; x++)
@@ -166,6 +167,7 @@ public class BaseGrid : MonoBehaviour
             {
                 if (matrix[x, y])
                 {
+                    item.AddUsedPos(new Vector2Int(gridPos.x + x, gridPos.y + y));
                     slots[gridPos.x + x, gridPos.y + y].AddItem(item);
                 }
             }
@@ -188,6 +190,7 @@ public class BaseGrid : MonoBehaviour
     /// <param name="gridPos">物品放置的起始坐标</param>
     public virtual void RemoveItem(Item item, Vector2Int gridPos)
     {
+        item.ClearUsedPos();
         bool[,] matrix = item.GetRotateMatrix();
         //对应物品格更新状态
         for (int x = 0; x < ItemShape.MatrixLen; x++)
@@ -195,7 +198,9 @@ public class BaseGrid : MonoBehaviour
             for (int y = 0; y < ItemShape.MatrixLen; y++)
             {
                 if (matrix[x, y])
+                {
                     slots[gridPos.x + x, gridPos.y + y].RemoveItem();
+                }
             }
         }
         items.Remove(item);
@@ -220,7 +225,6 @@ public class BaseGrid : MonoBehaviour
         {
             if (!TryAutoPlaceItem(item))
             {
-                //Debug.LogError($"物品 {item.data.itemName} 无法放置，背包可能已满");
                 //提示
                 UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
             }
@@ -264,7 +268,9 @@ public class BaseGrid : MonoBehaviour
         }
         return false;
     }
+    #endregion
 
+    #region 获取数据相关
     /// <summary>
     /// 获得当前背包所有物品
     /// </summary>
@@ -296,6 +302,14 @@ public class BaseGrid : MonoBehaviour
             items[i].SetIsUpdateInfo(isUpdateInfo);
             items[i].DeleteMe();
         }
+    }
+
+    public ItemSlot GetSlot(Vector2Int pos)
+    {
+        if (CheckPoint(pos)){
+            return slots[pos.x,pos.y];
+        }
+        return null;
     }
     #endregion
 

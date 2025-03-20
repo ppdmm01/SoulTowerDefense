@@ -23,7 +23,7 @@ public class TowerOperationPanel : BasePanel
         sellBtn.onClick.AddListener(() =>
         {
             GameResManager.Instance.AddQiNum(towerRes);
-            UIManager.Instance.ShowTxtPopup(towerRes.ToString(), Color.white, pos);
+            UIManager.Instance.ShowTxtPopup(towerRes.ToString(), Color.white, 36, pos);
             if (targetTower != null)
                 targetTower.Dead(); //Ïú»Ù·ÀÓùËþ
             UIManager.Instance.HidePanel<TowerOperationPanel>(false);

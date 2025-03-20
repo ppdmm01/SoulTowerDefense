@@ -17,6 +17,7 @@ MonoBehaviour:
   itemChineseName: "\u5F29"
   price: 35
   description: "\u7B80\u5355\u76F4\u63A5\uFF0C\u4F46\u5F3A\u529B"
+  slotColorType: 1
   shape:
     shapeMatrix: 01010000010100000000000000000000
     allowRotation: 1

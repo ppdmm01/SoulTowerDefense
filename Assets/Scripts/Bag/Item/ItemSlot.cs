@@ -58,7 +58,7 @@ public class ItemSlot : MonoBehaviour
     {
         this.isUsed = isUsed;
         if (isUsed)
-            SetColor(Defines.invalidColor);
+            SetColor(Defines.GetSlotColor(nowItem.data.slotColorType));
         else
             SetColor(Defines.validColor);
     }

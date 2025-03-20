@@ -17,6 +17,7 @@ MonoBehaviour:
   itemChineseName: "\u70AD"
   price: 30
   description: "\u6682\u65E0\u7528\u5904"
+  slotColorType: 0
   shape:
     shapeMatrix: 01000000000000000000000000000000
     allowRotation: 1

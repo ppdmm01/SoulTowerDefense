@@ -18,6 +18,8 @@ public class ItemSO : ScriptableObject
     public int price; //价格
     [TextArea]
     public string description; //物品描述
+    [Header("物品占格颜色类型")]
+    public Defines.SlotColorType slotColorType;
     [Header("物品形状")]
     public ItemShape shape; // 物品占格形状  
     [Header("检测点")]

@@ -166,11 +166,14 @@ public class UIManager : Singleton<UIManager>
     /// <param name="txt">文本</param>
     /// <param name="color">颜色</param>
     /// <param name="pos">位置</param>
-    public void ShowTxtPopup(string txt,Color color, Vector2 pos)
+    public void ShowTxtPopup(string txt,Color color, float size, Vector2 pos,bool isUI = false)
     {
         GameObject obj = CreateUIObjByPoolMgr("UI/UIObj/TxtPopup");
         UIPopup txtPopup = obj.GetComponent<UIPopup>();
-        txtPopup.Init(txt, color, pos);
+        if (isUI)
+            txtPopup.InitUI(txt, color, size, pos);
+        else
+            txtPopup.Init(txt, color, size, pos);
     }
 
     /// <summary>

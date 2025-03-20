@@ -21,7 +21,7 @@ public class PoolMgr : Singleton<PoolMgr>
     //UI柜子根对象
     private GameObject UIPoolObj;
     //是否开启布局功能
-    public static bool isOpenLayout = true;
+    public static bool isOpenLayout = false;
 
     /// <summary>
     /// 拿东西的方法

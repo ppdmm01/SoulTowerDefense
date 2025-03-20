@@ -1,9 +1,6 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -19,14 +16,16 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     [HideInInspector] public int lastCurrentRotation; //记录移动物品前的旋转度数
     private Coroutine rotateCoroutine; //旋转动画协程
 
-    [Header("相关记录数据")]
+    [Header("位置相关记录数据")]
     private Vector2 oldPos; //记录原本位置（实际坐标位置）
     [HideInInspector] public Vector2Int gridPos; //物品当前放置起始坐标（网格坐标位置，物品新位置）
     [HideInInspector] public Vector2Int oldGridPos; //记录物品移动前的起始坐标（网格坐标位置，物品旧位置）
     private Vector2Int lastFrameGridPos; //记录上一帧起始坐标（网格坐标位置，物品移动过程中的上一帧位置）
     [HideInInspector] public BaseGrid grid; //当前属于哪个网格
     [HideInInspector] public BaseGrid oldGrid; //原本属于哪个网格
+    public List<Vector2Int> usedPos; //物品占据的格子坐标
 
+    [Header("视觉相关")]
     private List<GameObject> starPoints; //记录目前亮的星星
     private List<GameObject> itemFrameList; //记录物品边框
 
@@ -36,7 +35,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     [HideInInspector] public RectTransform rectTransform; //变换组件
     private bool isDrag; //是否被拖拽
     [HideInInspector] public bool isDelete; //是否准备删除
-    public bool isUpdateInfo; //位置或角度变动时是否更新信息
+    [HideInInspector] public bool isUpdateInfo; //位置或角度变动时是否更新信息
 
     void Awake()
     {
@@ -45,6 +44,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         rectTransform = GetComponent<RectTransform>();
         starPoints = new List<GameObject>();
         itemFrameList = new List<GameObject>();
+        usedPos = new List<Vector2Int>();
     }
 
     private void Update()
@@ -306,7 +306,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     }
     #endregion
 
-    #region 计算相关
+    #region 计算和获取数据相关
     //获取网格起始坐标
     public Vector2Int GetStartGridPoint(Vector2 screenPos)
     {
@@ -359,6 +359,56 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     {
         return data.shape.GetRotatedMatrix(currentRotation);
     }
+
+    //清理物品占用的格子位置信息
+    public void ClearUsedPos()
+    {
+        usedPos.Clear();
+    }
+
+    //添加物品占用的格子位置信息
+    public void AddUsedPos(Vector2Int pos)
+    {
+        usedPos.Add(pos);
+    }
+
+    //获取周围物品
+    public List<Item> GetAroundItems()
+    {
+        List<Item> aroundItems = new List<Item>();
+        Vector2Int up;
+        Vector2Int down;
+        Vector2Int left;
+        Vector2Int right;
+        foreach (Vector2Int pos in usedPos)
+        {
+            up = pos + Vector2Int.up;
+            down = pos + Vector2Int.down;
+            left = pos + Vector2Int.left;
+            right = pos + Vector2Int.right;
+            if (grid.CheckPoint(up))
+            {
+                Item item = grid.GetSlot(up).nowItem;
+                if (item != null && item != this && !aroundItems.Contains(item)) aroundItems.Add(item);
+            }
+            if (grid.CheckPoint(down))
+            {
+                Item item = grid.GetSlot(down).nowItem;
+                if (item != null && item != this && !aroundItems.Contains(item)) aroundItems.Add(item);
+            }
+            if (grid.CheckPoint(left))
+            {
+                Item item = grid.GetSlot(left).nowItem;
+                if (item != null && item != this && !aroundItems.Contains(item)) aroundItems.Add(item);
+            }
+            if (grid.CheckPoint(right))
+            {
+                Item item = grid.GetSlot(right).nowItem;
+                if (item != null && item != this && !aroundItems.Contains(item)) aroundItems.Add(item);
+            }
+        }
+        return aroundItems;
+    }
     #endregion
 
     #region 旋转相关
@@ -405,9 +455,9 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     }
     #endregion
 
-    #region 检测周围物品相关（检测物品联动属性）
+    #region 星星激活相关（检测物品联动属性）
 
-    //获取周围物品并显示星星（isShowStar是否显示星星）
+    //获取周围星星处物品并显示星星（isShowStar是否显示星星）
     public List<ConnectItemInfo> GetConnectItems(bool isShowStar = false)
     {
         List<ConnectItemInfo> neighborItemInfos = new List<ConnectItemInfo>();
@@ -440,19 +490,6 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
                     CreateStar(slot.transform.position, true, point.pointType); //激活成功
                 neighborItemInfos.Add(connectItem);
             }
-
-            //if (slot.nowItem != null && MatchLinkAttribute(slot.nowItem, point.pointType) 
-            //    && !neighbors.Contains(slot.nowItem))
-            //{
-            //    if (isShowStar)
-            //        CreateStar(slot.transform.position, true, point.pointType); //星星处有物品，并且物品满足激活条件，并且没重复
-            //    neighbors.Add(slot.nowItem);
-            //}
-            //else
-            //{
-            //    if (isShowStar)
-            //        CreateStar(slot.transform.position, false, point.pointType);
-            //}
         }
 
         return neighborItemInfos.ToList();
@@ -516,9 +553,10 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
             GridManager.Instance.UpdateFightTowerInfo();
 
         //销毁
-        foreach (GameObject obj in itemFrameList)
-            UIManager.Instance.DestroyUIObj(obj);
+        //foreach (GameObject obj in itemFrameList)
+        //    UIManager.Instance.DestroyUIObj(obj);
         itemFrameList.Clear();
+        usedPos.Clear();
         Destroy(this.gameObject);
     }
 
