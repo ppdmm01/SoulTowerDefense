@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -33,8 +34,12 @@ public class LevelManager : SingletonMono<LevelManager>
     /// </summary>
     public void StartLevel(string sceneName,int levelNum = 1)
     {
-        AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName);
-        ao.completed += (obj) =>
+        UIManager.Instance.LoadScene(sceneName, () =>
+        {
+            UIManager.Instance.HidePanel<BagPanel>();
+            UIManager.Instance.HidePanel<PreFightPanel>();
+        }, 
+        () =>
         {
             AudioManager.Instance.PlayBGM("BGM/FightMusic");
             //关卡加载完成，显示战斗面板，初始化资源，开始出怪等逻辑
@@ -44,8 +49,8 @@ public class LevelManager : SingletonMono<LevelManager>
             //创建元气水晶
             TowerManager.Instance.CreateCore();
             //初始化资源
-            GameResManager.Instance.ResetQiNum(); //先归零
-            GameResManager.Instance.AddQiNum(100);
+            GameResManager.Instance.ResetSoulNum(); //先归零
+            GameResManager.Instance.AddSoulNum(100);
             //记录波次信息
             LevelSO levelData = data.levelSOList[levelNum - 1]; //获取关卡信息
             nowWave = 0;
@@ -54,11 +59,11 @@ public class LevelManager : SingletonMono<LevelManager>
             TowerPanel panel = UIManager.Instance.GetPanel<TowerPanel>();
             panel.UpdateWaveInfo(nowWave, totalWave);
             panel.UpdateEnemyNum(0);
-            panel.UpdateQiNum(GameResManager.Instance.GetQiNum());
+            panel.UpdateSoulNum(GameResManager.Instance.GetSoulNum());
             //开始出怪
             StopAllCoroutines();
             StartCoroutine(SpawnLevelEnemies(levelData));
-        };
+        }); 
     }
 
     /// <summary>

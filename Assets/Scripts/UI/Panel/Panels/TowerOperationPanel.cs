@@ -22,7 +22,7 @@ public class TowerOperationPanel : BasePanel
         });
         sellBtn.onClick.AddListener(() =>
         {
-            GameResManager.Instance.AddQiNum(towerRes);
+            GameResManager.Instance.AddSoulNum(towerRes);
             UIManager.Instance.ShowTxtPopup(towerRes.ToString(), Color.white, 36, pos);
             if (targetTower != null)
                 targetTower.Dead(); //Ïú»Ù·ÀÓùËþ

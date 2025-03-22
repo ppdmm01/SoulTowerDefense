@@ -20,11 +20,11 @@ MonoBehaviour:
   cost: 10
   canBeAttack: 1
   isAttacker: 1
-  damage: 8
+  damage: 100
   range: 4
   interval: 1
   isProducer: 0
   output: 0
   cooldown: 0
   buffDatas: []
-  itemTags: 0000000005000000
+  itemTags: 0000000006000000

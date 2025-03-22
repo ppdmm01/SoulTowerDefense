@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EffectManager : Singleton<EffectManager>
 {
@@ -11,18 +12,22 @@ public class EffectManager : Singleton<EffectManager>
 
     private List<Effect> effects;
 
-    public void PlayEffect(string effectName,Vector2 pos)
+    public void PlayEffect(string effectName,Vector2 pos,UnityAction callback = null)
     {
         GameObject effObj = PoolMgr.Instance.GetObj("Effect/" + effectName);
         effObj.transform.position = pos;
-        AddEffect(effObj.GetComponent<Effect>());
+        Effect effect = effObj.GetComponent<Effect>();
+        effect.AddCallBack(callback);
+        AddEffect(effect);
     }
 
-    public void PlayUIEffect(string effectName, Vector2 pos)
+    public void PlayUIEffect(string effectName, Vector2 pos, UnityAction callback = null)
     {
         GameObject effObj = PoolMgr.Instance.GetUIObj("Effect/" + effectName);
         effObj.transform.position = pos;
-        AddEffect(effObj.GetComponent<Effect>());
+        Effect effect = effObj.GetComponent<Effect>();
+        effect.AddCallBack(callback);
+        AddEffect(effect);
     }
 
     public void AddEffect(Effect eff)

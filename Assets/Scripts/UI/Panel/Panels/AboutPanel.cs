@@ -11,6 +11,7 @@ public class AboutPanel : BasePanel
     {
         closeBtn.onClick.AddListener(() =>
         {
+            canvasGroup.blocksRaycasts = false;
             UIManager.Instance.HidePanel<AboutPanel>();
         });
     }

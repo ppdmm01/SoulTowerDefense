@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -18,10 +19,10 @@ public class ForgePanel : BasePanel
     {
         quitBtn.onClick.AddListener(() =>
         {
-            UIManager.Instance.HidePanel<ForgePanel>();
+            canvasGroup.blocksRaycasts = false;
             UIManager.Instance.HidePanel<BagPanel>();
+            UIManager.Instance.HidePanel<ForgePanel>();
             UIManager.Instance.ShowPanel<MapPanel>();
-            SceneManager.LoadSceneAsync("MapScene");
         });
         SynthesisBtn.onClick.AddListener(() =>
         {

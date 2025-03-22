@@ -1,20 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// 特效生成
 /// </summary>
 public class Effect : MonoBehaviour
 {
+    public float DestroyTime = 3f;
+    private UnityAction callback;
     private void OnEnable()
     {
-        DestroyMe(3f);
+        DestroyMe(DestroyTime);
     }
 
     private void OnDisable()
     {
         StopAllCoroutines();
+        callback = null;
+    }
+
+    public void AddCallBack(UnityAction callback)
+    {
+        this.callback = callback;
     }
 
     /// <summary>
@@ -30,6 +39,8 @@ public class Effect : MonoBehaviour
     protected virtual IEnumerator ReallyDestroy(float time)
     {
         yield return new WaitForSeconds(time);
+        callback?.Invoke();
+        callback = null;
         PoolMgr.Instance.PushObj(gameObject);
     }
 
@@ -39,6 +50,8 @@ public class Effect : MonoBehaviour
     public virtual void DestroyMeImmediate()
     {
         StopAllCoroutines();
+        callback?.Invoke();
+        callback = null;
         PoolMgr.Instance.PushObj(gameObject);
         EffectManager.Instance.RemoveEffect(this);
     }

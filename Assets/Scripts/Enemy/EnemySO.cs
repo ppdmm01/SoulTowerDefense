@@ -10,4 +10,5 @@ public class EnemySO : ScriptableObject
     public float moveSpeed; //移动速度
     public int atk; //攻击力
     public float interval; //攻击间隔
+    public int soulNum; //死亡后获得得资源
 }

@@ -15,10 +15,19 @@ public class BeginPanel : BasePanel
     {
         playBtn.onClick.AddListener(() =>
         {
-            //TODO：开始游戏
-            UIManager.Instance.HidePanel<BeginPanel>();
-            UIManager.Instance.ShowPanel<MapPanel>();
-            SceneManager.LoadSceneAsync("MapScene");
+            canvasGroup.blocksRaycasts = false;
+            //开始游戏
+            UIManager.Instance.LoadScene("MapScene", 
+            () =>
+            {
+                Debug.Log("关闭开始面板");
+                UIManager.Instance.HidePanel<BeginPanel>();
+            },
+            () =>
+            {
+                Debug.Log("显示地图面板");
+                UIManager.Instance.ShowPanel<MapPanel>();
+            });
         });
 
         settingBtn.onClick.AddListener(() =>

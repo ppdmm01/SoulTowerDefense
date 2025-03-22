@@ -117,7 +117,6 @@ public class BagGrid : BaseGrid
                     TowerManager.Instance.SetTowerDataFromName(attribute.condition.name, attribute.activeEffects);
             }
         }
-        Debug.Log(itemTrans);
         //显示该次操作所形成的组合
         if (itemTrans == null) return;
         List<CombinationSO> newCombinations = CombinationManager.Instance.GetChangeCombinationInfo();

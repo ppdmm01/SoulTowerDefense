@@ -41,6 +41,7 @@ public class PreFightPanel : BasePanel
 
         startFightBtn.onClick.AddListener(() =>
         {
+            canvasGroup.blocksRaycasts = false;
             if (TowerManager.Instance.towerDatas.Count == 0)
             {
                 UIManager.Instance.ShowPanel<TipPanel>().SetInfo("你没有上场任何防御塔，确定继续吗？", StartFight);
@@ -227,9 +228,6 @@ public class PreFightPanel : BasePanel
     /// </summary>
     public void StartFight()
     {
-        //战斗开始
         LevelManager.Instance.StartLevel("LevelScene1");
-        UIManager.Instance.HidePanel<PreFightPanel>();
-        UIManager.Instance.HidePanel<BagPanel>();
     }
 }

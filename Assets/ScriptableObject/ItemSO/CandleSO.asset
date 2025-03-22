@@ -34,7 +34,7 @@ MonoBehaviour:
       conditionType: 0
       pointType: 1
       name: 
-      tags: 0100000005000000
+      tags: 0100000006000000
     activeEffects:
     - effectType: 8
       value: 0.1
@@ -44,7 +44,7 @@ MonoBehaviour:
       conditionType: 0
       pointType: 0
       name: 
-      tags: 0500000002000000
+      tags: 0600000002000000
     activeEffects:
     - effectType: 4
       value: 0.05
@@ -54,7 +54,7 @@ MonoBehaviour:
       conditionType: 0
       pointType: 0
       name: 
-      tags: 0500000002000000
+      tags: 0600000002000000
     activeEffects:
     - effectType: 5
       value: 0.05

@@ -76,6 +76,8 @@ public class ItemActiveEffect
         BurnBuff_Duration, //灼烧时间
         BurnBuff_Damage, //灼烧伤害
         BurnBuff_TriggerChance, //灼烧几率
+        SlowBuff_Duration, //缓慢时间
+        SlowBuff_TriggerChance, //缓慢几率
     }
 
     public EffectType effectType; //效果类型

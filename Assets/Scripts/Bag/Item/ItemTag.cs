@@ -11,6 +11,7 @@ public enum ItemTag
     Heat, //ÈÈ
     Light, //¹â
     Sound, //Éù
+    Magnet, //´Å
     Book, //Êé
     Tower, //Ëş
 }

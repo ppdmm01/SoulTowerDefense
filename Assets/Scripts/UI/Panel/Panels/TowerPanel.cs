@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class TowerPanel : BasePanel
 {
-    public TextMeshProUGUI qiNumText; //“气”资源数量文本
+    public Transform soulUITrans; //气资源位置（用于给资源定位）
+    public TextMeshProUGUI soulNumText; //气资源数量文本
     public TextMeshProUGUI waveNumText; //波数
     public TextMeshProUGUI nowEnemyNumText; //剩余敌人数量
     public Transform towerBtnContent; //放置按钮的位置
@@ -21,7 +22,6 @@ public class TowerPanel : BasePanel
     /// </summary>
     public void InitTowerBtn()
     {
-        Debug.Log(TowerManager.Instance.towerDatas.Count);
         foreach (TowerData towerData in TowerManager.Instance.towerDatas.Values)
         {
             GameObject obj = Instantiate(Resources.Load<GameObject>("UI/UIObj/CreateTowerBtn"));
@@ -46,9 +46,9 @@ public class TowerPanel : BasePanel
     /// 更新气资源数量
     /// </summary>
     /// <param name="num"></param>
-    public void UpdateQiNum(int num)
+    public void UpdateSoulNum(int num)
     {
-        qiNumText.text = num.ToString();    
+        soulNumText.text = num.ToString();    
     }
 
     /// <summary>

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4772723065493535190}
   - component: {fileID: 7279606338026031142}
   - component: {fileID: 1753351061641784789}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Explode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2028882763
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -634675646, guid: 9fc67842558c22a4a9bb690fe5b7110d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

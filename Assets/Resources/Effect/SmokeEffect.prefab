@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5741238089004551077}
   - component: {fileID: 8182725336394503376}
   - component: {fileID: 4767737513737585089}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SmokeEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2028882763
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -1440389574, guid: a1faa8ca4d247d04b93efcfe5d02b8bb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2773f666fa6aa1441a161e560b747d93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DestroyTime: 3
 --- !u!114 &4767737513737585089
 MonoBehaviour:
   m_ObjectHideFlags: 0

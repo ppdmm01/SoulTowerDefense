@@ -108,7 +108,8 @@ public class BaseTower : MonoBehaviour
         if (data.isAttacker)
         {
             float atkSpeed = TowerManager.Instance.GetTowerSO_ByName(data.towerName).interval / data.interval; //计算攻击速度增长了多少
-            ani.SetFloat("AttackSpeed", atkSpeed); //设置攻击动画速度
+            if (ani != null)
+                ani.SetFloat("AttackSpeed", atkSpeed); //设置攻击动画速度
         }
 
         //闪白材质
@@ -151,7 +152,7 @@ public class BaseTower : MonoBehaviour
         FlashSmoothly(1f, Color.yellow, () =>
         {
             UIManager.Instance.ShowTxtPopup(data.output.ToString(), Color.white,36, transform.position);
-            GameResManager.Instance.AddQiNum(data.output);
+            GameResManager.Instance.AddSoulNum(data.output);
         });
     }
 

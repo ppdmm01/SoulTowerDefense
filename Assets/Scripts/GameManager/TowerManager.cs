@@ -27,6 +27,9 @@ public class TowerManager : SingletonMono<TowerManager>
     private BaseTower target; //当前放置的目标防御塔
     private BaseTower nowTower; //当前检测范围的防御塔
 
+    private float operationOffsetTime = 0.1f; //操作间隔时间(防止误触连续点击)
+    private float timer; //计时器
+
     protected override void Awake()
     {
         base.Awake();
@@ -66,6 +69,8 @@ public class TowerManager : SingletonMono<TowerManager>
     /// <param name="towerName">防御塔名称</param>
     public void CreateTower(string towerName)
     {
+        if (isPlacing) return; //如果正在放置，则不能再弄了
+
         GameObject towerObj = Instantiate(Resources.Load<GameObject>("Tower/" + towerName));
         if (towerObj == null)
             Debug.LogError("防御塔不存在！");
@@ -77,6 +82,8 @@ public class TowerManager : SingletonMono<TowerManager>
         tower.isUsed = false;
         isPlacing = true;
         target = tower;
+
+        timer = 0;
     }
 
     /// <summary>
@@ -159,6 +166,7 @@ public class TowerManager : SingletonMono<TowerManager>
     {
         if (isPlacing)
         {
+            timer += Time.deltaTime;
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             target.transform.position = mousePos;
             //显示防御塔范围
@@ -168,7 +176,7 @@ public class TowerManager : SingletonMono<TowerManager>
             else
                 target.SetRangeColor(Defines.invalidRangeColor);
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && timer >= operationOffsetTime)
             {
                 PlaceTower();
             }
@@ -187,7 +195,7 @@ public class TowerManager : SingletonMono<TowerManager>
     {
         if (HasResources())
         {
-            GameResManager.Instance.AddQiNum(-target.data.cost); //消耗资源
+            GameResManager.Instance.AddSoulNum(-target.data.cost); //消耗资源
 
             //使用
             target.ShowHpBar();
@@ -222,7 +230,7 @@ public class TowerManager : SingletonMono<TowerManager>
     /// </summary>
     public bool HasResources()
     {
-        return GameResManager.Instance.GetQiNum() >= target.data.cost;
+        return GameResManager.Instance.GetSoulNum() >= target.data.cost;
     }
 
     /// <summary>
@@ -311,6 +319,16 @@ public class TowerManager : SingletonMono<TowerManager>
                     break;
                 case ItemActiveEffect.EffectType.BurnBuff_TriggerChance:
                     buffData = data.GetBuffData(BuffType.Burn);
+                    if (buffData != null)
+                        buffData.triggerChance += activeEffect.value;
+                    break;
+                case ItemActiveEffect.EffectType.SlowBuff_Duration:
+                    buffData = data.GetBuffData(BuffType.Slow);
+                    if (buffData != null)
+                        buffData.duration += activeEffect.value;
+                    break;
+                case ItemActiveEffect.EffectType.SlowBuff_TriggerChance:
+                    buffData = data.GetBuffData(BuffType.Slow);
                     if (buffData != null)
                         buffData.triggerChance += activeEffect.value;
                     break;

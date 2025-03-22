@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
+  m_Name: OilTankSO
+  m_EditorClassIdentifier: 
+  id: 14
+  itemName: OilTank
+  itemChineseName: "\u731B\u706B\u6CB9\u7F50"
+  price: 60
+  description: "\u5A01\u529B\u5DE8\u5927\u7684\u706B\u836F"
+  slotColorType: 0
+  shape:
+    shapeMatrix: 01010000010100000000000000000000
+    allowRotation: 1
+  detectionPoints:
+  - pos: {x: 0, y: 2}
+    pointType: 1
+  - pos: {x: 1, y: 2}
+    pointType: 1
+  itemAttributes:
+  - attributeType: 1
+    condition:
+      conditionType: 0
+      pointType: 1
+      name: 
+      tags: 0100000006000000
+    activeEffects:
+    - effectType: 8
+      value: 0.15
+    description: "\u706B\u7130\u6FC0\u6D3B\u7684\u70ED\u5B66\u5854\uFF1A\u707C\u70E7\u4F24\u5BB3+15%"
+  - attributeType: 1
+    condition:
+      conditionType: 1
+      pointType: 1
+      name: FireOilTank
+      tags: 
+    activeEffects:
+    - effectType: 8
+      value: 0.15
+    description: "\u706B\u7130\u6FC0\u6D3B\u7684\u731B\u706B\u6CB9\u67DC\uFF1A\u706B\u7130\u4F24\u5BB3\u518D+15%"
+  icon: {fileID: 515672551, guid: d9d012dcbaf98854a973fb39c7774735, type: 3}
+  itemTags: 01000000

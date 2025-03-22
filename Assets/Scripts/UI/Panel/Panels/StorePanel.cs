@@ -21,11 +21,12 @@ public class StorePanel : BasePanel
     {
         quitBtn.onClick.AddListener(() =>
         {
-            UIManager.Instance.HidePanel<StorePanel>();
+            canvasGroup.blocksRaycasts = false;
             UIManager.Instance.HidePanel<BagPanel>();
+            UIManager.Instance.HidePanel<StorePanel>();
             UIManager.Instance.ShowPanel<MapPanel>();
-            SceneManager.LoadSceneAsync("MapScene");
         });
+
         refreshBtn.onClick.AddListener(() =>
         {
             RefreshItems();

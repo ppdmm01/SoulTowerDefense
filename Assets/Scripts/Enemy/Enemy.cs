@@ -20,8 +20,8 @@ public class Enemy : MonoBehaviour
     private float attackTimer;
 
     //闪白特效相关
-    private SpriteRenderer spriteRenderer;
-    private Color oldColor; //记录原来的颜色
+    public SpriteRenderer spriteRenderer;
+    private Color nowColor; //记录当前的颜色
     private Color originColor; //初始颜色
     private Color slowColor; //减速时的颜色
     private Color stunColor; //眩晕时的颜色
@@ -42,11 +42,16 @@ public class Enemy : MonoBehaviour
         attackTimer = 0;
         target = null;
         towerList = new List<BaseTower>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        oldColor = spriteRenderer.color;
+
+        Material material = Resources.Load<Material>("Material/FlashMaterial");
+        if (spriteRenderer.material != material)
+            spriteRenderer.material = material;
+
         originColor = spriteRenderer.color;
         slowColor = Color.blue;
         stunColor = Color.gray;
+
+        nowColor = originColor;
 
         stunIcon.SetActive(false);
         slowIcon.SetActive(false);
@@ -78,11 +83,11 @@ public class Enemy : MonoBehaviour
             if (TowerManager.Instance.core != null)
             {
                 if (speedMultiplier == 0)
-                    oldColor = stunColor; //眩晕色
+                    nowColor = stunColor; //眩晕色
                 else if (speedMultiplier < 1)
-                    oldColor = slowColor; //减速色
+                    nowColor = slowColor; //减速色
                 else
-                    oldColor = originColor; //正常色
+                    nowColor = originColor; //正常色
 
                 if (speedMultiplier == 0)
                 {
@@ -133,6 +138,9 @@ public class Enemy : MonoBehaviour
         if (isDead) return;
         isDead = true;
         target = null;
+        Vector3 soulPos = transform.position;
+        GameResManager.Instance.CreateOneSoul(data.soulNum, soulPos);
+        EffectManager.Instance.PlayEffect("SmokeEffect", transform.position);
         LevelManager.Instance.SubEnemyNum(); //怪物数量-1
         PoolMgr.Instance.PushObj(gameObject);
 
@@ -150,9 +158,11 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator FlashRoutine(float time)
     {
-        spriteRenderer.color = Color.white;
+        spriteRenderer.material.SetFloat("_FlashAmount", 1);
+        spriteRenderer.material.SetColor("_FlashColor", Color.white);
         yield return new WaitForSeconds(time);
-        spriteRenderer.color = oldColor;
+        spriteRenderer.material.SetColor("_FlashColor", nowColor);
+        spriteRenderer.material.SetFloat("_FlashAmount", 0);
     }
 
     private BaseTower FindTarget()
@@ -160,31 +170,6 @@ public class Enemy : MonoBehaviour
         if (towerList.Count == 0) return null;
         return towerList[0];
     }
-
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Tower"))
-    //    {
-    //        BaseTower tower = collision.GetComponent<BaseTower>();
-    //        if (tower.data.canBeAttack)
-    //        {
-    //            if (!tower.isUsed) return;
-    //            if (!towerList.Contains(tower))
-    //                towerList.Add(tower);
-    //        }
-    //    }
-    //}
-
-    //private void OnTriggerExit2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Tower"))
-    //    {
-    //        BaseTower tower = collision.GetComponent<BaseTower>();
-    //        if (!tower.isUsed) return;
-    //        if (towerList.Contains(tower))
-    //            towerList.Remove(tower);
-    //    }
-    //}
 
     //检测防御塔
     public void CheckTower()
@@ -208,8 +193,12 @@ public class Enemy : MonoBehaviour
     {
         StopAllCoroutines();
         target = null;
-        oldColor = originColor;
-        spriteRenderer.color = oldColor;
+
+        nowColor = originColor;
+        spriteRenderer.color = nowColor;
+        spriteRenderer.material.SetColor("_FlashColor", nowColor);
+        spriteRenderer.material.SetFloat("_FlashAmount", 0);
+
         slowIcon.SetActive(false);
         stunIcon.SetActive(false);
         towerList.Clear();

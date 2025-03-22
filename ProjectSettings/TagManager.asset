@@ -17,7 +17,7 @@ TagManager:
   - Enemy
   - Tower
   - TowerRange
-  - 
+  - Effect
   - 
   - 
   - 
@@ -52,6 +52,9 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 2663280359
+    locked: 0
+  - name: GameRes
+    uniqueID: 2649675559
     locked: 0
   - name: Effect
     uniqueID: 2028882763

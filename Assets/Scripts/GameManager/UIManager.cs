@@ -12,6 +12,9 @@ public class UIManager : Singleton<UIManager>
     public Transform topCanvasTrans;
     public Transform itemTrans;
 
+    //是否锁住UI操作
+    //public bool Lock;
+
     //存储面板的容器
     private Dictionary<string, BasePanel> panelDic = new Dictionary<string, BasePanel>();
     
@@ -20,6 +23,7 @@ public class UIManager : Singleton<UIManager>
 
     private UIManager()
     {
+        //Lock = false;
         //创建Canvas
         GameObject canvasObj = GameObject.Instantiate(Resources.Load<GameObject>("UI/Canvas"));
         canvasTrans = canvasObj.transform;
@@ -107,6 +111,12 @@ public class UIManager : Singleton<UIManager>
         if (panelDic.ContainsKey(panelName))
             return panelDic[panelName] as T;
         return null;
+    }
+
+    public void LoadScene(string sceneName,UnityAction fadeInCallback = null, UnityAction completedCallback = null)
+    {
+        LoadingPanel panel = ShowPanel<LoadingPanel>();
+        panel.LoadScene(sceneName, fadeInCallback, completedCallback);
     }
 
     /// <summary>
@@ -216,16 +226,20 @@ public class UIManager : Singleton<UIManager>
         panel.SetInfo(info, () =>
         {
             //返回地图面板（TODO:跳到胜利选奖励面板）
-            HidePanel<TowerPanel>();
-            ShowPanel<MapPanel>();
-            SceneManager.LoadSceneAsync("MapScene");
+            LoadScene("MapScene", () =>
+            {
+                HidePanel<TowerPanel>();
+                ShowPanel<MapPanel>();
+            });
         });
         panel.AddCancelBtnCallBack(() =>
         {
             //返回地图面板，和确认按钮逻辑一样
-            HidePanel<TowerPanel>();
-            ShowPanel<MapPanel>();
-            SceneManager.LoadSceneAsync("MapScene");
+            LoadScene("MapScene", () =>
+            {
+                HidePanel<TowerPanel>();
+                ShowPanel<MapPanel>();
+            });
         });
     }
 }

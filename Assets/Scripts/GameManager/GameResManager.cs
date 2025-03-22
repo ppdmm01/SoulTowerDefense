@@ -9,17 +9,17 @@ using UnityEngine;
 public class GameResManager : Singleton<GameResManager>
 {
 
-    private int qiResNum; //气资源数量
+    private int soulResNum; //气资源数量
     private int taixuResNum; //太虚资源数量
 
     private GameResManager()
     {
-        ResetQiNum();
+        ResetSoulNum();
     }
 
-    public int GetQiNum()
+    public int GetSoulNum()
     {
-        return qiResNum;
+        return soulResNum;
     }
 
     public int GetTaixuNum()
@@ -27,12 +27,26 @@ public class GameResManager : Singleton<GameResManager>
         return taixuResNum;
     }
 
-    public void AddQiNum(int num)
+    /// <summary>
+    /// 创建一个气
+    /// </summary>
+    /// <param name="soulNum">资源数量</param>
+    public void CreateOneSoul(int soulNum,Vector2 pos)
     {
-        qiResNum += num;
+        GameObject obj = PoolMgr.Instance.GetObj("GameRes/Soul");
+        if (obj != null)
+        {
+            obj.transform.position = pos;
+            obj.GetComponent<Soul>().Init(soulNum);
+        }
+    }
+
+    public void AddSoulNum(int num)
+    {
+        soulResNum += num;
         TowerPanel panel = UIManager.Instance.GetPanel<TowerPanel>();
         if (panel != null)
-            panel.UpdateQiNum(qiResNum);
+            panel.UpdateSoulNum(soulResNum);
     }
 
     public void AddTaixuNum(int num)
@@ -43,12 +57,12 @@ public class GameResManager : Singleton<GameResManager>
             panel.UpdateTaixuResNum(taixuResNum);
     }
 
-    public void ResetQiNum()
+    public void ResetSoulNum()
     {
-        qiResNum = 0;
+        soulResNum = 0;
         TowerPanel panel = UIManager.Instance.GetPanel<TowerPanel>();
         if (panel != null)
-            panel.UpdateQiNum(qiResNum);
+            panel.UpdateSoulNum(soulResNum);
     }
 
     public void ResetTaixuNum()

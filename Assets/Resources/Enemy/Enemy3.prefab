@@ -190,6 +190,7 @@ MonoBehaviour:
   nowHp: 0
   speedMultiplier: 1
   damageMultiplier: 1
+  spriteRenderer: {fileID: 3493147883384101248}
   attackRange: {fileID: 7673524544757717372}
   stunIcon: {fileID: 1227342482618024494}
   slowIcon: {fileID: 8391181587249395927}
@@ -241,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8307ca06952c4b448de4367d0425370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNum: 300
+  maxNum: 1000
 --- !u!50 &-6387242507907503140
 Rigidbody2D:
   serializedVersion: 4

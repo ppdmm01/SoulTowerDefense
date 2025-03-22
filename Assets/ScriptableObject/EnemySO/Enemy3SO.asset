@@ -16,3 +16,4 @@ MonoBehaviour:
   moveSpeed: 0.35
   atk: 10
   interval: 3
+  soulNum: 5

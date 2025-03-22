@@ -6,11 +6,11 @@ using UnityEngine.Events;
 public abstract class BasePanel : MonoBehaviour
 {
     //当前面板上的CanvasGroup组件
-    private CanvasGroup canvasGroup;
+    protected CanvasGroup canvasGroup;
     //是否显示
     protected bool isShow;
     //隐藏面板后执行的事件
-    private UnityAction hideCallBack;
+    protected UnityAction hideCallBack;
     //显隐速度
     public float alphaSpeed = 5f;
     //是否显示在顶层

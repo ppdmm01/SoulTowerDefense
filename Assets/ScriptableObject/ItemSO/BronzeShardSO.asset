@@ -17,20 +17,26 @@ MonoBehaviour:
   itemChineseName: "\u9752\u94DC\u788E\u7247"
   price: 20
   description: "\u589E\u52A0\u4F24\u5BB3"
+  slotColorType: 0
   shape:
     shapeMatrix: 01000000000000000000000000000000
     allowRotation: 1
   detectionPoints:
   - pos: {x: -1, y: 0}
+    pointType: 0
   - pos: {x: 1, y: 0}
+    pointType: 0
   - pos: {x: 0, y: 1}
+    pointType: 0
   - pos: {x: 0, y: -1}
+    pointType: 0
   itemAttributes:
   - attributeType: 1
     condition:
       conditionType: 0
+      pointType: 0
       name: 
-      tags: 05000000
+      tags: 06000000
     activeEffects:
     - effectType: 4
       value: 0.05

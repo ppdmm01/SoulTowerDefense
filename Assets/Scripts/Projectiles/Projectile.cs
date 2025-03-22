@@ -10,7 +10,7 @@ public class Projectile : MonoBehaviour
 
     protected BuffApplier buffApplier; //可以施加的buff
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         StartCoroutine(DestroyMe(5f));
     }
@@ -36,7 +36,7 @@ public class Projectile : MonoBehaviour
         PoolMgr.Instance.PushObj(gameObject);
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         StopAllCoroutines();
     }
