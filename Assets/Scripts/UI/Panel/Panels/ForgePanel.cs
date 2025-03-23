@@ -15,19 +15,31 @@ public class ForgePanel : BasePanel
     [Header("背包相关")]
     public ForgeGrid forgeGrid; //合成用的网格
     public BaseGrid productGrid; //放置成品的网格
+
+    public Transform forgeTrans; //成品位置
+
+    [Header("合成提示")]
+    public GameObject OkObj; //可以合成
+    public GameObject NoObj; //不可以合成
     public override void Init()
     {
         quitBtn.onClick.AddListener(() =>
         {
-            canvasGroup.blocksRaycasts = false;
-            UIManager.Instance.HidePanel<BagPanel>();
-            UIManager.Instance.HidePanel<ForgePanel>();
-            UIManager.Instance.ShowPanel<MapPanel>();
+            if (forgeGrid.items.Count > 0 || productGrid.items.Count > 0)
+            {
+                UIManager.Instance.ShowPanel<TipPanel>().SetInfo("你还有未取走的物品，确定离开吗？", Quit);
+            }
+            else
+            {
+                Quit();
+            }
         });
         SynthesisBtn.onClick.AddListener(() =>
         {
             forgeGrid.Synthesis(); //合成物品
         });
+
+        UpdateTip(false);
 
         //显示背包面板
         BagPanel bagPanel = UIManager.Instance.ShowPanel<BagPanel>();
@@ -62,5 +74,31 @@ public class ForgePanel : BasePanel
         //向背包管理器中移除背包
         GridManager.Instance.RemoveGrid(forgeGrid);
         GridManager.Instance.RemoveGrid(productGrid);
+    }
+
+    /// <summary>
+    /// 更新提示
+    /// </summary>
+    public void UpdateTip(bool isOk)
+    {
+        if (isOk)
+        {
+            OkObj.SetActive(true);
+            NoObj.SetActive(false);
+        }
+        else
+        {
+            OkObj.SetActive(false);
+            NoObj.SetActive(true);
+        }
+    }
+
+    //退出面板
+    private void Quit()
+    {
+        canvasGroup.blocksRaycasts = false;
+        UIManager.Instance.HidePanel<BagPanel>();
+        UIManager.Instance.HidePanel<ForgePanel>();
+        UIManager.Instance.ShowPanel<MapPanel>();
     }
 }

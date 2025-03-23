@@ -34,7 +34,7 @@ public class MapGenerator
         //生成路径
         List<List<Vector2Int>> paths = GeneratePaths();
 
-        //RandomizeNodePositions();
+        RandomizeNodePositions();
 
         SetUpConnections(paths);
 
@@ -105,29 +105,29 @@ public class MapGenerator
         nodes.Add(nodesOnThisLayer);
     }
 
-    //private static void RandomizeNodePositions()
-    //{
-    //    for (int index = 0; index < nodes.Count; index++)
-    //    {
-    //        List<Node> list = nodes[index];
-    //        MapLayer layer = config.layers[index];
-    //        float distToNextLayer = index + 1 >= layerDistances.Count
-    //            ? 0f
-    //            : layerDistances[index + 1];
-    //        float distToPreviousLayer = layerDistances[index];
+    private static void RandomizeNodePositions()
+    {
+        for (int index = 0; index < nodes.Count; index++)
+        {
+            List<Node> list = nodes[index];
+            MapLayer layer = config.layers[index];
+            float distToNextLayer = index + 1 >= layerDistances.Count
+                ? 0f
+                : layerDistances[index + 1];
+            float distToPreviousLayer = layerDistances[index];
 
-    //        foreach (Node node in list)
-    //        {
-    //            float xRnd = Random.Range(-0.5f, 0.5f);
-    //            float yRnd = Random.Range(-0.5f, 0.5f);
+            foreach (Node node in list)
+            {
+                float xRnd = Random.Range(-0.5f, 0.5f);
+                float yRnd = Random.Range(-0.5f, 0.5f);
 
-    //            float x = xRnd * layer.nodesApartDistance;
-    //            float y = yRnd < 0 ? distToPreviousLayer * yRnd : distToNextLayer * yRnd;
+                float x = xRnd * layer.nodesApartDistance;
+                float y = yRnd < 0 ? distToPreviousLayer * yRnd : distToNextLayer * yRnd;
 
-    //            node.position += new Vector2(x, y) * layer.randomizePosition;
-    //        }
-    //    }
-    //}
+                node.position += new Vector2(x, y) * layer.randomizePosition;
+            }
+        }
+    }
 
     /// <summary>
     /// 为路径上的所有节点建立联系

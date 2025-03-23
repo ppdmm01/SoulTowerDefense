@@ -21,10 +21,11 @@ public class EffectManager : Singleton<EffectManager>
         AddEffect(effect);
     }
 
-    public void PlayUIEffect(string effectName, Vector2 pos, UnityAction callback = null)
+    public void PlayUIEffect(string effectName, Vector2 pos, float scale = 1f, UnityAction callback = null)
     {
         GameObject effObj = PoolMgr.Instance.GetUIObj("Effect/" + effectName);
         effObj.transform.position = pos;
+        effObj.transform.localScale *= scale;
         Effect effect = effObj.GetComponent<Effect>();
         effect.AddCallBack(callback);
         AddEffect(effect);

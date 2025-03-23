@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2137bce18c41c05448a334d3fc4559ea, type: 3}
   m_Name: MinorEnemy
   m_EditorClassIdentifier: 
-  icon: {fileID: -156154286, guid: d07485b782dcab54aa497adf36f40e29, type: 3}
+  icon: {fileID: 21300000, guid: 23575e6ad2c60a346816abb5267b1a4b, type: 3}
   nodeType: 0

@@ -8,8 +8,15 @@ using UnityEngine;
 /// </summary>
 public class Main : MonoBehaviour
 {
+    // 热点（指针的点击点，决定鼠标的点击位置，一般设置为图片中心或左上角）  
+    public Vector2 hotspot = Vector2.zero;
+    // 鼠标模式  
+    public CursorMode cursorMode = CursorMode.Auto;
     void Start()
     {
+        Texture2D cursorTexture = Resources.Load<Texture2D>("Cursor/cursor");
+        Cursor.SetCursor(cursorTexture, hotspot, cursorMode);
+        //UIManager.Instance.ShowPanel<BookPanel>();
         //UIManager.Instance.ShowPanel<BagPanel>();
         UIManager.Instance.ShowPanel<BeginPanel>();
         DOTween.Init();

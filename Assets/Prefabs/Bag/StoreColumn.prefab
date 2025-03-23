@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.54509807, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -247,7 +247,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -37.7, y: -0.000031471}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6486950262976056066
 CanvasRenderer:
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -693003353, guid: 449706fde0d6f55408ec6cdbe03bc295, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 23575e6ad2c60a346816abb5267b1a4b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -399,8 +399,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -144, y: -143.99998}
-  m_SizeDelta: {x: 288, y: 288}
+  m_AnchoredPosition: {x: -199.5, y: -199.5}
+  m_SizeDelta: {x: 399, y: 399}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &6310415969872488485
 CanvasRenderer:
@@ -479,6 +479,7 @@ MonoBehaviour:
   gridName: StoreGrid
   isOpenPreview: 0
   isShowSlot: 0
+  isLocked: 0
   gridWidth: 6
   gridHeight: 6
   items: []

@@ -26,6 +26,7 @@ public class TipInfo : MonoBehaviour
     /// <param name="displayDuration">展示时间</param>
     public void Init(string info,float fadeDuration = 0.2f,float displayDuration = 2f,float height = 100f)
     {
+        Debug.Log("发送信息："+info);
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null)
             canvasGroup = gameObject.AddComponent<CanvasGroup>();

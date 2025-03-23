@@ -139,10 +139,10 @@ TextureImporter:
       name: item_KaoGongJi
       rect:
         serializedVersion: 2
-        x: 512
-        y: 1024
-        width: 512
-        height: 1024
+        x: 548
+        y: 1153
+        width: 450
+        height: 768
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,10 +181,10 @@ TextureImporter:
       name: item_Candle
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1024
-        width: 512
-        height: 1024
+        x: 59
+        y: 1156
+        width: 384
+        height: 768
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,10 +202,10 @@ TextureImporter:
       name: item_Oil
       rect:
         serializedVersion: 2
-        x: 0
-        y: 512
-        width: 512
-        height: 512
+        x: 45
+        y: 576
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -245,9 +245,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1024
-        y: 512
+        y: 568
         width: 1024
-        height: 512
+        height: 384
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   combinationName: "\u6743\u91CD\u76F8\u6052"
+  description: 
   activeAttribute:
     attributeType: 0
     condition:
       conditionType: 0
       pointType: 0
       name: 
-      tags: 0000000005000000
+      tags: 0000000006000000
     activeEffects:
     - effectType: 4
       value: 0.1

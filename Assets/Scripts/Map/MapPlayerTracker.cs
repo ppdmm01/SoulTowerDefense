@@ -58,7 +58,7 @@ public class MapPlayerTracker : MonoBehaviour
         Locked = lockAfterSelecting;
         mapManager.CurrentMap.path.Add(mapNode.Node.point);
         view.SetAttainableNodes();
-        //view.SetLineColors();
+        view.SetLineColors();
         mapNode.ShowSwirlAnimation();
 
         DOTween.Sequence().AppendInterval(enterNodeDelay).OnComplete(() => EnterNode(mapNode)); //等待一段时间后进入节点
@@ -75,8 +75,8 @@ public class MapPlayerTracker : MonoBehaviour
         switch (mapNode.Node.nodeType)
         {
             case NodeType.MinorEnemy:
-                UIManager.Instance.HidePanel<MapPanel>();
-                UIManager.Instance.ShowPanel<PreFightPanel>();
+                //UIManager.Instance.HidePanel<MapPanel>();
+                //UIManager.Instance.ShowPanel<PreFightPanel>();
                 Instance.Locked = false;
                 break;
             case NodeType.Boss:

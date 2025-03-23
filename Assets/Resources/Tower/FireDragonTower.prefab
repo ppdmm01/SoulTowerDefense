@@ -114,7 +114,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71971cb87ed23eb4eb4f55db2b9d92b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: fe7483cf3c50d044baa4d19199a4e1c7, type: 2}
   launcher: {fileID: 6705102249388949956}
   renderers:
   - {fileID: 8996349763639314740}
@@ -122,6 +121,7 @@ MonoBehaviour:
   rangeObj: {fileID: 7758361821325801727}
   rangeTrigger: {fileID: 1317500752564493743}
   towerCollider: {fileID: 5335226150219598559}
+  hpBar: {fileID: 0}
   enemyList: []
   isUsed: 0
   projectilePath: Projectiles/FireDragon
@@ -550,8 +550,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.3137255}
+  m_Sprite: {fileID: 21300000, guid: bf18f52888de19a428abaffdfcdb7858, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

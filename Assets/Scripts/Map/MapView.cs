@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class MapView : MonoBehaviour
@@ -57,7 +58,7 @@ public class MapView : MonoBehaviour
     protected GameObject mapParent;
     private List<List<Vector2Int>> paths;
     private Camera cam;
-    // ALL nodes:
+    // 所有节点:
     public readonly List<MapNode> MapNodes = new List<MapNode>();
     protected readonly List<LineConnection> lineConnections = new List<LineConnection>();
 
@@ -104,7 +105,7 @@ public class MapView : MonoBehaviour
 
         SetAttainableNodes();
 
-        //SetLineColors();
+        SetLineColors();
 
         CreateMapBackground(m);
     }
@@ -273,104 +274,39 @@ public class MapView : MonoBehaviour
         }
     }
 
-    //public virtual void SetLineColors()
-    //{
-    //    // set all lines to grayed out first:
-    //    foreach (LineConnection connection in lineConnections)
-    //        connection.SetColor(lineLockedColor);
+    public virtual void SetLineColors()
+    {
+        // set all lines to grayed out first:
+        foreach (LineConnection connection in lineConnections)
+            connection.SetColor(lineLockedColor);
 
-    //    // set all lines that are a part of the path to visited color:
-    //    // if we have not started moving on the map yet, leave everything as is:
-    //    if (mapManager.CurrentMap.path.Count == 0)
-    //        return;
+        // set all lines that are a part of the path to visited color:
+        // if we have not started moving on the map yet, leave everything as is:
+        if (mapManager.CurrentMap.path.Count == 0)
+            return;
 
-    //    // in any case, we mark outgoing connections from the final node with visible/attainable color:
-    //    Vector2Int currentPoint = mapManager.CurrentMap.path[mapManager.CurrentMap.path.Count - 1];
-    //    Node currentNode = mapManager.CurrentMap.GetNode(currentPoint);
+        // in any case, we mark outgoing connections from the final node with visible/attainable color:
+        Vector2Int currentPoint = mapManager.CurrentMap.path[mapManager.CurrentMap.path.Count - 1];
+        Node currentNode = mapManager.CurrentMap.GetNode(currentPoint);
 
-    //    foreach (Vector2Int point in currentNode.outgoing)
-    //    {
-    //        LineConnection lineConnection = lineConnections.FirstOrDefault(conn => conn.from.Node == currentNode &&
-    //                                                                    conn.to.Node.point.Equals(point));
-    //        lineConnection?.SetColor(lineVisitedColor);
-    //    }
+        foreach (Vector2Int point in currentNode.outgoing)
+        {
+            LineConnection lineConnection = lineConnections.FirstOrDefault(conn => conn.from.Node == currentNode &&
+                                                                        conn.to.Node.point.Equals(point));
+            lineConnection?.SetColor(lineVisitedColor);
+        }
 
-    //    if (mapManager.CurrentMap.path.Count <= 1) return;
+        if (mapManager.CurrentMap.path.Count <= 1) return;
 
-    //    for (int i = 0; i < mapManager.CurrentMap.path.Count - 1; i++)
-    //    {
-    //        Vector2Int current = mapManager.CurrentMap.path[i];
-    //        Vector2Int next = mapManager.CurrentMap.path[i + 1];
-    //        LineConnection lineConnection = lineConnections.FirstOrDefault(conn => conn.@from.Node.point.Equals(current) &&
-    //                                                                    conn.to.Node.point.Equals(next));
-    //        lineConnection?.SetColor(lineVisitedColor);
-    //    }
-    //}
-
-    //protected virtual void SetOrientation()
-    //{
-    //    ScrollNonUI scrollNonUi = mapParent.GetComponent<ScrollNonUI>();
-    //    float span = mapManager.CurrentMap.DistanceBetweenFirstAndLastLayers();
-    //    MapNode bossNode = MapNodes.FirstOrDefault(node => node.Node.nodeType == NodeType.Boss);
-    //    Debug.Log("Map span in set orientation: " + span + " camera aspect: " + cam.aspect);
-
-    //    // setting first parent to be right in front of the camera first:
-    //    firstParent.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, 0f);
-    //    float offset = orientationOffset;
-    //    switch (orientation)
-    //    {
-    //        case MapOrientation.BottomToTop:
-    //            if (scrollNonUi != null)
-    //            {
-    //                scrollNonUi.yConstraints.max = 0;
-    //                scrollNonUi.yConstraints.min = -(span + 2f * offset);
-    //            }
-    //            firstParent.transform.localPosition += new Vector3(0, offset, 0);
-    //            break;
-    //        case MapOrientation.TopToBottom:
-    //            mapParent.transform.eulerAngles = new Vector3(0, 0, 180);
-    //            if (scrollNonUi != null)
-    //            {
-    //                scrollNonUi.yConstraints.min = 0;
-    //                scrollNonUi.yConstraints.max = span + 2f * offset;
-    //            }
-    //            // factor in map span:
-    //            firstParent.transform.localPosition += new Vector3(0, -offset, 0);
-    //            break;
-    //        case MapOrientation.RightToLeft:
-    //            offset *= cam.aspect;
-    //            mapParent.transform.eulerAngles = new Vector3(0, 0, 90);
-    //            // factor in map span:
-    //            firstParent.transform.localPosition -= new Vector3(offset, bossNode.transform.position.y, 0);
-    //            if (scrollNonUi != null)
-    //            {
-    //                scrollNonUi.xConstraints.max = span + 2f * offset;
-    //                scrollNonUi.xConstraints.min = 0;
-    //            }
-    //            break;
-    //        case MapOrientation.LeftToRight:
-    //            offset *= cam.aspect;
-    //            mapParent.transform.eulerAngles = new Vector3(0, 0, -90);
-    //            firstParent.transform.localPosition += new Vector3(offset, -bossNode.transform.position.y, 0);
-    //            if (scrollNonUi != null)
-    //            {
-    //                scrollNonUi.xConstraints.max = 0;
-    //                scrollNonUi.xConstraints.min = -(span + 2f * offset);
-    //            }
-    //            break;
-    //        default:
-    //            throw new ArgumentOutOfRangeException();
-    //    }
-    //}
-
-    //private void DrawLines()
-    //{
-    //    foreach (MapNode node in MapNodes)
-    //    {
-    //        foreach (Vector2Int connection in node.Node.outgoing)
-    //            AddLineConnection(node, GetNode(connection));
-    //    }
-    //}
+        for (int i = 0; i < mapManager.CurrentMap.path.Count - 1; i++)
+        {
+            Vector2Int current = mapManager.CurrentMap.path[i];
+            Vector2Int next = mapManager.CurrentMap.path[i + 1];
+            LineConnection lineConnection = lineConnections.FirstOrDefault(conn => conn.@from.Node.point.Equals(current) &&
+                                                                        conn.to.Node.point.Equals(next));
+            lineConnection?.SetColor(lineVisitedColor);
+        }
+    }
 
     /// <summary>
     /// 重置所有图标的旋转角度
@@ -421,7 +357,7 @@ public class MapView : MonoBehaviour
                 Vector3.Lerp(Vector3.zero, toPoint - fromPoint, (float)i / (linePointsCount - 1)));
         }
 
-        //DottedLineRenderer dottedLine = lineObject.GetComponent<DottedLineRenderer>();
+        //MapLine dottedLine = lineObject.GetComponent<MapLine>();
         //if (dottedLine != null) dottedLine.ScaleMaterial();
 
         lineConnections.Add(new LineConnection(lineRenderer, from, to));

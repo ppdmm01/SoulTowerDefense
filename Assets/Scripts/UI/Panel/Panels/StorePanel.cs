@@ -29,6 +29,8 @@ public class StorePanel : BasePanel
 
         refreshBtn.onClick.AddListener(() =>
         {
+            //TODO:花费一定资源
+            AudioManager.Instance.PlaySound("SoundEffect/Bell");
             RefreshItems();
         });
 
