@@ -82,7 +82,7 @@ public class BagGrid : BaseGrid
             List<ConnectItemInfo> neighborItemInfos = item.GetConnectItems(); //获取该物品周围有效的激活物品（无法知道激活的是哪个属性）
 
             //先计算该物品所有的全局属性
-            foreach (ItemAttribute attribute in item.data.itemAttributes)
+            foreach (ItemAttribute attribute in item.nowAttributes)
             {
                 //全局属性
                 if (attribute.attributeType == ItemAttribute.AttributeType.Global)

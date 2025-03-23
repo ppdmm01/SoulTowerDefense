@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -16,15 +17,15 @@ public class ItemInfo : MonoBehaviour
     /// 设置信息
     /// </summary>
     /// <param name="data">防御塔数据</param>
-    public void SetInfo(ItemSO data)
+    public void SetInfo(ItemSO data,List<ItemAttribute> nowAttributes)
     {
         nowHeight = itemName.rectTransform.sizeDelta.y;
         itemName.text = data.itemChineseName;
         //类型
-        string typeInfo;
-        if (data.itemTags.Contains(ItemTag.Tower)) typeInfo = ColorTextTools.ColorText("【防御塔】", "#FF3030");
-        else typeInfo = ColorTextTools.ColorText("【道具】", "#00B6FF");
-        CreateAttributeInfo("Type", "物品类型：" + typeInfo);
+        string typeInfo = $"<color={Defines.blueColor}>物品类型：</color>";
+        if (data.itemTags.Contains(ItemTag.Tower)) typeInfo += ColorTextTools.ColorText("【防御塔】", "#FF3030");
+        else typeInfo += ColorTextTools.ColorText("【道具】", "#00B6FF");
+        CreateAttributeInfo("Type", typeInfo);
         //塔
         if (data.itemTags.Contains(ItemTag.Tower))
         {
@@ -37,22 +38,25 @@ public class ItemInfo : MonoBehaviour
         //物品属性
         if (data.itemAttributes.Count > 0)
         {
-            string itemAttributeInfo = "基础属性：\n";
-            string itemAttributeInfo2 = "联动属性：\n";
-            foreach (ItemAttribute attribute in data.itemAttributes)
+            string itemAttributeInfo = $"<color={Defines.blueColor}>基础属性：</color>\n";
+            string itemAttributeInfo2 = $"<color={Defines.blueColor}>联动属性：</color>\n";
+            //获取属性的描述
+            if (nowAttributes == null) nowAttributes = data.itemAttributes;
+            foreach (ItemAttribute attribute in nowAttributes)
             {
                 if (attribute.attributeType == ItemAttribute.AttributeType.Global)
-                    itemAttributeInfo += attribute.description + "\n";
+                    itemAttributeInfo += GetAttributeDescription(attribute) + "\n";
                 else
-                    itemAttributeInfo2 += attribute.description + "\n";
+                    itemAttributeInfo2 += GetAttributeDescription(attribute) + "\n";
             }
-            if (itemAttributeInfo != "基础属性：\n")
+            //判空
+            if (itemAttributeInfo != $"<color={Defines.blueColor}>基础属性：</color>\n")
                 CreateAttributeInfo("GlobalAttribute", itemAttributeInfo);
-            if (itemAttributeInfo2 != "联动属性：\n")
+            if (itemAttributeInfo2 != $"<color={Defines.blueColor}>联动属性：</color>\n")
                 CreateAttributeInfo("LinkAttribute", itemAttributeInfo2);
         }
         //标签
-        string tagInfo = "标签：";
+        string tagInfo = $"<color={Defines.blueColor}>标签：</color>";
         foreach (ItemTag tag in data.itemTags)
         {
             switch (tag)
@@ -124,5 +128,149 @@ public class ItemInfo : MonoBehaviour
             Destroy(attributeInfo.gameObject);
         }
         itemAttributes.Clear();
+    }
+
+    /// <summary>
+    /// 获取激活效果的描述
+    /// </summary>
+    public string GetAttributeDescription(ItemAttribute attribute)
+    {
+        string description = "";
+        ItemActiveCondition condition = attribute.condition;
+        //触发规则
+        switch (attribute.attributeType)
+        {
+            case ItemAttribute.AttributeType.Global:
+                description += "所有";
+                break;
+            case ItemAttribute.AttributeType.Link:
+                switch (condition.pointType)
+                {
+                    case DetectionPoint.PointType.Star:
+                        description += "星星触发的";
+                        break;
+                    case DetectionPoint.PointType.Fire:
+                        description += "火焰触发的";
+                        break;
+                }
+                break;
+        }
+        //触发的标签或名字
+        ItemTag[] tags = condition.tags;
+        switch (condition.conditionType)
+        {
+            case ItemActiveCondition.ConditionType.Tag:
+                //目前只考虑防御塔效果
+                if (tags.Contains(ItemTag.Tower))
+                {
+                    if (tags.Contains(ItemTag.Force))
+                    {
+                        description += "力学塔：";
+                    }
+                    else if (tags.Contains(ItemTag.Heat))
+                    {
+                        description += "热学塔：";
+                    }
+                    else if (tags.Contains(ItemTag.Light))
+                    {
+                        description += "光学塔：";
+                    }
+                }
+                break;
+            case ItemActiveCondition.ConditionType.Name:
+                description += condition.name + "：";
+                break;
+        }
+        //触发效果
+        string growStr = ""; //记录成长效果
+        for (int i = 0;i < attribute.activeEffects.Count();i++)
+        {
+            ItemActiveEffect effect = attribute.activeEffects[i];
+            switch (effect.effectType)
+            {
+                case ItemActiveEffect.EffectType.Hp:
+                    description += $"<color={Defines.purpleColor}>血量+{Mathf.RoundToInt(effect.value)}</color>";                   
+                    growStr += $"<color={Defines.purpleColor}>血量+{Mathf.RoundToInt(effect.growValue)}</color>";
+                    break;
+                case ItemActiveEffect.EffectType.Cost:
+                    description += $"<color={Defines.purpleColor}>花费-{Mathf.RoundToInt(effect.value)}</color>";
+                    growStr += $"<color={Defines.purpleColor}>花费-{Mathf.RoundToInt(effect.growValue)}</color>";
+                    break;
+                case ItemActiveEffect.EffectType.Output:
+                    description += $"<color={Defines.purpleColor}>产量+{Mathf.RoundToInt(effect.value)}</color>";
+                    growStr += $"<color={Defines.purpleColor}>产量+{Mathf.RoundToInt(effect.growValue)}</color>";
+                    break;
+                case ItemActiveEffect.EffectType.Cooldown:
+                    description += $"<color={Defines.purpleColor}>生产冷却-{Mathf.RoundToInt(effect.value)}s</color>";
+                    growStr += $"<color={Defines.purpleColor}>生产冷却-{Mathf.RoundToInt(effect.growValue)}s</color>";
+                    break;
+                case ItemActiveEffect.EffectType.DamageMultiplier:
+                    description += $"<color={Defines.purpleColor}>物理伤害+{Mathf.RoundToInt(effect.value * 100)}%</color>";
+                    growStr += $"<color={Defines.purpleColor}>物理伤害+{Mathf.RoundToInt(effect.growValue * 100)}%</color>";
+                    break;
+                case ItemActiveEffect.EffectType.RangeMultiplier:
+                    description += $"<color={Defines.purpleColor}>射程+{Mathf.RoundToInt(effect.value * 100)}%</color>";
+                    growStr += $"<color={Defines.purpleColor}>射程+{Mathf.RoundToInt(effect.growValue * 100)}%</color>";
+                    break;
+                case ItemActiveEffect.EffectType.IntervalMultiplier:
+                    description += $"<color={Defines.purpleColor}>攻击冷却-{Mathf.Abs(Mathf.RoundToInt(effect.value * 100))}%</color>";
+                    growStr += $"<color={Defines.purpleColor}>攻击冷却-{Mathf.Abs(Mathf.RoundToInt(effect.growValue * 100))}%</color>";
+                    break;
+                case ItemActiveEffect.EffectType.BurnBuff_Duration:
+                    description += $"<color={Defines.redColor}>「灼烧」</color>" +
+                        $"<color={Defines.purpleColor}>持续时间+{effect.value.ToString("F1")}s</color>";
+                    growStr += $"<color={Defines.redColor}>「灼烧」</color>" +
+                        $"<color={Defines.purpleColor}>持续时间+{effect.growValue.ToString("F1")}s</color>";
+                    break;
+                case ItemActiveEffect.EffectType.BurnBuff_Damage:
+                    description += $"<color={Defines.redColor}>「灼烧」</color>" +
+                        $"<color={Defines.purpleColor}>伤害+{Mathf.RoundToInt(effect.value * 100)}%</color>";
+                    growStr += $"<color={Defines.redColor}>「灼烧」</color>" +
+                        $"<color={Defines.purpleColor}>伤害+{Mathf.RoundToInt(effect.growValue * 100)}%</color>";
+                    break;
+                case ItemActiveEffect.EffectType.BurnBuff_TriggerChance:
+                    description += $"<color={Defines.redColor}>「灼烧」</color>" +
+                        $"<color={Defines.purpleColor}>触发几率+{effect.value.ToString("F1")}%</color>";
+                    growStr += $"<color={Defines.redColor}>「灼烧」</color>" +
+                        $"<color={Defines.purpleColor}>触发几率+{effect.growValue.ToString("F1")}%</color>";
+                    break;
+                case ItemActiveEffect.EffectType.SlowBuff_Duration:
+                    description += $"<color={Defines.greenColor}>「缓慢」</color>" +
+                        $"<color={Defines.purpleColor}>持续时间+{effect.value.ToString("F1")}s</color>";
+                    growStr += $"<color={Defines.greenColor}>「缓慢」</color>" +
+                        $"<color={Defines.purpleColor}>持续时间+{effect.growValue.ToString("F1")}s</color>";
+                    break;
+                case ItemActiveEffect.EffectType.SlowBuff_TriggerChance:
+                    description += $"<color={Defines.greenColor}>「缓慢」</color>" +
+                        $"<color={Defines.purpleColor}>触发几率+{Mathf.RoundToInt(effect.value * 100)}%</color>";
+                    growStr += $"<color={Defines.greenColor}>「缓慢」</color>" +
+                        $"<color={Defines.purpleColor}>触发几率+{Mathf.RoundToInt(effect.growValue * 100)}%</color>";
+                    break;
+                default:
+                    break;
+            }
+            if (i != attribute.activeEffects.Count() - 1)
+            {
+                description += "，";
+                growStr += "，";
+            }
+            if (i == attribute.activeEffects.Count() - 1 && attribute.isGrow)
+            {
+                switch (attribute.growType)
+                {
+                    case ItemAttribute.GrowType.All:
+                        description += $"\n(每经过一个地图节点：{growStr})" +
+                            $"<color={Defines.purpleColor}> <已成长{attribute.growTime}次></color>";
+                        break;
+                    case ItemAttribute.GrowType.Random:
+                        description += $"\n(每经过一个地图节点，随机增加下列其一效果：{growStr})" +
+                            $"<color={Defines.purpleColor}> <已成长{attribute.growTime}次></color>";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return description;
     }
 }

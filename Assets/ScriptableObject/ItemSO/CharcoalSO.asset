@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
   m_Name: CharcoalSO
   m_EditorClassIdentifier: 
-  id: 2
+  id: 3
   itemName: Charcoal
   itemChineseName: "\u70AD"
   price: 30
@@ -37,9 +37,12 @@ MonoBehaviour:
       pointType: 1
       name: 
       tags: 0100000006000000
+    isGrow: 0
+    growType: 0
     activeEffects:
     - effectType: 7
       value: 0.2
+      growValue: 0
     description: "\u706B\u7130\u6FC0\u6D3B\u7684\u70ED\u5B66\u5854\uFF1A\u71C3\u70E7\u65F6\u95F4+0.2s"
   icon: {fileID: 1620226355, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
   itemTags: 01000000

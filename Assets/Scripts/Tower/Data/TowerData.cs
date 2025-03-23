@@ -120,12 +120,13 @@ public class TowerData
     /// </summary>
     public void UpdateAttribute()
     {
-        damage = (int)(originData.damage * damageMultiplier);
-        range = originData.range * rangeMultiplier;
-        interval = originData.interval * intervalMultiplier;
+        damage = Mathf.RoundToInt(originData.damage * damageMultiplier);
+        range = Mathf.RoundToInt(originData.range * rangeMultiplier);
+        interval = Mathf.RoundToInt(originData.interval * intervalMultiplier);
         foreach (BuffData data in buffDatas)
         {
-            data.damage = (int)(originData.GetBuffData(data.buffType).damage * data.damageMultiplier); //最终伤害：配置数据 * 当前倍率
+            //最终伤害：配置数据 * 当前倍率
+            data.damage = Mathf.RoundToInt((originData.GetBuffData(data.buffType).damage * data.damageMultiplier));
         }
     }
 

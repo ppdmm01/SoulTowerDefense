@@ -8,16 +8,16 @@ using UnityEngine;
 /// </summary>
 public class GameDataManager : Singleton<GameDataManager>
 {
-    public MusicData musicData = new MusicData();
-    public List<GridData> gridDatas = new List<GridData>();
-    public Map mapData = new Map();
+    public MusicData musicData;
+    public List<GridData> gridDatas;
+    public Map mapData;
 
     private GameDataManager()
     {
         Debug.Log(Application.persistentDataPath);
-        musicData = JsonMgr.Instance.LoadData<MusicData>("MusicData");
-        gridDatas = JsonMgr.Instance.LoadData<List<GridData>>("GridDatas");
-        mapData = JsonMgr.Instance.LoadData<Map>("MapData");
+        musicData = JsonMgr.Instance.LoadData<MusicData>("MusicData") ?? new MusicData();
+        gridDatas = JsonMgr.Instance.LoadData<List<GridData>>("GridDatas") ?? new List<GridData>();
+        mapData = JsonMgr.Instance.LoadData<Map>("MapData") ?? new Map();
     }
 
     /// <summary>
@@ -35,14 +35,10 @@ public class GameDataManager : Singleton<GameDataManager>
     /// <returns></returns>
     public GridData GetGridData(string gridName)
     {
-        if (gridDatas == null)
+        Debug.Log(gridDatas);
+        if (gridDatas.Any(data => data != null && data.gridName == gridName))
         {
-            gridDatas = new List<GridData>();
-        }
-
-        if (gridDatas.Any(data => data.gridName == gridName))
-        {
-            return gridDatas.FirstOrDefault(data => data.gridName == gridName);
+            return gridDatas.FirstOrDefault(data => data != null && data.gridName == gridName);
         }
         else
         {
@@ -52,12 +48,8 @@ public class GameDataManager : Singleton<GameDataManager>
 
     public void UpdateGridData(GridData newData)
     {
-        if (gridDatas == null)
-        {
-            gridDatas = new List<GridData>();
-        }
         //如果已存在，则更新
-        int index = gridDatas.FindIndex(data => data.gridName == newData.gridName);
+        int index = gridDatas.FindIndex(data => data != null && data.gridName == newData.gridName);
         if (index != -1)
         {
             gridDatas[index] = newData;
@@ -70,12 +62,8 @@ public class GameDataManager : Singleton<GameDataManager>
 
     public void RemoveGridData(string gridName)
     {
-        if (gridDatas == null)
-        {
-            gridDatas = new List<GridData>();
-        }
-        if (gridDatas.Any(data => data.gridName == gridName))
-            gridDatas.RemoveAll(data => data.gridName == gridName);
+        if (gridDatas.Any(data => data != null && data.gridName == gridName))
+            gridDatas.RemoveAll(data => data != null && data.gridName == gridName);
     }
 
     public void SaveGridData()

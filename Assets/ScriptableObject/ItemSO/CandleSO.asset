@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
   m_Name: CandleSO
   m_EditorClassIdentifier: 
-  id: 11
+  id: 2
   itemName: Candle
   itemChineseName: "\u8721\u70DB"
   price: 50
@@ -35,9 +35,12 @@ MonoBehaviour:
       pointType: 1
       name: 
       tags: 0100000006000000
+    isGrow: 0
+    growType: 0
     activeEffects:
     - effectType: 8
       value: 0.1
+      growValue: 0
     description: "\u706B\u7130\u6FC0\u6D3B\u7684\u70ED\u5B66\u5854\uFF1A\u707C\u70E7\u4F24\u5BB3+10%"
   - attributeType: 1
     condition:
@@ -45,9 +48,12 @@ MonoBehaviour:
       pointType: 0
       name: 
       tags: 0600000002000000
+    isGrow: 0
+    growType: 0
     activeEffects:
     - effectType: 4
       value: 0.05
+      growValue: 0
     description: "\u661F\u661F\u6FC0\u6D3B\u7684\u5149\u5B66\u5854\uFF1A\u4F24\u5BB3+5%"
   - attributeType: 0
     condition:
@@ -55,9 +61,12 @@ MonoBehaviour:
       pointType: 0
       name: 
       tags: 0600000002000000
+    isGrow: 0
+    growType: 0
     activeEffects:
     - effectType: 5
       value: 0.05
+      growValue: 0
     description: "\u6240\u6709\u5149\u5B66\u5854\uFF1A\u5C04\u7A0B+5%"
   icon: {fileID: 76422808, guid: d9d012dcbaf98854a973fb39c7774735, type: 3}
   itemTags: 0200000001000000

@@ -16,6 +16,6 @@ public class Page : MonoBehaviour
     /// </summary>
     public void UpdatePage()
     {
-        itemInfo.SetInfo(itemSO);
+        //itemInfo.SetInfo(itemSO);
     }
 }

@@ -283,13 +283,13 @@ public class TowerManager : SingletonMono<TowerManager>
             switch (activeEffect.effectType)
             {
                 case ItemActiveEffect.EffectType.Hp:
-                    data.hp += (int)activeEffect.value;
+                    data.hp += Mathf.RoundToInt(activeEffect.value);
                     break;
                 case ItemActiveEffect.EffectType.Cost:
-                    data.cost += (int)activeEffect.value;
+                    data.cost += Mathf.RoundToInt(activeEffect.value);
                     break;
                 case ItemActiveEffect.EffectType.Output:
-                    data.output += (int)activeEffect.value;
+                    data.output += Mathf.RoundToInt(activeEffect.value);
                     break;
                 case ItemActiveEffect.EffectType.Cooldown:
                     data.cooldown += activeEffect.value;

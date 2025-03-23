@@ -15,6 +15,18 @@ public class GridManager : SingletonMono<GridManager>
         itemsTrans = UIManager.Instance.itemTrans;
         gridDic = new Dictionary<string, BaseGrid>();
         itemPrefab = Resources.Load<GameObject>("Bag/ItemPrefab");
+
+        //背包内所有物品触发成长
+        EventCenter.Instance.AddEventListener(EventType.EnterMapNode,() =>
+        {
+            GridData bagData = GameDataManager.Instance.GetGridData("Bag");
+            if (bagData != null)
+            {
+                bagData.AllItemGrow();
+                GameDataManager.Instance.UpdateGridData(bagData);
+                GameDataManager.Instance.SaveGridData();
+            }
+        });
     }
 
     [HideInInspector] public Transform itemsTrans; //放置物品的父对象
@@ -110,6 +122,8 @@ public class GridManager : SingletonMono<GridManager>
         Item item = itemObj.AddComponent<Item>();
         ItemSO data = ItemManager.Instance.GetItemDataById(itemData.id);
         item.Init(data, grid);
+        item.growSpeed = itemData.growSpeed;
+        item.nowAttributes = itemData.itemAttributes;
         item.gridPos = itemData.gridPos;
         item.currentRotation = itemData.currentRotation;
         item.rectTransform.rotation = Quaternion.Euler(0, 0, item.currentRotation);

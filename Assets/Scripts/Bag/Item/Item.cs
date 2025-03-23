@@ -12,6 +12,10 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 {
     [Header("物品数据")]
     public ItemSO data; //物品数据
+    public int growSpeed = 1; //成长速度
+    public List<ItemAttribute> nowAttributes; //需要实时记录属性（因为有一些成长类道具）
+
+    [Header("物品旋转相关")]
     [HideInInspector] public int currentRotation; //当前旋转度数
     [HideInInspector] public int lastCurrentRotation; //记录移动物品前的旋转度数
     private Coroutine rotateCoroutine; //旋转动画协程
@@ -85,6 +89,8 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     {
         this.data = data;
 
+        nowAttributes = data.GetItemAttributes(); //记录属性
+
         isUpdateInfo = true;
         isDrag = false;
         currentRotation = 0;
@@ -97,7 +103,6 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         oldGrid = this.grid;
 
         Icon.sprite = data.icon; //更换图片
-                                    //Icon.alphaHitTestMinimumThreshold = 1f; //设置透明度阈值
 
         Vector2Int size = GetSize();
         rectTransform.sizeDelta = new Vector2(size.x * Defines.cellSize, size.y * Defines.cellSize); //根据数据设置物品大小  
@@ -136,7 +141,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         if (ItemManager.Instance.dragTarget == null)
         {
             GetConnectItems(true);
-            UIManager.Instance.GetPanel<BagPanel>()?.ShowItemInfo(data);
+            UIManager.Instance.GetPanel<BagPanel>()?.ShowItemInfo(data,nowAttributes);
         }
     }
 
@@ -516,9 +521,9 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
     //匹配指定物品是否满足该物品的 联动属性激活要求
     //2025.3.17更改：加入不同的 检测点类型，所以不能检测所有要求了，只检测对应 检测点类型 的要求即可
-    public ItemAttribute MatchLinkAttribute(Item item,DetectionPoint.PointType pointType)
+    private ItemAttribute MatchLinkAttribute(Item item,DetectionPoint.PointType pointType)
     {
-        foreach (ItemAttribute attribute in data.itemAttributes)
+        foreach (ItemAttribute attribute in nowAttributes)
         {
             if (attribute.attributeType == ItemAttribute.AttributeType.Global) continue; //全局的不考虑
             if (attribute.condition.pointType != pointType) continue; //要求的检测点类型不一致，不考虑

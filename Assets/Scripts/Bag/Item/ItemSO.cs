@@ -30,6 +30,15 @@ public class ItemSO : ScriptableObject
 
     [Header("物品标签")]
     public List<ItemTag> itemTags; // 物品标签
+
+    //获取物品属性列表
+    public List<ItemAttribute> GetItemAttributes()
+    {
+        List<ItemAttribute> list = new List<ItemAttribute>();
+        for (int i = 0; i < itemAttributes.Count; i++)
+            list.Add(new ItemAttribute(itemAttributes[i]));
+        return list;
+    }
 }
 
 /// <summary>

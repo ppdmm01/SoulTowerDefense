@@ -7,5 +7,5 @@ using UnityEngine;
 /// </summary>
 public enum EventType
 {
-    
+    EnterMapNode, //进入地图节点
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
   m_Name: GunpowderSO
   m_EditorClassIdentifier: 
-  id: 3
+  id: 5
   itemName: Gunpowder
   itemChineseName: "\u706B\u836F"
   price: 60
@@ -33,13 +33,18 @@ MonoBehaviour:
       pointType: 0
       name: 
       tags: 0100000006000000
+    isGrow: 0
+    growType: 0
     activeEffects:
     - effectType: 7
       value: 0.5
+      growValue: 0
     - effectType: 4
       value: 0.08
+      growValue: 0
     - effectType: 8
       value: 0.15
+      growValue: 0
     description: "\u6240\u6709\u70ED\u5B66\u5854\uFF1A\u71C3\u70E7\u65F6\u95F4+0.5s\uFF0C\u4F24\u5BB3+8%\uFF0C\u707C\u70E7\u4F24\u5BB3+15%"
   - attributeType: 1
     condition:
@@ -47,9 +52,12 @@ MonoBehaviour:
       pointType: 1
       name: 
       tags: 0100000006000000
+    isGrow: 0
+    growType: 0
     activeEffects:
     - effectType: 9
       value: 8
+      growValue: 0
     description: "\u706B\u7130\u6FC0\u6D3B\u7684\u70ED\u5B66\u5854\uFF1A\u707C\u70E7\u89E6\u53D1\u51E0\u7387+8%"
   icon: {fileID: -741162250, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
   itemTags: 01000000

@@ -18,8 +18,17 @@ public class GridData
         List<ItemData> list = new List<ItemData>();
         foreach (Item item in items)
         {
-            list.Add(new ItemData(item.data.id, item.currentRotation, item.gridPos));
+            list.Add(new ItemData(item.data.id, item.currentRotation, item.gridPos, item.growSpeed, item.nowAttributes));
         }
         this.itemDatas = list;
+    }
+
+    //触发所有物品成长
+    public void AllItemGrow()
+    {
+        foreach (ItemData itemData in itemDatas)
+        {
+            itemData.Grow();
+        }
     }
 }

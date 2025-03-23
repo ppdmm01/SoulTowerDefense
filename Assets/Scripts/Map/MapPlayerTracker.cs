@@ -70,13 +70,14 @@ public class MapPlayerTracker : MonoBehaviour
     private static void EnterNode(MapNode mapNode)
     {
         Debug.Log("进入节点: " + mapNode.Node.blueprintName + " 节点类型: " + mapNode.Node.nodeType);
-
+        //触发进入节点事件
+        EventCenter.Instance.EventTrigger(EventType.EnterMapNode);
         //若lockAfterSelecting为true，记得完成节点的事件后将Locked置为false
         switch (mapNode.Node.nodeType)
         {
             case NodeType.MinorEnemy:
-                //UIManager.Instance.HidePanel<MapPanel>();
-                //UIManager.Instance.ShowPanel<PreFightPanel>();
+                UIManager.Instance.HidePanel<MapPanel>();
+                UIManager.Instance.ShowPanel<PreFightPanel>();
                 Instance.Locked = false;
                 break;
             case NodeType.Boss:
@@ -86,6 +87,8 @@ public class MapPlayerTracker : MonoBehaviour
                 break;
             case NodeType.Crystal:
                 Instance.Locked = false;
+                UIManager.Instance.HidePanel<MapPanel>();
+                UIManager.Instance.ShowPanel<StorePanel>();
                 break;
             case NodeType.Store:
                 UIManager.Instance.HidePanel<MapPanel>();
@@ -99,6 +102,8 @@ public class MapPlayerTracker : MonoBehaviour
                 break;
             case NodeType.Treasure:
                 Instance.Locked = false;
+                UIManager.Instance.HidePanel<MapPanel>();
+                UIManager.Instance.ShowPanel<StorePanel>();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

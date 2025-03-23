@@ -50,4 +50,13 @@ public static class Defines
 
     //波次相关常量
     public static readonly float waitTime = 5f; //每波之间的休息时间
+
+    //颜色相关变量
+    public static readonly string redColor = "#FF0000";
+    public static readonly string yellowColor = "#FFFF00";
+    public static readonly string greenColor = "#00FF00";
+    public static readonly string purpleColor = "#800080";
+    public static readonly string cyanColor = "#00FFFF";
+    public static readonly string blueColor = "#0000FF";
+    public static readonly string grayColor = "#808080";
 }

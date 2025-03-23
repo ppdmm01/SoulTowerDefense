@@ -72,10 +72,10 @@ public class BagPanel : BasePanel
     /// <summary>
     /// 显示物品信息
     /// </summary>
-    public void ShowItemInfo(ItemSO data)
+    public void ShowItemInfo(ItemSO data,List<ItemAttribute> nowAttributes)
     {
         ItemInfoObj.SetActive(true);
-        ItemInfoObj.GetComponent<ItemInfo>().SetInfo(data);
+        ItemInfoObj.GetComponent<ItemInfo>().SetInfo(data, nowAttributes);
     }
 
     /// <summary>

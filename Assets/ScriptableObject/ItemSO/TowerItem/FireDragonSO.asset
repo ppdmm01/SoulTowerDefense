@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
   m_Name: FireDragonSO
   m_EditorClassIdentifier: 
-  id: 10
+  id: 18
   itemName: FireDragonTower
   itemChineseName: "\u706B\u9F99"
   price: 35
