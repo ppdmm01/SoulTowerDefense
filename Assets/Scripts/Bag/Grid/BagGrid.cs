@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +18,6 @@ public class BagGrid : BaseGrid
             if (isUpdateCombination) CalculateAttribute(item.transform);
             else CalculateAttribute(null);
         }
-        //GridManager.Instance.UpdateFightTowerInfo();
     }
 
     public override void RemoveItem(Item item, Vector2Int gridPos)
@@ -25,14 +26,11 @@ public class BagGrid : BaseGrid
         //同时更新面板信息防御塔
         if (item.isUpdateInfo)
             CalculateAttribute(item.transform);
-        //GridManager.Instance.UpdateFightTowerInfo();
     }
 
     public override void UpdateGrid(GridData gridData)
     {
         base.UpdateGrid(gridData);
-        //同时更新面板信息防御塔
-        //GridManager.Instance.UpdateFightTowerInfo();
         CalculateAttribute();
     }
 
@@ -43,6 +41,7 @@ public class BagGrid : BaseGrid
     public void CalculateAttribute(Transform itemTrans = null)
     {
         TowerManager.Instance.RecordOldData(); //数据变化前先记录老数据
+        AttributeManager.Instance.ClearAllGrowSpeed(); //清理上一次操作的数据
         CalculateTower(); //计算有哪些防御塔可用
         CalculateItemAttribute(); //计算物品属性
         CalculateCombination(itemTrans); //计算组合
@@ -64,7 +63,7 @@ public class BagGrid : BaseGrid
         {
             if (item.data.itemTags.Contains(ItemTag.Tower))
             {
-                TowerData towerData = new TowerData(TowerManager.Instance.GetTowerSO_ByName(item.data.itemName));
+                TowerData towerData = new TowerData(TowerManager.Instance.GetTowerSO_ByName(item.data.itemName),item.nowItemBuffs);
                 //添加防御塔
                 TowerManager.Instance.AddTowerData(item.data.itemName, towerData);
             }
@@ -79,7 +78,7 @@ public class BagGrid : BaseGrid
         //遍历背包中所有物品
         foreach (Item item in items)
         {
-            List<ConnectItemInfo> neighborItemInfos = item.GetConnectItems(); //获取该物品周围有效的激活物品（无法知道激活的是哪个属性）
+            List<ConnectItemInfo> neighborItemInfos = item.GetConnectItems(); //获取该物品周围有效的激活物品信息
 
             //先计算该物品所有的全局属性
             foreach (ItemAttribute attribute in item.nowAttributes)
@@ -88,15 +87,15 @@ public class BagGrid : BaseGrid
                 if (attribute.attributeType == ItemAttribute.AttributeType.Global)
                 {
                     if (attribute.condition.conditionType == ItemActiveCondition.ConditionType.Tag)
-                        TowerManager.Instance.SetTowerDataFromTag(attribute.condition.tags, attribute.activeEffects);
+                        AttributeManager.Instance.SetAttributeFromTag(attribute.condition.tags, attribute.activeEffects);
                     else
-                        TowerManager.Instance.SetTowerDataFromName(attribute.condition.name, attribute.activeEffects);
+                        AttributeManager.Instance.SetAttributeFromName(attribute.condition.name, attribute.activeEffects);
                 }
             }
             //再计算已激活的联动属性
             foreach (ConnectItemInfo info in neighborItemInfos)
             {
-                TowerManager.Instance.SetTowerDataFromName(info.item.data.itemName, info.activateAttribute.activeEffects);
+                AttributeManager.Instance.SetAttributeFromName(info.item.data.itemName, info.activateAttribute.activeEffects);
             }
         }
     }
@@ -112,9 +111,9 @@ public class BagGrid : BaseGrid
             if (attribute.attributeType == ItemAttribute.AttributeType.Global)
             {
                 if (attribute.condition.conditionType == ItemActiveCondition.ConditionType.Tag)
-                    TowerManager.Instance.SetTowerDataFromTag(attribute.condition.tags, attribute.activeEffects);
+                    AttributeManager.Instance.SetAttributeFromTag(attribute.condition.tags, attribute.activeEffects);
                 else
-                    TowerManager.Instance.SetTowerDataFromName(attribute.condition.name, attribute.activeEffects);
+                    AttributeManager.Instance.SetAttributeFromName(attribute.condition.name, attribute.activeEffects);
             }
         }
         //显示该次操作所形成的组合
@@ -122,14 +121,32 @@ public class BagGrid : BaseGrid
         List<CombinationSO> newCombinations = CombinationManager.Instance.GetChangeCombinationInfo();
         if (newCombinations.Count > 0)
         {
-            AudioManager.Instance.PlaySound("SoundEffect/Combination");
-            //特效
-            //GameObject effObj = PoolMgr.Instance.GetObj("Effect/CombinationEffect");
-            //effObj.transform.position = itemTrans.position;
+            StopAllCoroutines();
+            StartCoroutine(ShowCombination(newCombinations, itemTrans));
         }
+    }
+
+    /// <summary>
+    /// 显示组合
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ShowCombination(List<CombinationSO> newCombinations, Transform itemTrans)
+    {
         foreach (CombinationSO combination in newCombinations)
         {
-            UIManager.Instance.ShowTxtPopup(combination.combinationName,Color.yellow,64, itemTrans.position,true);
+            AudioManager.Instance.PlaySound("SoundEffect/Combination");
+            UIManager.Instance.ShowTxtPopup(combination.combinationName, Color.green, 64, itemTrans.position, true);
+            //获取激活组合的物品
+            List<Item> items = CombinationManager.Instance.GetItemsByCombination(combination);
+            //物品的格子颜色闪亮
+            foreach (Item item in items)
+            {
+                foreach (Vector2Int pos in item.usedPos)
+                {
+                    item.grid.slots[pos.x, pos.y].Flash();
+                }
+            }
+            yield return new WaitForSeconds(0.5f);
         }
     }
     #endregion

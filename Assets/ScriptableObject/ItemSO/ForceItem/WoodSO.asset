@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
+  m_Name: WoodSO
+  m_EditorClassIdentifier: 
+  id: 7
+  itemName: Wood
+  itemChineseName: "\u6728\u5934"
+  price: 20
+  description: 
+  slotColorType: 0
+  shape:
+    shapeMatrix: 01000000010000000000000000000000
+    allowRotation: 1
+  detectionPoints:
+  - pos: {x: 2, y: 0}
+    pointType: 0
+  - pos: {x: 0, y: 1}
+    pointType: 0
+  - pos: {x: 1, y: 1}
+    pointType: 0
+  - pos: {x: 0, y: -1}
+    pointType: 0
+  - pos: {x: 1, y: -1}
+    pointType: 0
+  - pos: {x: -1, y: 0}
+    pointType: 0
+  buffTypes: 
+  itemAttributes:
+  - attributeType: 0
+    condition:
+      conditionType: 0
+      pointType: 0
+      name: 
+      tags: 0600000000000000
+    isGrow: 0
+    growType: 0
+    growTime: 0
+    activeEffects:
+    - effectType: 4
+      BuffType: 0
+      value: 0.03
+      growValue: 0
+  - attributeType: 1
+    condition:
+      conditionType: 0
+      pointType: 0
+      name: 
+      tags: 0000000006000000
+    isGrow: 0
+    growType: 0
+    growTime: 0
+    activeEffects:
+    - effectType: 4
+      BuffType: 0
+      value: 0.05
+      growValue: 0
+  icon: {fileID: -1025332416, guid: 666b7dfa7b403534e878752a956a383d, type: 3}
+  itemTags: 00000000

@@ -8,9 +8,9 @@ public class CombinationInfo : MonoBehaviour
     public TextMeshProUGUI title;
     public TextMeshProUGUI description;
 
-    public void SetInfo(string title,string description)
+    public void SetInfo(string title,ItemAttribute itemAttribute)
     {
         this.title.text = title;
-        this.description.text = description;
+        this.description.text = AttributeManager.Instance.GetAttributeDescription(itemAttribute);
     }
 }

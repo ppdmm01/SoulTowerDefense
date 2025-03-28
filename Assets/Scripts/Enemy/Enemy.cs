@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void Wound(int dmg,Color txtColor)
     {
-        nowHp -= (int)(dmg * damageMultiplier);
+        nowHp -= Mathf.RoundToInt(dmg * damageMultiplier);
         //ÊÜ»÷Êı×Ö
         UIManager.Instance.ShowTxtPopup(dmg.ToString(), txtColor,36, transform.position);
         //ÅĞ¶ÏËÀÍö

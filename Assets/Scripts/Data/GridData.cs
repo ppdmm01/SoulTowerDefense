@@ -18,7 +18,7 @@ public class GridData
         List<ItemData> list = new List<ItemData>();
         foreach (Item item in items)
         {
-            list.Add(new ItemData(item.data.id, item.currentRotation, item.gridPos, item.growSpeed, item.nowAttributes));
+            list.Add(new ItemData(item.data.id, item.currentRotation, item.gridPos, item.growSpeed, item.nowAttributes,item.nowItemBuffs));
         }
         this.itemDatas = list;
     }

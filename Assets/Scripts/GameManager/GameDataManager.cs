@@ -35,7 +35,6 @@ public class GameDataManager : Singleton<GameDataManager>
     /// <returns></returns>
     public GridData GetGridData(string gridName)
     {
-        Debug.Log(gridDatas);
         if (gridDatas.Any(data => data != null && data.gridName == gridName))
         {
             return gridDatas.FirstOrDefault(data => data != null && data.gridName == gridName);

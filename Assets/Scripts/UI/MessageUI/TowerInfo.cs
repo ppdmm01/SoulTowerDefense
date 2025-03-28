@@ -28,6 +28,7 @@ public class TowerInfo : MonoBehaviour
         towerName.text = data.towerChineseName;
         towerDescription.text = data.description;
         nowHeight = towerBaseInfoTrans.sizeDelta.y;
+
         //创建属性
         CreateAttributeInfo(nameof(data.hp),"血量：" + data.hp);
         CreateAttributeInfo(nameof(data.cost), "花费：" + data.cost);

@@ -12,6 +12,8 @@ public class ItemSlot : MonoBehaviour
     [HideInInspector] public bool isUsed; //是否被占用
     private BaseGrid grid; //物品格属于哪个网格
     [HideInInspector] public Item nowItem; //当前物品格的物品
+    private float flashTime = 0.3f;
+    private Color nowColor;
 
     private Image slotImg;
 
@@ -20,6 +22,10 @@ public class ItemSlot : MonoBehaviour
         nowItem = null;
         slotImg = GetComponent<Image>();
         SetStatus(false);
+        Material material = new Material(Resources.Load<Material>("Material/FlashMaterial"));
+        if (slotImg.material != material)
+            slotImg.material = material;
+        nowColor = slotImg.color;
     }
 
     /// <summary>
@@ -69,6 +75,7 @@ public class ItemSlot : MonoBehaviour
     /// <param name="color">颜色</param>
     public void SetColor(Color color)
     {
+        nowColor = color;
         slotImg.color = color;
     }
 
@@ -78,5 +85,24 @@ public class ItemSlot : MonoBehaviour
     public void HideImg()
     {
         slotImg.enabled = false;
+    }
+
+    /// <summary>
+    /// 闪烁效果
+    /// </summary>
+    public void Flash()
+    {
+        StopAllCoroutines();
+        if (gameObject.activeSelf)
+            StartCoroutine(FlashRoutine());
+    }
+
+    private IEnumerator FlashRoutine()
+    {
+        slotImg.material.SetFloat("_FlashAmount", 1);
+        slotImg.material.SetColor("_FlashColor", Color.yellow);
+        yield return new WaitForSeconds(flashTime);
+        slotImg.material.SetColor("_FlashColor", nowColor);
+        slotImg.material.SetFloat("_FlashAmount", 0);
     }
 }

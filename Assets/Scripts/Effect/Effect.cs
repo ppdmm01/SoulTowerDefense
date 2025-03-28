@@ -17,6 +17,7 @@ public class Effect : MonoBehaviour
 
     private void OnDisable()
     {
+        transform.localScale = Vector3.one;
         StopAllCoroutines();
         callback = null;
     }

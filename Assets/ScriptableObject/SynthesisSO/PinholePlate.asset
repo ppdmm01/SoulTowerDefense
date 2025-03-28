@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f9689ba3c5148443acbcfc81f663f25, type: 3}
+  m_Name: PinholePlate
+  m_EditorClassIdentifier: 
+  id: 1
+  recipe:
+  - type: 0
+    tags: 
+    data: {fileID: 11400000, guid: 1ded7f31b094ab8489ffe65df84b0890, type: 2}
+    num: 1
+  - type: 0
+    tags: 
+    data: {fileID: 11400000, guid: 1d3f8662a451bde43bf760c6dccd59f1, type: 2}
+    num: 1
+  product:
+  - type: 0
+    tags: 
+    data: {fileID: 11400000, guid: ee534206c2197284fae1050b60714a6e, type: 2}
+    num: 1

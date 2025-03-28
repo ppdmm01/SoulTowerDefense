@@ -14,6 +14,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     public ItemSO data; //物品数据
     public int growSpeed = 1; //成长速度
     public List<ItemAttribute> nowAttributes; //需要实时记录属性（因为有一些成长类道具）
+    public List<BuffType> nowItemBuffs; //实时记录物品的buff数据（针对防御塔道具，附魔系统）
 
     [Header("物品旋转相关")]
     [HideInInspector] public int currentRotation; //当前旋转度数
@@ -65,17 +66,17 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
             //检测是否在背包中
             if (GridManager.Instance.IsInsideGrid(Input.mousePosition, "Bag") && grid.gridName != "Bag")
             {
-                grid = GridManager.Instance.GetBagByName("Bag");
+                grid = GridManager.Instance.GetGridByName("Bag");
             }
             //检测是否在储物箱中
             if (GridManager.Instance.IsInsideGrid(Input.mousePosition, "StorageBox") && grid.gridName != "StorageBox")
             {
-                grid = GridManager.Instance.GetBagByName("StorageBox");
+                grid = GridManager.Instance.GetGridByName("StorageBox");
             }
             //检测是否在锻造炉中
             if (GridManager.Instance.IsInsideGrid(Input.mousePosition, "ForgeGrid") && grid.gridName != "ForgeGrid")
             {
-                grid = GridManager.Instance.GetBagByName("ForgeGrid");
+                grid = GridManager.Instance.GetGridByName("ForgeGrid");
             }
         }
     }
@@ -90,6 +91,10 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         this.data = data;
 
         nowAttributes = data.GetItemAttributes(); //记录属性
+        nowItemBuffs = data.GetItemBuffTypes(); //记录物品buff
+
+        //初始化物品成长速度
+        growSpeed = AttributeManager.Instance.GetItemGrowSpeed(data.itemName);
 
         isUpdateInfo = true;
         isDrag = false;
@@ -141,7 +146,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         if (ItemManager.Instance.dragTarget == null)
         {
             GetConnectItems(true);
-            UIManager.Instance.GetPanel<BagPanel>()?.ShowItemInfo(data,nowAttributes);
+            UIManager.Instance.GetPanel<BagPanel>()?.ShowItemInfo(this);
         }
     }
 
@@ -169,6 +174,9 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
         UpdatePreview(); //更新预览
         ShowItemFrame(); //显示边框
+
+        //取消格子的协程
+        grid.StopAllCoroutines();
     }
 
     private void Process(PointerEventData eventData)

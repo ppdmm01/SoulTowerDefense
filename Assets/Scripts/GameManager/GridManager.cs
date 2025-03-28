@@ -1,9 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.Android;
-using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class GridManager : SingletonMono<GridManager>
 {
@@ -30,7 +29,7 @@ public class GridManager : SingletonMono<GridManager>
     }
 
     [HideInInspector] public Transform itemsTrans; //放置物品的父对象
-    public Dictionary<string, BaseGrid> gridDic; //通过字典（背包可能有多个，比如一个背包，一个储物箱）
+    public Dictionary<string, BaseGrid> gridDic; //通过字典存储所有网格（网格可能有多个，比如一个背包，一个储物箱）
     private GameObject itemPrefab;
 
     //检测鼠标点是否在指定网格里
@@ -66,49 +65,64 @@ public class GridManager : SingletonMono<GridManager>
     }
 
     //获取背包
-    public BaseGrid GetBagByName(string bagName)
+    public BaseGrid GetGridByName(string bagName)
     {
         return gridDic[bagName];
     }
 
     //朝指定背包添加指定名称物品
-    public void AddItem(string itemName, BaseGrid grid)
+    public void AddItem(string itemName, BaseGrid grid,int num = 1, List<BuffType> buffs = null)
     {
-        //GameObject itemObj = Instantiate(Resources.Load<GameObject>("Items/"+name));
-        //创建物体
-        GameObject itemObj = Instantiate(itemPrefab);
-        itemObj.transform.SetParent(itemsTrans, false);
-        //添加并初始化Item脚本
-        Item item = itemObj.AddComponent<Item>();
-        ItemSO data = ItemManager.Instance.GetItemDataByName(itemName);
-        item.Init(data, grid);
-        //背包满了
-        if (!grid.TryAutoPlaceItem(item))
+        for (int i=0;i<num; i++)
         {
-            //删除多余的物品
-            item.DeleteMe();
-            //提示
-            UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
+            //创建物体
+            GameObject itemObj = Instantiate(itemPrefab);
+            itemObj.transform.SetParent(itemsTrans, false);
+            //添加并初始化Item脚本
+            Item item = itemObj.AddComponent<Item>();
+            ItemSO data = ItemManager.Instance.GetItemDataByName(itemName);
+            item.Init(data, grid);
+            //添加标记（附魔）
+            if (buffs != null)
+                foreach (BuffType buff in buffs)
+                  if (buff != BuffType.None && !item.nowItemBuffs.Contains(buff))
+                     item.nowItemBuffs.Add(buff);
+            //背包满了
+            if (!grid.TryAutoPlaceItem(item))
+            {
+                //删除多余的物品
+                item.DeleteMe();
+                //提示
+                UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
+            }
         }
     }
 
     //朝指定背包添加指定Id的物品
-    public void AddItem(int id, BaseGrid grid)
+    public void AddItem(int id, BaseGrid grid,int num = 1,List<BuffType> buffs = null)
     {
-        //创建物体
-        GameObject itemObj = Instantiate(itemPrefab);
-        itemObj.transform.SetParent(itemsTrans, false);
-        //添加并初始化Item脚本
-        Item item = itemObj.AddComponent<Item>();
-        ItemSO data = ItemManager.Instance.GetItemDataById(id);
-        item.Init(data, grid);
-        //背包满了
-        if (!grid.TryAutoPlaceItem(item))
+        for (int i = 0; i < num; i++)
         {
-            //删除多余的物品
-            item.DeleteMe();
-            //提示
-            UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
+            //创建物体
+            GameObject itemObj = Instantiate(itemPrefab);
+            itemObj.transform.SetParent(itemsTrans, false);
+            //添加并初始化Item脚本
+            Item item = itemObj.AddComponent<Item>();
+            ItemSO data = ItemManager.Instance.GetItemDataById(id);
+            item.Init(data, grid);
+            //添加标记（附魔）
+            if (buffs != null)
+                foreach (BuffType buff in buffs)
+                    if (buff != BuffType.None && !item.nowItemBuffs.Contains(buff))
+                        item.nowItemBuffs.Add(buff);
+            //背包满了
+            if (!grid.TryAutoPlaceItem(item))
+            {
+                //删除多余的物品
+                item.DeleteMe();
+                //提示
+                UIManager.Instance.ShowTipInfo("空间不足，物品放置失败");
+            }
         }
     }
 
@@ -125,6 +139,7 @@ public class GridManager : SingletonMono<GridManager>
         item.growSpeed = itemData.growSpeed;
         item.nowAttributes = itemData.itemAttributes;
         item.gridPos = itemData.gridPos;
+        item.nowItemBuffs = itemData.itemBuffs;
         item.currentRotation = itemData.currentRotation;
         item.rectTransform.rotation = Quaternion.Euler(0, 0, item.currentRotation);
         //放置
@@ -169,6 +184,26 @@ public class GridManager : SingletonMono<GridManager>
     }
 
     /// <summary>
+    /// 设置物品的成长速度
+    /// </summary>
+    /// <param name="itemName"></param>
+    /// <param name="growSpeed"></param>
+    public void SetItemGrowSpeed(string itemName,int growSpeed)
+    {
+        //设置符合名字的物品成长速度
+        BaseGrid storageBox = GetGridByName("StorageBox");
+        BaseGrid bag = GetGridByName("Bag");
+        if (storageBox != null)
+            foreach (Item item in storageBox.items.Where(item => item.data.itemName == itemName).ToList())
+            {
+                item.growSpeed = growSpeed;
+            }
+        if (bag != null)
+            foreach (Item item in bag.items.Where(item => item.data.itemName == itemName).ToList())
+                item.growSpeed = growSpeed;
+    }
+
+    /// <summary>
     /// 清理指定背包的所有物品
     /// </summary>
     /// <param name="grid"></param>
@@ -183,7 +218,7 @@ public class GridManager : SingletonMono<GridManager>
     public void UpdateFightTowerInfo()
     {
         //这里先默认存在，后面可能需要判空
-        BagGrid bagGrid = GetBagByName("Bag") as BagGrid;
+        BagGrid bagGrid = GetGridByName("Bag") as BagGrid;
         if (bagGrid != null)
         {
             bagGrid.CalculateAttribute();

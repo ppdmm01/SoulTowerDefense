@@ -13,4 +13,23 @@ MonoBehaviour:
   m_Name: SynthesisManagerSO
   m_EditorClassIdentifier: 
   synthesisSOList:
+  - {fileID: 11400000, guid: 11dde842669c0e44aaf7edf3e1a06108, type: 2}
+  - {fileID: 11400000, guid: 40292722707225a46956c67bf6079a04, type: 2}
+  - {fileID: 11400000, guid: 08167989f39ed8a468f4eac113903b84, type: 2}
+  - {fileID: 11400000, guid: 9aae1e490a3b3024186b796a272e4862, type: 2}
+  - {fileID: 11400000, guid: 045734b0dc4cb084fb8eb4431b29188e, type: 2}
+  - {fileID: 11400000, guid: 6a7604f4d69157d49b97fb50e2959e7f, type: 2}
+  - {fileID: 11400000, guid: 741ef497b72ebeb42a2b0384bda4f763, type: 2}
+  - {fileID: 11400000, guid: 509ccb8ff485d604b8f8e0ed7b675045, type: 2}
+  - {fileID: 11400000, guid: f0ae12f10cf95d544b5ce3dd47f04e95, type: 2}
   - {fileID: 11400000, guid: 184436425c491b64894625bc814c9e38, type: 2}
+  - {fileID: 11400000, guid: 17adffaa4b4cd0740adafe8a855fb34e, type: 2}
+  - {fileID: 11400000, guid: bf1541b27d4c0ff4c955feeacb905600, type: 2}
+  - {fileID: 11400000, guid: 824d9ce277497e94989d372dc465f010, type: 2}
+  - {fileID: 11400000, guid: f4b52e6d4c1df454abbab3fce3fe82cb, type: 2}
+  - {fileID: 11400000, guid: 08c70f73d3a12534faef9f21e8d0009d, type: 2}
+  - {fileID: 11400000, guid: 470ef7100c8cfa04887faa7ed33afc2b, type: 2}
+  - {fileID: 11400000, guid: 42fc0286c9d33444c906cc2d4af14bf0, type: 2}
+  - {fileID: 11400000, guid: 765fec4314c5f084ab4a09d981da9250, type: 2}
+  - {fileID: 11400000, guid: 347bb9a1da813f74db9fbcc523424674, type: 2}
+  - {fileID: 11400000, guid: 91425f8e3d177fb4da80f667f932552d, type: 2}

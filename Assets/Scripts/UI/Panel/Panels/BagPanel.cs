@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ public class BagPanel : BasePanel
     public Button arrangeBtn; //排序按钮
     public Button addItemBtn; //添加物品按钮
     public Button clearItemBtn; //清空物品按钮
+    public TMP_InputField inputField; //输入按钮
 
     [Header("物品信息")]
     public GameObject ItemInfoObj;
@@ -25,11 +27,12 @@ public class BagPanel : BasePanel
 
         arrangeBtn.onClick.AddListener(() =>
         {
-            GridManager.Instance.GetBagByName(storageBox.gridName).AutoArrange();
+            GridManager.Instance.GetGridByName(storageBox.gridName).AutoArrange();
         });
         addItemBtn.onClick.AddListener(() =>
         {
-            GridManager.Instance.AddRandomItem(3, storageBox);
+            //GridManager.Instance.AddRandomItem(3, storageBox);
+            GridManager.Instance.AddItem(int.Parse(inputField.text),storageBox);
         });
         clearItemBtn.onClick.AddListener(() =>
         {
@@ -72,10 +75,10 @@ public class BagPanel : BasePanel
     /// <summary>
     /// 显示物品信息
     /// </summary>
-    public void ShowItemInfo(ItemSO data,List<ItemAttribute> nowAttributes)
+    public void ShowItemInfo(Item item)
     {
         ItemInfoObj.SetActive(true);
-        ItemInfoObj.GetComponent<ItemInfo>().SetInfo(data, nowAttributes);
+        ItemInfoObj.GetComponent<ItemInfo>().SetInfo(item);
     }
 
     /// <summary>

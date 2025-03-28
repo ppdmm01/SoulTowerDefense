@@ -43,9 +43,11 @@ public class TowerData
     public float rangeMultiplier = 1f;
     public float intervalMultiplier = 1f;
 
-    public TowerData(TowerSO towerSO)
+    public TowerData() { }
+
+    public TowerData(TowerSO towerSO,List<BuffType> itemBuffTypes)
     {
-        Init(towerSO);
+        Init(towerSO, itemBuffTypes);
     }
 
     public TowerData(TowerData other)
@@ -76,7 +78,7 @@ public class TowerData
     /// 初始化用
     /// </summary>
     /// <param name="towerSO"></param>
-    public void Init(TowerSO towerSO)
+    public void Init(TowerSO towerSO, List<BuffType> itemBuffTypes)
     {
         originData = towerSO;
         towerName = towerSO.towerName;
@@ -99,6 +101,17 @@ public class TowerData
         damageMultiplier = 1f;
         rangeMultiplier = 1f;
         intervalMultiplier = 1f;
+
+        //为防御塔添加buff
+        if(itemBuffTypes != null)
+        {
+            //判断是否有buff了
+            foreach (BuffType type in itemBuffTypes)
+            {
+                if (buffDatas.Any(buffData => buffData.buffType == type)) continue; //有了就不用加了
+                else buffDatas.Add(BuffConfigManager.Instance.GetBuffConfigData(type)); //没有就添加初始值
+            }
+        }
     }
 
     /// <summary>
@@ -121,12 +134,14 @@ public class TowerData
     public void UpdateAttribute()
     {
         damage = Mathf.RoundToInt(originData.damage * damageMultiplier);
-        range = Mathf.RoundToInt(originData.range * rangeMultiplier);
-        interval = Mathf.RoundToInt(originData.interval * intervalMultiplier);
+        range = originData.range * rangeMultiplier;
+        interval = originData.interval * intervalMultiplier;
         foreach (BuffData data in buffDatas)
         {
+            BuffData originBuffData = originData.GetBuffData(data.buffType);
             //最终伤害：配置数据 * 当前倍率
-            data.damage = Mathf.RoundToInt((originData.GetBuffData(data.buffType).damage * data.damageMultiplier));
+            if (originBuffData != null)
+                data.damage = Mathf.RoundToInt(originData.GetBuffData(data.buffType).damage * data.damageMultiplier);
         }
     }
 
@@ -135,6 +150,7 @@ public class TowerData
     /// </summary>
     public BuffData GetBuffData(BuffType type)
     {
+        if (type == BuffType.None) return null;
         if (buffDatas.Any(data => data.buffType == type))
             return buffDatas.FirstOrDefault(data => data.buffType == type);
         else

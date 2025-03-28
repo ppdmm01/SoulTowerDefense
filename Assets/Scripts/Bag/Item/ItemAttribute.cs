@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -21,7 +21,6 @@ public class ItemAttribute
         this.growType = other.growType;
         this.growTime = other.growTime;
         this.activeEffects = other.GetActiveEffects();
-        this.description = other.description;
     }
     /// <summary>
     /// 属性类型枚举
@@ -52,9 +51,6 @@ public class ItemAttribute
     [Header("属性激活效果")]
     public ItemActiveEffect[] activeEffects;
 
-    [Header("属性说明")]
-    public string description;
-
     /// <summary>
     /// 检测其他物品是否满足激活条件
     /// </summary>
@@ -63,9 +59,10 @@ public class ItemAttribute
     /// <returns>是否满足</returns>
     public bool IsMatch(Item item)
     {
+        //判断物品的名字或标签
         if (condition.conditionType == ItemActiveCondition.ConditionType.Name)
         {
-            if (item.data.itemName != condition.name) return false;
+            if (item.data.itemChineseName != condition.name) return false;
         }
         else
         {
@@ -73,7 +70,28 @@ public class ItemAttribute
                 if (!item.data.itemTags.Contains(tag)) return false;
         }
 
-        return true;
+        /*
+         * 判断是否满足buff
+         * activeEffects的buff类型分3种情况：全是None，Buff和None参杂在一起，全是Buff
+         * 对于没有Buff的道具来说，在标签或名字匹配后，只要要求里有None即可激活该效果
+         * 对于有Buff的道具来说，在标签或名字匹配后，只要要求里有None或者有匹配的Buff即可激活该效果
+         */
+        List<BuffType> buffTypeList = activeEffects.Select(effect => effect.BuffType).Distinct().ToList(); //获取效果所需buff类型
+        if (item.nowItemBuffs.Count == 0)
+        {
+            if (buffTypeList.Contains(BuffType.None))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            foreach (BuffType buffType in buffTypeList)
+            {
+                if (buffType == BuffType.None || item.nowItemBuffs.Any(b => b == buffType)) return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>
@@ -118,6 +136,7 @@ public class ItemActiveEffect
     public ItemActiveEffect(ItemActiveEffect other)
     {
         this.effectType = other.effectType;
+        this.BuffType = other.BuffType;
         this.value = other.value;
         this.growValue = other.growValue;
     }
@@ -136,15 +155,17 @@ public class ItemActiveEffect
         RangeMultiplier, //射程倍率
         IntervalMultiplier, //攻击间隔倍率
         [Header("Buff相关")]
-        BurnBuff_Duration, //灼烧时间
-        BurnBuff_Damage, //灼烧伤害
-        BurnBuff_TriggerChance, //灼烧几率
-        SlowBuff_Duration, //缓慢时间
-        SlowBuff_TriggerChance, //缓慢几率
+        Buff_Duration, //buff持续时间
+        Buff_TriggerChance, //buff触发几率
+        Buff_Damage, //buff伤害
+        Buff_WoundMultiplier, //buff受伤倍率
+        [Header("成长相关")]
+        GrowSpeed //成长速度
     }
 
 
     public EffectType effectType; //效果类型
+    public BuffType BuffType; //buff类型
     public float value; //值
     [Header("成长")]
     public float growValue; //成长值
@@ -188,5 +209,6 @@ public class ItemActiveCondition
     public DetectionPoint.PointType pointType;
     [Header("条件")]
     public string name;
+    public string chineseName;
     public ItemTag[] tags;
 }

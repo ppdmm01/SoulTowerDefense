@@ -29,7 +29,7 @@ public class CombinationPanel : BasePanel
             GameObject combinationObj = Instantiate(Resources.Load<GameObject>("UI/UIObj/CombinationInfo"));
             combinationObj.transform.SetParent(sr.content, false);
             CombinationInfo info = combinationObj.GetComponent<CombinationInfo>();
-            info.SetInfo(combination.combinationName,combination.activeAttribute.description);
+            info.SetInfo(combination.combinationName,combination.activeAttribute);
             combinationInfoList.Add(combinationObj);
         }
     }

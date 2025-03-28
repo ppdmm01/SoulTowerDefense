@@ -96,7 +96,7 @@ public class TowerManager : SingletonMono<TowerManager>
             Debug.LogError("核心不存在！");
         //初始化数据
         Core core = coreObj.GetComponent<Core>();
-        TowerData towerData = new TowerData(GetTowerSO_ByName("Core"));
+        TowerData towerData = new TowerData(GetTowerSO_ByName("Core"),null);
         core.Init(towerData);
 
         //使用
@@ -263,99 +263,90 @@ public class TowerManager : SingletonMono<TowerManager>
         return towerSODic[towerName];
     }
 
-    /// <summary>
-    /// 修改指定防御塔属性
-    /// </summary>
-    /// <param name="towerName">防御塔名字</param>
-    /// <param name="activeEffect">激活效果</param>
-    public void SetTowerDataFromName(string towerName, ItemActiveEffect[] activeEffects)
-    {
-        if (!towerDatas.ContainsKey(towerName)) 
-        {
-            Debug.Log("未找到名为"+towerName+"的防御塔");
-            return;
-        }
+    ///// <summary>
+    ///// 修改指定防御塔属性
+    ///// </summary>
+    ///// <param name="towerName">防御塔名字</param>
+    ///// <param name="activeEffect">激活效果</param>
+    //public void SetTowerDataFromName(string towerName, ItemActiveEffect[] activeEffects)
+    //{
+    //    if (!towerDatas.ContainsKey(towerName)) 
+    //    {
+    //        Debug.Log("未找到名为"+towerName+"的防御塔");
+    //        return;
+    //    }
 
-        TowerData data = towerDatas[towerName];
-        BuffData buffData;
-        foreach (ItemActiveEffect activeEffect in activeEffects)
-        {
-            switch (activeEffect.effectType)
-            {
-                case ItemActiveEffect.EffectType.Hp:
-                    data.hp += Mathf.RoundToInt(activeEffect.value);
-                    break;
-                case ItemActiveEffect.EffectType.Cost:
-                    data.cost += Mathf.RoundToInt(activeEffect.value);
-                    break;
-                case ItemActiveEffect.EffectType.Output:
-                    data.output += Mathf.RoundToInt(activeEffect.value);
-                    break;
-                case ItemActiveEffect.EffectType.Cooldown:
-                    data.cooldown += activeEffect.value;
-                    break;
-                case ItemActiveEffect.EffectType.DamageMultiplier:
-                    data.damageMultiplier += activeEffect.value;
-                    data.UpdateAttribute();
-                    break;
-                case ItemActiveEffect.EffectType.RangeMultiplier:
-                    data.rangeMultiplier += activeEffect.value;
-                    data.UpdateAttribute();
-                    break;
-                case ItemActiveEffect.EffectType.IntervalMultiplier:
-                    data.intervalMultiplier += activeEffect.value;
-                    data.UpdateAttribute();
-                    break;
-                case ItemActiveEffect.EffectType.BurnBuff_Duration:
-                    buffData = data.GetBuffData(BuffType.Burn);
-                    if (buffData != null)
-                        buffData.duration += activeEffect.value;
-                    break;
-                case ItemActiveEffect.EffectType.BurnBuff_Damage:
-                    buffData = data.GetBuffData(BuffType.Burn);
-                    if (buffData != null)
-                        buffData.damageMultiplier += activeEffect.value;
-                    data.UpdateAttribute();
-                    break;
-                case ItemActiveEffect.EffectType.BurnBuff_TriggerChance:
-                    buffData = data.GetBuffData(BuffType.Burn);
-                    if (buffData != null)
-                        buffData.triggerChance += activeEffect.value;
-                    break;
-                case ItemActiveEffect.EffectType.SlowBuff_Duration:
-                    buffData = data.GetBuffData(BuffType.Slow);
-                    if (buffData != null)
-                        buffData.duration += activeEffect.value;
-                    break;
-                case ItemActiveEffect.EffectType.SlowBuff_TriggerChance:
-                    buffData = data.GetBuffData(BuffType.Slow);
-                    if (buffData != null)
-                        buffData.triggerChance += activeEffect.value;
-                    break;
-            }
-        }
-    }
+    //    TowerData data = towerDatas[towerName];
+    //    BuffData buffData;
+    //    foreach (ItemActiveEffect activeEffect in activeEffects)
+    //    {
+    //        buffData = data.GetBuffData(activeEffect.BuffType);
+    //        switch (activeEffect.effectType)
+    //        {
+    //            case ItemActiveEffect.EffectType.Hp:
+    //                data.hp += Mathf.RoundToInt(activeEffect.value);
+    //                break;
+    //            case ItemActiveEffect.EffectType.Cost:
+    //                data.cost += Mathf.RoundToInt(activeEffect.value);
+    //                break;
+    //            case ItemActiveEffect.EffectType.Output:
+    //                data.output += Mathf.RoundToInt(activeEffect.value);
+    //                break;
+    //            case ItemActiveEffect.EffectType.Cooldown:
+    //                data.cooldown += activeEffect.value;
+    //                break;
+    //            case ItemActiveEffect.EffectType.DamageMultiplier:
+    //                data.damageMultiplier += activeEffect.value;
+    //                data.UpdateAttribute();
+    //                break;
+    //            case ItemActiveEffect.EffectType.RangeMultiplier:
+    //                data.rangeMultiplier += activeEffect.value;
+    //                data.UpdateAttribute();
+    //                break;
+    //            case ItemActiveEffect.EffectType.IntervalMultiplier:
+    //                data.intervalMultiplier += activeEffect.value;
+    //                data.UpdateAttribute();
+    //                break;
+    //            case ItemActiveEffect.EffectType.Buff_Duration:
+    //                if (buffData != null) buffData.duration += activeEffect.value;
+    //                break;
+    //            case ItemActiveEffect.EffectType.Buff_TriggerChance:
+    //                if (buffData != null) buffData.triggerChance += activeEffect.value;
+    //                data.UpdateAttribute();
+    //                break;
+    //            case ItemActiveEffect.EffectType.Buff_Damage:
+    //                if (buffData != null) buffData.damageMultiplier += activeEffect.value;
+    //                data.UpdateAttribute();
+    //                break;
+    //            case ItemActiveEffect.EffectType.Buff_WoundMultiplier:
+    //                if (buffData != null) buffData.woundMultiplier += activeEffect.value;
+    //                break;
+    //            case ItemActiveEffect.EffectType.GrowSpeed:
+    //                break;
+    //        }
+    //    }
+    //}
 
-    /// <summary>
-    /// 通过标签统一修改防御塔属性
-    /// </summary>
-    /// <param name="tags">标签</param>
-    /// <param name="activeEffects">激活效果</param>
-    public void SetTowerDataFromTag(ItemTag[] tags,ItemActiveEffect[] activeEffects)
-    {
-        bool flag = true; //标记是否满足标签条件
-        foreach (TowerData data in towerDatas.Values)
-        {
-            flag = true;
-            //只有所有标签满足并且检测点类型对应才行
-            foreach (ItemTag tag in tags)
-                if (!data.itemTags.Contains(tag)) 
-                    flag = false;
+    ///// <summary>
+    ///// 通过标签统一修改防御塔属性
+    ///// </summary>
+    ///// <param name="tags">标签</param>
+    ///// <param name="activeEffects">激活效果</param>
+    //public void SetTowerDataFromTag(ItemTag[] tags,ItemActiveEffect[] activeEffects)
+    //{
+    //    bool flag = true; //标记是否满足标签条件
+    //    foreach (TowerData data in towerDatas.Values)
+    //    {
+    //        flag = true;
+    //        //只有所有标签满足并且检测点类型对应才行
+    //        foreach (ItemTag tag in tags)
+    //            if (!data.itemTags.Contains(tag)) 
+    //                flag = false;
 
-            if (flag)
-                SetTowerDataFromName(data.towerName, activeEffects);
-        }
-    }
+    //        if (flag)
+    //            SetTowerDataFromName(data.towerName, activeEffects);
+    //    }
+    //}
 
     /// <summary>
     /// 记录老数据

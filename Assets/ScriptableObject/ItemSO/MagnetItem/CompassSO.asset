@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
+  m_Name: CompassSO
+  m_EditorClassIdentifier: 
+  id: 18
+  itemName: Compass
+  itemChineseName: "\u53F8\u5357"
+  price: 60
+  description: 
+  slotColorType: 0
+  shape:
+    shapeMatrix: 01010000010100000000000000000000
+    allowRotation: 1
+  detectionPoints:
+  - pos: {x: 2, y: 0}
+    pointType: 0
+  - pos: {x: 2, y: 1}
+    pointType: 0
+  buffTypes: 
+  itemAttributes:
+  - attributeType: 1
+    condition:
+      conditionType: 0
+      pointType: 0
+      name: 
+      tags: 06000000
+    isGrow: 0
+    growType: 0
+    growTime: 0
+    activeEffects:
+    - effectType: 5
+      BuffType: 0
+      value: 0.15
+      growValue: 0
+  - attributeType: 1
+    condition:
+      conditionType: 0
+      pointType: 0
+      name: 
+      tags: 06000000
+    isGrow: 0
+    growType: 0
+    growTime: 0
+    activeEffects:
+    - effectType: 8
+      BuffType: 4
+      value: 0.1
+      growValue: 0
+  icon: {fileID: -1294874873, guid: d9d012dcbaf98854a973fb39c7774735, type: 3}
+  itemTags: 04000000

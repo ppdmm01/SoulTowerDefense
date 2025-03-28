@@ -182,15 +182,15 @@ public class PreFightPanel : BasePanel
         switch (data.buffType)
         {
             case BuffType.Burn:
-                info = $"攻击时<color=red>{data.triggerChance}%</color>几率附带<color=red>灼烧</color>：" +
+                info = $"攻击时<color=red>{Mathf.RoundToInt(data.triggerChance * 100)}%</color>几率附带<color=red>灼烧</color>：" +
                     $"每秒造成<color=red>{data.damage}</color>点伤害，持续<color=red>{data.duration}s</color>。";
                 break;
             case BuffType.Slow:
-                info = $"攻击时<color=red>{data.triggerChance}%</color>几率附带<color=red>缓慢</color>：" +
-                    $"敌人速度变为<color=red>50%</color>,持续<color=red>{data.duration}s</color>。";
+                info = $"攻击时<color=red>{Mathf.RoundToInt(data.triggerChance*100)}%</color>几率附带<color=red>缓慢</color>：" +
+                    $"令敌人减速,持续<color=red>{data.duration}s</color>。";
                 break;
             case BuffType.Stun:
-                info = $"攻击时<color=red>{data.triggerChance}%</color>几率附带<color=red>眩晕</color>：" +
+                info = $"攻击时<color=red>{Mathf.RoundToInt(data.triggerChance * 100)}%</color>几率附带<color=red>眩晕</color>：" +
                     $"敌人停住不动，持续<color=red>{data.duration}s</color>。";
                 break;
         }

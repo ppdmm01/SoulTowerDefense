@@ -5,9 +5,11 @@ using UnityEngine;
 
 public enum BuffType
 {
+    None, //无Buff
     Burn, //灼烧
     Slow, //减速
     Stun, //眩晕
+    Mark, //标记
 }
 
 /// <summary>
@@ -16,7 +18,7 @@ public enum BuffType
 [Serializable]
 public class BuffData
 {
-    [Header("buff施加者设置(%)")]
+    [Header("buff施加者触发几率")]
     public float triggerChance; //buff触发几率（每次攻击有多大几率会触发）
 
     [Header("基础设置")]

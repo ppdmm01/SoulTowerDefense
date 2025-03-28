@@ -28,7 +28,7 @@ MonoBehaviour:
   cooldown: 0
   buffDatas:
   - triggerChance: 20
-    buffType: 0
+    buffType: 1
     buffName: "\u707C\u70E7"
     isTriggerOverTime: 1
     isStack: 0

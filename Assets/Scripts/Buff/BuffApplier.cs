@@ -20,7 +20,7 @@ public class BuffApplier
     {
         foreach (BuffData data in buffDatas)
         {
-            float randomNum = Random.Range(0f, 100f);
+            float randomNum = Random.Range(0f, 1f);
             if (randomNum <= data.triggerChance)
             {
                 ApplyBuff(target,data);

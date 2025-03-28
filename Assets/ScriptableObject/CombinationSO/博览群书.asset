@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b69d9de411d7641a33567c0d90e7ac, type: 3}
+  m_Name: "\u535A\u89C8\u7FA4\u4E66"
+  m_EditorClassIdentifier: 
+  posType: 0
+  combinationName: "\u535A\u89C8\u7FA4\u4E66"
+  description: 
+  activeAttribute:
+    attributeType: 0
+    condition:
+      conditionType: 0
+      pointType: 0
+      name: 
+      tags: 06000000
+    isGrow: 0
+    growType: 0
+    growTime: 0
+    activeEffects:
+    - effectType: 5
+      BuffType: 0
+      value: 0.3
+      growValue: 0
+    - effectType: 6
+      BuffType: 0
+      value: -0.1
+      growValue: 0
+    - effectType: 4
+      BuffType: 0
+      value: 0.2
+      growValue: 0
+  combinationType: 0
+  tag: 5
+  itemNum: 3
+  items: []
+  item1: {fileID: 0}
+  item2: {fileID: 0}

@@ -24,6 +24,8 @@ public class ItemSO : ScriptableObject
     public ItemShape shape; // 物品占格形状  
     [Header("检测点")]
     public List<DetectionPoint> detectionPoints; //检测点
+    [Header("物品带有的buff（针对防御塔道具）")]
+    public List<BuffType> buffTypes;
     [Header("物品属性")]
     public List<ItemAttribute> itemAttributes; //物品属性
     public Sprite icon; //图片
@@ -38,6 +40,24 @@ public class ItemSO : ScriptableObject
         for (int i = 0; i < itemAttributes.Count; i++)
             list.Add(new ItemAttribute(itemAttributes[i]));
         return list;
+    }
+
+    public List<BuffType> GetItemBuffTypes()
+    {
+        List<BuffType> list = new List<BuffType>();
+        for (int i = 0; i < buffTypes.Count; i++)
+            list.Add(buffTypes[i]);
+        return list;
+    }
+
+    //物品是否满足标签
+    public bool isContainTags(List<ItemTag> tags)
+    {
+        foreach (ItemTag tag in tags)
+        {
+            if (!itemTags.Contains(tag)) return false;
+        }
+        return true;
     }
 }
 

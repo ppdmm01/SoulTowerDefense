@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class CombinationManager : Singleton<CombinationManager>
 {
@@ -10,6 +11,8 @@ public class CombinationManager : Singleton<CombinationManager>
 
     private List<CombinationSO> oldCombinations; //上一个组合
     private List<CombinationSO> nowCombinations; //当前有的组合
+
+    private Dictionary<CombinationSO, List<Item>> combinationItemDir; //获取激活的组合对应的物品
 
     private CombinationManager()
     {
@@ -21,10 +24,12 @@ public class CombinationManager : Singleton<CombinationManager>
         }
         nowCombinations = new List<CombinationSO>();
         oldCombinations = nowCombinations;
+        combinationItemDir = new Dictionary<CombinationSO, List<Item>>();
     }
 
     public List<CombinationSO> CheckAllCombination(BaseGrid grid)
     {
+        combinationItemDir.Clear();
         List<CombinationSO> activeCombinations = new List<CombinationSO>();
         foreach (CombinationSO combination in data.combinationList)
         {
@@ -47,13 +52,38 @@ public class CombinationManager : Singleton<CombinationManager>
         /*
          * 物品的相对位置目前以物品中心点来判断（目前没有特别奇怪的形状）
          */
-        switch (combination.type)
+        switch (combination.posType)
         {
             case CombinationSO.CombinationPosType.Any:
-                foreach (ItemSO requireItem in combination.items)
+                if (combination.combinationType == CombinationSO.ItemCombinationType.Tag)
                 {
-                    if (!grid.items.Any(item => item.data == requireItem))
+                    //找到匹配标签的所有物品
+                    List<Item> list = grid.items.Where(item => item.data.itemTags.Any(tag => tag == combination.tag)).ToList();
+                    if (list.Count < combination.itemNum)
+                    {
                         return false; //不满足组合数量要求
+                    }
+                    else
+                    {
+                        //记录激活的组合的物品
+                        if (!combinationItemDir.ContainsKey(combination))
+                            combinationItemDir.Add(combination, list.GetRange(0, combination.itemNum));
+                    }
+                }
+                else if (combination.combinationType == CombinationSO.ItemCombinationType.Data)
+                {
+                    List<Item> list = new List<Item>();
+                    foreach (ItemSO requireItem in combination.items)
+                    {
+                        //注：可能会出现一种情况：需要的物品里有多个同样类型的，目前都是获取第一个，会重复，如果遇到这种情况，要重新修改逻辑。
+                        if (!grid.items.Any(item => item.data == requireItem))
+                            return false; //不满足组合对应物品要求
+                        else
+                            list.Add(grid.items.FirstOrDefault(item => item.data == requireItem)); //记录符合要求的物品
+                    }
+                    //记录激活的组合的物品
+                    if (!combinationItemDir.ContainsKey(combination))
+                        combinationItemDir.Add(combination, list);
                 }
                 return true;
             case CombinationSO.CombinationPosType.UpAndDown:
@@ -65,10 +95,17 @@ public class CombinationManager : Singleton<CombinationManager>
                 foreach (Item upitem in upItems)
                 {
                     List<Item> aroundItems = upitem.GetAroundItems();
+                    //周围包含指定物品 并且 该物品在upitem的下方，则满足条件
                     if (aroundItems.Any(item => item.data == combination.item2 
                         && item.transform.position.y < upitem.transform.position.y))
                     {
-                        return true; //周围包含指定物品 并且 该物品在upitem的下方
+                        //获取下方物品
+                        Item downItem = aroundItems.FirstOrDefault(item => item.data == combination.item2
+                                        && item.transform.position.y < upitem.transform.position.y);
+                        //记录激活的组合的物品
+                        if (!combinationItemDir.ContainsKey(combination))
+                            combinationItemDir.Add(combination, new List<Item>() { upitem, downItem });
+                        return true;
                     }
                 }
                 return false;
@@ -81,10 +118,17 @@ public class CombinationManager : Singleton<CombinationManager>
                 foreach (Item leftItem in leftItems)
                 {
                     List<Item> aroundItems = leftItem.GetAroundItems();
+                    //周围包含指定物品 并且 该物品在leftItem的右方
                     if (aroundItems.Any(item => item.data == combination.item2
                         && item.transform.position.x > leftItem.transform.position.x))
                     {
-                        return true; //周围包含指定物品 并且 该物品在leftItem的右方
+                        //获取右方物品
+                        Item rightItem = aroundItems.FirstOrDefault(item => item.data == combination.item2
+                                        && item.transform.position.x > leftItem.transform.position.x);
+                        //记录激活的组合的物品
+                        if (!combinationItemDir.ContainsKey(combination))
+                            combinationItemDir.Add(combination, new List<Item>() { leftItem, rightItem });
+                        return true;
                     }
                 }
                 return false;
@@ -98,6 +142,11 @@ public class CombinationManager : Singleton<CombinationManager>
                     List<Item> aroundItems = item.GetAroundItems();
                     if (aroundItems.Any(item => item.data == combination.item2))
                     {
+                        //获取周围物品
+                        Item aroundItem = aroundItems.FirstOrDefault(item => item.data == combination.item2);
+                        //记录激活的组合的物品
+                        if (!combinationItemDir.ContainsKey(combination))
+                            combinationItemDir.Add(combination, new List<Item>() { item, aroundItem });
                         return true; //周围包含指定物品
                     }
                 }
@@ -115,5 +164,12 @@ public class CombinationManager : Singleton<CombinationManager>
     public List<CombinationSO> GetNowCombinations()
     {
         return nowCombinations;
+    }
+
+    public List<Item> GetItemsByCombination(CombinationSO combination)
+    {
+        if (combinationItemDir.ContainsKey(combination))
+            return combinationItemDir[combination];
+        return null;
     }
 }

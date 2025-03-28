@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -50,6 +51,14 @@ public class ItemManager : Singleton<ItemManager>
         return itemDataDic2[itemId];
     }
 
+    public ItemSO GetItemDataByTags(List<ItemTag> tags)
+    {
+        //获取满足标签的物品
+        List<ItemSO> item = data.itemSOList.Where(data => data.isContainTags(tags)).ToList();
+        //随机一个返回
+        return item.Random();
+    }
+
     //得到指定数量的随机物品数据
     public List<ItemSO> GetRandomItemData(int num)
     {
@@ -62,5 +71,16 @@ public class ItemManager : Singleton<ItemManager>
             list.Add(data.itemSOList[randomNum]);
         }
         return list;
+    }
+
+    //比较两个标签是否相等
+    public bool CompareItemTag(List<ItemTag> a, List<ItemTag> b)
+    {
+        if (a.Count != b.Count) return false; //数量不匹配
+        a.Sort(); b.Sort();
+        for (int i = 0;i < a.Count;i++)
+            if (a[i] != b[i]) return false; //标签不匹配
+
+        return true;
     }
 }

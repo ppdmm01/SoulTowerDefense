@@ -20,24 +20,24 @@ public class ForgeManager : Singleton<ForgeManager>
         }
     }
 
-    /// <summary>
-    /// 获取合成配方数据
-    /// </summary>
-    /// <param name="id">配方id</param>
-    /// <returns></returns>
-    public SynthesisSO GetSynthesisData(int id)
-    {
-        return data.synthesisSOList.Find(synthesis => synthesis.id == id);
-    }
+    ///// <summary>
+    ///// 获取合成配方数据
+    ///// </summary>
+    ///// <param name="id">配方id</param>
+    ///// <returns></returns>
+    //public SynthesisSO GetSynthesisData(int id)
+    //{
+    //    return data.synthesisSOList.Find(synthesis => synthesis.id == id);
+    //}
 
-    /// <summary>
-    /// 获取合成配方数据
-    /// </summary>
-    /// <param name="productName">成品名称</param>
-    /// <returns></returns>
-    public SynthesisSO GetSynthesisData(string productName)
-    {
-        return data.synthesisSOList.Find(synthesis => synthesis.product.itemName == productName);
-    }
+    ///// <summary>
+    ///// 获取合成配方数据
+    ///// </summary>
+    ///// <param name="productName">成品名称</param>
+    ///// <returns></returns>
+    //public SynthesisSO GetSynthesisData(string productName)
+    //{
+    //    return data.synthesisSOList.Find(synthesis => synthesis.product.itemName == productName);
+    //}
 
 }
