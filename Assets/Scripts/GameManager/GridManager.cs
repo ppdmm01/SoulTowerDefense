@@ -16,16 +16,7 @@ public class GridManager : SingletonMono<GridManager>
         itemPrefab = Resources.Load<GameObject>("Bag/ItemPrefab");
 
         //背包内所有物品触发成长
-        EventCenter.Instance.AddEventListener(EventType.EnterMapNode,() =>
-        {
-            GridData bagData = GameDataManager.Instance.GetGridData("Bag");
-            if (bagData != null)
-            {
-                bagData.AllItemGrow();
-                GameDataManager.Instance.UpdateGridData(bagData);
-                GameDataManager.Instance.SaveGridData();
-            }
-        });
+        EventCenter.Instance.AddEventListener(EventType.EnterMapNode, AllItemGrow);
     }
 
     [HideInInspector] public Transform itemsTrans; //放置物品的父对象
@@ -65,9 +56,11 @@ public class GridManager : SingletonMono<GridManager>
     }
 
     //获取背包
-    public BaseGrid GetGridByName(string bagName)
+    public BaseGrid GetGridByName(string gridName)
     {
-        return gridDic[bagName];
+        if (gridDic.ContainsKey(gridName))
+            return gridDic[gridName];
+        return null;
     }
 
     //朝指定背包添加指定名称物品
@@ -223,5 +216,22 @@ public class GridManager : SingletonMono<GridManager>
         {
             bagGrid.CalculateAttribute();
         }
+    }
+
+    //让物品成长
+    public void AllItemGrow()
+    {
+        GridData bagData = GameDataManager.Instance.GetGridData("Bag");
+        if (bagData != null)
+        {
+            bagData.AllItemGrow();
+            GameDataManager.Instance.UpdateGridData(bagData);
+            GameDataManager.Instance.SaveGridData();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        EventCenter.Instance.RemoveEventListener(EventType.EnterMapNode, AllItemGrow);
     }
 }

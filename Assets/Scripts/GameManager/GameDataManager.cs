@@ -35,6 +35,8 @@ public class GameDataManager : Singleton<GameDataManager>
     /// <returns></returns>
     public GridData GetGridData(string gridName)
     {
+        if (gridDatas == null) return null;
+
         if (gridDatas.Any(data => data != null && data.gridName == gridName))
         {
             return gridDatas.FirstOrDefault(data => data != null && data.gridName == gridName);
@@ -47,6 +49,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
     public void UpdateGridData(GridData newData)
     {
+        if (gridDatas == null) gridDatas = new List<GridData>();
         //如果已存在，则更新
         int index = gridDatas.FindIndex(data => data != null && data.gridName == newData.gridName);
         if (index != -1)
@@ -61,6 +64,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
     public void RemoveGridData(string gridName)
     {
+        if (gridDatas == null) gridDatas = new List<GridData>();
         if (gridDatas.Any(data => data != null && data.gridName == gridName))
             gridDatas.RemoveAll(data => data != null && data.gridName == gridName);
     }
@@ -74,5 +78,14 @@ public class GameDataManager : Singleton<GameDataManager>
     {
         this.mapData = map;
         JsonMgr.Instance.SaveData(mapData, "MapData");
+    }
+
+    //清空数据
+    public void ClearGameData()
+    {
+        mapData = null;
+        gridDatas = null;
+        SaveGridData();
+        SaveMapData(null);
     }
 }

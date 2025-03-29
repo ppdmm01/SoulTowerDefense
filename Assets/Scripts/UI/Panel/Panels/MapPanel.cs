@@ -14,5 +14,7 @@ public class MapPanel : BasePanel
             panel.ShowBtn(TopColumnBtnType.Book,TopColumnBtnType.Crystal,TopColumnBtnType.Menu);
         }
         panel.SetTitle("µØÍ¼");
+
+        PlayerStateManager.Instance.ChangeState(PlayerState.Map);
     }
 }

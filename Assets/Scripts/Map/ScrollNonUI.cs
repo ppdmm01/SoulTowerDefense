@@ -42,6 +42,7 @@ public class ScrollNonUI : MonoBehaviour
 
     private void Update()
     {
+        if (PlayerStateManager.Instance.CurrentState != PlayerState.Map) return;
         if (!dragging) return;
 
         //让对象跟随鼠标移动

@@ -8,4 +8,5 @@ using UnityEngine;
 public enum EventType
 {
     EnterMapNode, //进入地图节点
+    SelectItem, //选择物品
 }

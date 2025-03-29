@@ -6,28 +6,29 @@ using UnityEngine.UI;
 
 public class BeginPanel : BasePanel
 {
-    public Button playBtn;
+    public Button continueBtn; //继续游戏
+    public Button playBtn; //新游戏
     public Button settingBtn;
     public Button aboutBtn;
     public Button quitBtn;
 
     public override void Init()
     {
+        //是否显示继续游戏按钮
+        if (GameDataManager.Instance.mapData != null && GameDataManager.Instance.mapData.nodes != null) 
+            continueBtn.gameObject.SetActive(true);
+        else 
+            continueBtn.gameObject.SetActive(false);
+
+        continueBtn.onClick.AddListener(PlayGame);
+
         playBtn.onClick.AddListener(() =>
         {
-            canvasGroup.blocksRaycasts = false;
-            //开始游戏
-            UIManager.Instance.LoadScene("MapScene", 
-            () =>
-            {
-                Debug.Log("关闭开始面板");
-                UIManager.Instance.HidePanel<BeginPanel>();
-            },
-            () =>
-            {
-                Debug.Log("显示地图面板");
-                UIManager.Instance.ShowPanel<MapPanel>();
-            });
+            if (continueBtn.gameObject.activeSelf)
+                UIManager.Instance.ShowPanel<TipPanel>().SetInfo("是否开始新游戏？", PlayNewGame);
+            else
+                //开始游戏
+                PlayNewGame();
         });
 
         settingBtn.onClick.AddListener(() =>
@@ -47,6 +48,35 @@ public class BeginPanel : BasePanel
             //退出游戏
             Application.Quit();
             //TODO：提示是否确定退出
+        });
+    }
+
+    //开始游戏
+    private void PlayGame()
+    {
+        canvasGroup.blocksRaycasts = false;
+        UIManager.Instance.LoadScene("MapScene",
+        () =>
+        {
+            UIManager.Instance.HidePanel<BeginPanel>(); //关闭开始界面
+        },
+        () =>
+        {
+            UIManager.Instance.ShowPanel<MapPanel>(); //显示地图界面
+        });
+    }
+
+    private void PlayNewGame()
+    {
+        canvasGroup.blocksRaycasts = false;
+        //清理所有数据
+        GameDataManager.Instance.ClearGameData();
+        UIManager.Instance.LoadScene("MapScene",
+        () =>
+        {
+            UIManager.Instance.HidePanel<BeginPanel>(); //关闭开始界面
+            UIManager.Instance.ShowPanel<MapPanel>();
+            UIManager.Instance.ShowPanel<SelectPanel>().UpdateTowerItem(); //开始新游戏，选择一个防御塔
         });
     }
 }

@@ -12,6 +12,8 @@ public class LevelSO : ScriptableObject
     [Header("波次")]
     public List<WaveInfo> waveInfos; //存储波次
 
+    public List<RewardData> rewardDatas; //胜利奖励
+
     /// <summary>
     /// 获取波次信息
     /// </summary>

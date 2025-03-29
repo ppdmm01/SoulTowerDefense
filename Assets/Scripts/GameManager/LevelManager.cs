@@ -11,6 +11,7 @@ public class LevelManager : SingletonMono<LevelManager>
 {
     public bool isInLevel; //是否在关卡中
     public LevelManagerSO data; //存储各个关卡
+    private LevelSO currentLevel; //当前关卡
 
     private int nowWave; //当前波次
     private int totalWave; //总波次
@@ -53,6 +54,7 @@ public class LevelManager : SingletonMono<LevelManager>
             GameResManager.Instance.AddSoulNum(100);
             //记录波次信息
             LevelSO levelData = data.levelSOList[levelNum - 1]; //获取关卡信息
+            currentLevel = levelData;
             nowWave = 0;
             totalWave = levelData.waveInfos.Count;
             //初始化面板信息
@@ -100,8 +102,12 @@ public class LevelManager : SingletonMono<LevelManager>
             ++nowWave;
         }
         nowWave = totalWave;
+        yield return new WaitForSeconds(1f);
         //显示胜利面板
-        UIManager.Instance.ShowGameOverPanel(true);
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Fight)
+            WinFight(); //战斗胜利
+        else if (PlayerStateManager.Instance.CurrentState == PlayerState.Boss)
+            WinGame(); //游戏胜利
     }
 
     /// <summary>
@@ -165,5 +171,35 @@ public class LevelManager : SingletonMono<LevelManager>
         timer = 0;
         nowEnemyNum = 0;
         StopAllCoroutines();
+    }
+
+    public void WinFight()
+    {
+        //清理战场
+        isInLevel = false;
+        Clear();
+        TowerManager.Instance.Clear();
+        EnemyManager.Instance.Clear();
+        PoolMgr.Instance.ClearPool(); //切换场景前先清除对象池
+
+        //显示面板
+        UIManager.Instance.LoadScene("MapScene", () =>
+        {
+            UIManager.Instance.HidePanel<TowerPanel>();
+            RewardPanel rewardPanel = UIManager.Instance.ShowPanel<RewardPanel>();
+            rewardPanel.SetReward(currentLevel.rewardDatas);
+        });
+    }
+
+    public void WinGame()
+    {
+        UIManager.Instance.HidePanel<TowerPanel>();
+        UIManager.Instance.ShowPanel<GameOverPanel>();
+    }
+
+    public void LoseGame()
+    {
+        UIManager.Instance.HidePanel<TowerPanel>();
+        UIManager.Instance.ShowPanel<GameOverPanel>();
     }
 }

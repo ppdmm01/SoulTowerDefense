@@ -57,3 +57,8 @@ MonoBehaviour:
       spawnNum: 5
       frequency: 4
       delayTime: 10
+  rewardDatas:
+  - rewardType: 0
+    value: 20
+  - rewardType: 1
+    value: 0

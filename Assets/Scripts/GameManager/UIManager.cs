@@ -207,39 +207,39 @@ public class UIManager : Singleton<UIManager>
         UIObjList.Clear();
     }
 
-    /// <summary>
-    /// 游戏结束，显示面板
-    /// </summary>
-    /// <param name="isWin"></param>
-    public void ShowGameOverPanel(bool isWin)
-    {
-        //清理战场
-        LevelManager.Instance.isInLevel = false;
-        LevelManager.Instance.Clear();
-        TowerManager.Instance.Clear();
-        EnemyManager.Instance.Clear();
-        PoolMgr.Instance.ClearPool(); //切换场景前先清除对象池
+    ///// <summary>
+    ///// 游戏结束，显示面板
+    ///// </summary>
+    ///// <param name="isWin"></param>
+    //public void ShowGameOverPanel(bool isWin)
+    //{
+    //    //清理战场
+    //    LevelManager.Instance.isInLevel = false;
+    //    LevelManager.Instance.Clear();
+    //    TowerManager.Instance.Clear();
+    //    EnemyManager.Instance.Clear();
+    //    PoolMgr.Instance.ClearPool(); //切换场景前先清除对象池
 
-        //显示面板
-        TipPanel panel = ShowPanel<TipPanel>();
-        string info = isWin ? "胜利！" : "失败！";
-        panel.SetInfo(info, () =>
-        {
-            //返回地图面板（TODO:跳到胜利选奖励面板）
-            LoadScene("MapScene", () =>
-            {
-                HidePanel<TowerPanel>();
-                ShowPanel<MapPanel>();
-            });
-        });
-        panel.AddCancelBtnCallBack(() =>
-        {
-            //返回地图面板，和确认按钮逻辑一样
-            LoadScene("MapScene", () =>
-            {
-                HidePanel<TowerPanel>();
-                ShowPanel<MapPanel>();
-            });
-        });
-    }
+    //    //显示面板
+    //    TipPanel panel = ShowPanel<TipPanel>();
+    //    string info = isWin ? "胜利！" : "失败！";
+    //    panel.SetInfo(info, () =>
+    //    {
+    //        //返回地图面板（TODO:跳到胜利选奖励面板）
+    //        LoadScene("MapScene", () =>
+    //        {
+    //            HidePanel<TowerPanel>();
+    //            ShowPanel<RewardPanel>(); //显示奖励
+    //        });
+    //    });
+    //    panel.AddCancelBtnCallBack(() =>
+    //    {
+    //        //返回地图面板，和确认按钮逻辑一样
+    //        LoadScene("MapScene", () =>
+    //        {
+    //            HidePanel<TowerPanel>();
+    //            ShowPanel<MapPanel>();
+    //        });
+    //    });
+    //}
 }

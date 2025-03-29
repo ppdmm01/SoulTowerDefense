@@ -40,6 +40,7 @@ public class MapManager : MonoBehaviour
 
     public void GenerateNewMap()
     {
+        Debug.Log("生成新地图");   
         Map map = MapGenerator.GetMap(config); //根据配置表生成随机的地图
         CurrentMap = map;
         view.ShowMap(map); //显示地图
@@ -53,6 +54,8 @@ public class MapManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        if (PlayerStateManager.Instance.CurrentState != PlayerState.Map && CurrentMap.path.Count >= 1)
+            CurrentMap.path.RemoveAt(CurrentMap.path.Count-1); //如果在中途退出，则恢复到上一个节点
         SaveMap();
     }
 

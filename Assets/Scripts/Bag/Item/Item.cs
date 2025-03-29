@@ -147,6 +147,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         {
             GetConnectItems(true);
             UIManager.Instance.GetPanel<BagPanel>()?.ShowItemInfo(this);
+            UIManager.Instance.GetPanel<SelectPanel>()?.ShowItemInfo(this);
         }
     }
 
@@ -155,6 +156,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
     {
         HideAllStar();
         UIManager.Instance.GetPanel<BagPanel>()?.HideItemInfo();
+        UIManager.Instance.GetPanel<SelectPanel>()?.HideItemInfo();
     }
 
     private void Begin(PointerEventData eventData)
@@ -208,6 +210,11 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
             {
                 //购买物品
                 BuyThisItem();
+            }
+            if (oldGrid.gridName == "SelectGrid")
+            {
+                //选择物品
+                EventCenter.Instance.EventTrigger(EventType.SelectItem);
             }
             oldGrid = grid; //更新老背包
             oldGridPos = gridPos; //更新老位置坐标

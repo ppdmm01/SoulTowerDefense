@@ -76,34 +76,40 @@ public class MapPlayerTracker : MonoBehaviour
         switch (mapNode.Node.nodeType)
         {
             case NodeType.MinorEnemy:
-                UIManager.Instance.HidePanel<MapPanel>();
-                UIManager.Instance.ShowPanel<PreFightPanel>();
+                //UIManager.Instance.HidePanel<MapPanel>();
+                //UIManager.Instance.ShowPanel<PreFightPanel>();
+                //PlayerStateManager.Instance.ChangeState(PlayerState.Fight);
                 Instance.Locked = false;
                 break;
             case NodeType.Boss:
                 UIManager.Instance.HidePanel<MapPanel>();
                 UIManager.Instance.ShowPanel<PreFightPanel>();
+                PlayerStateManager.Instance.ChangeState(PlayerState.Boss);
                 Instance.Locked = false;
                 break;
             case NodeType.Crystal:
                 Instance.Locked = false;
-                UIManager.Instance.HidePanel<MapPanel>();
-                UIManager.Instance.ShowPanel<StorePanel>();
+                //UIManager.Instance.HidePanel<MapPanel>();
+                //UIManager.Instance.ShowPanel<SelectPanel>().UpdateItem();
+               // PlayerStateManager.Instance.ChangeState(PlayerState.Select);
                 break;
             case NodeType.Store:
-                UIManager.Instance.HidePanel<MapPanel>();
-                UIManager.Instance.ShowPanel<StorePanel>();
+                //UIManager.Instance.HidePanel<MapPanel>();
+                //UIManager.Instance.ShowPanel<StorePanel>();
+                //PlayerStateManager.Instance.ChangeState(PlayerState.Store);
                 Instance.Locked = false;
                 break;
             case NodeType.Forge:
-                UIManager.Instance.HidePanel<MapPanel>();
-                UIManager.Instance.ShowPanel<ForgePanel>();
+                //UIManager.Instance.HidePanel<MapPanel>();
+                //UIManager.Instance.ShowPanel<ForgePanel>();
+                //PlayerStateManager.Instance.ChangeState(PlayerState.Forge);
                 Instance.Locked = false;
                 break;
             case NodeType.Treasure:
                 Instance.Locked = false;
-                UIManager.Instance.HidePanel<MapPanel>();
-                UIManager.Instance.ShowPanel<StorePanel>();
+                //UIManager.Instance.HidePanel<MapPanel>();
+                //UIManager.Instance.ShowPanel<SelectPanel>().UpdateItem();
+                //PlayerStateManager.Instance.ChangeState(PlayerState.Select);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

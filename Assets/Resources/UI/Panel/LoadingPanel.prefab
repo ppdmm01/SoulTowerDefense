@@ -450,7 +450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alphaSpeed: 5
   isOnTop: 1
-  duration: 1
+  duration: 0.6
 --- !u!1 &4664555331822894716
 GameObject:
   m_ObjectHideFlags: 0

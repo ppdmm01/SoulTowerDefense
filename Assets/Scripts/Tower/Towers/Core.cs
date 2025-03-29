@@ -33,6 +33,6 @@ public class Core : BaseTower
         base.Dead();
         TowerManager.Instance.core = null;
         if (LevelManager.Instance.isInLevel == true) //游戏还未结束时，游戏失败，已经结束了就跳过该步骤
-            UIManager.Instance.ShowGameOverPanel(false);
+            LevelManager.Instance.LoseGame();
     }
 }
