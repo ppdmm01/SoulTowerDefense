@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -11,13 +12,15 @@ public class LevelManager : SingletonMono<LevelManager>
 {
     public bool isInLevel; //是否在关卡中
     public LevelManagerSO data; //存储各个关卡
-    private LevelSO currentLevel; //当前关卡
+    private LevelSO currentLevelData; //当前关卡
 
     private int nowWave; //当前波次
     private int totalWave; //总波次
     private float timer = 0; //计时器
 
     private int nowEnemyNum; //当前敌人数量
+
+    private bool isQuit; //是否退出
 
     protected override void Awake()
     {
@@ -28,12 +31,13 @@ public class LevelManager : SingletonMono<LevelManager>
             if (data == null)
                 Debug.LogError("加载LevelManagerSO失败！");
         }
+        isQuit = false;
     }
 
     /// <summary>
     /// 开启一个关卡
     /// </summary>
-    public void StartLevel(string sceneName,int levelNum = 1)
+    public void StartLevel(string sceneName,int mapLayer)
     {
         UIManager.Instance.LoadScene(sceneName, () =>
         {
@@ -53,8 +57,8 @@ public class LevelManager : SingletonMono<LevelManager>
             GameResManager.Instance.ResetSoulNum(); //先归零
             GameResManager.Instance.AddSoulNum(100);
             //记录波次信息
-            LevelSO levelData = data.levelSOList[levelNum - 1]; //获取关卡信息
-            currentLevel = levelData;
+            LevelSO levelData = GetLevelData(mapLayer); //获取关卡信息
+            currentLevelData = levelData;
             nowWave = 0;
             totalWave = levelData.waveInfos.Count;
             //初始化面板信息
@@ -66,6 +70,18 @@ public class LevelManager : SingletonMono<LevelManager>
             StopAllCoroutines();
             StartCoroutine(SpawnLevelEnemies(levelData));
         }); 
+    }
+
+    //获取一个关卡
+    public LevelSO GetLevelData(int mapLayer)
+    {
+        Debug.Log("LAYER:" + mapLayer);
+        int level = (mapLayer+1) / 2; //获取关卡等级
+        Debug.Log("Level:" + level);
+        List<LevelSO> list = data.levelSOList.Where(levelData => levelData.level == level).ToList(); //获取同等级的关卡
+        LevelSO levelData = list.Random();
+        Debug.Log("level:" + levelData.level + " name:" + levelData.name);
+        return levelData;
     }
 
     /// <summary>
@@ -149,7 +165,7 @@ public class LevelManager : SingletonMono<LevelManager>
     private void AddEnemyNum(int num)
     {
         nowEnemyNum += num;
-        UIManager.Instance.GetPanel<TowerPanel>().UpdateEnemyNum(nowEnemyNum);
+        UIManager.Instance.GetPanel<TowerPanel>()?.UpdateEnemyNum(nowEnemyNum);
     }
 
     /// <summary>
@@ -158,7 +174,7 @@ public class LevelManager : SingletonMono<LevelManager>
     public void SubEnemyNum()
     {
         --nowEnemyNum;
-        UIManager.Instance.GetPanel<TowerPanel>().UpdateEnemyNum(nowEnemyNum);
+        UIManager.Instance.GetPanel<TowerPanel>()?.UpdateEnemyNum(nowEnemyNum);
     }
 
     /// <summary>
@@ -170,36 +186,80 @@ public class LevelManager : SingletonMono<LevelManager>
         nowWave = totalWave = 0;
         timer = 0;
         nowEnemyNum = 0;
+        TowerManager.Instance.Clear();
+        EnemyManager.Instance.Clear();
+        PoolMgr.Instance.ClearPool(); //切换场景前先清除对象池
         StopAllCoroutines();
     }
 
     public void WinFight()
     {
         //清理战场
-        isInLevel = false;
         Clear();
-        TowerManager.Instance.Clear();
-        EnemyManager.Instance.Clear();
-        PoolMgr.Instance.ClearPool(); //切换场景前先清除对象池
 
         //显示面板
         UIManager.Instance.LoadScene("MapScene", () =>
         {
             UIManager.Instance.HidePanel<TowerPanel>();
             RewardPanel rewardPanel = UIManager.Instance.ShowPanel<RewardPanel>();
-            rewardPanel.SetReward(currentLevel.rewardDatas);
+            rewardPanel.SetReward("战利品",currentLevelData.rewardDatas);
         });
     }
 
     public void WinGame()
     {
         UIManager.Instance.HidePanel<TowerPanel>();
-        UIManager.Instance.ShowPanel<GameOverPanel>();
+        GameOverPanel panel = UIManager.Instance.ShowPanel<GameOverPanel>();
+        panel.SetTitle(true);
+        GameResManager.Instance.ResetCoreHp();
+        GameResManager.Instance.ResetTaixuNum();
     }
 
     public void LoseGame()
     {
+        //if (PlayerStateManager.Instance.CurrentState == PlayerState.Menu) return; //如果是菜单退出导致的，则忽视
         UIManager.Instance.HidePanel<TowerPanel>();
-        UIManager.Instance.ShowPanel<GameOverPanel>();
+        GameOverPanel panel = UIManager.Instance.ShowPanel<GameOverPanel>();
+        panel.SetTitle(false);
+        GameResManager.Instance.ResetCoreHp();
+        GameResManager.Instance.ResetTaixuNum();
+    }
+
+    private void OnApplicationQuit()
+    {
+        //战斗途中退出，则退回到上一个节点
+        isQuit = true;
+        if (isInLevel)
+        {
+            if (PlayerStateManager.Instance.CurrentState == PlayerState.Fight ||
+            PlayerStateManager.Instance.CurrentState == PlayerState.Boss ||
+            PlayerStateManager.Instance.CurrentState == PlayerState.Menu)
+            {
+                Debug.Log("退回节点");
+                Map currentMap = GameDataManager.Instance.mapData;
+                if (currentMap != null && currentMap.path.Count >= 1)
+                    currentMap.path.RemoveAt(currentMap.path.Count - 1);
+                GameDataManager.Instance.SaveMapData(currentMap);
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log(isInLevel);
+        //战斗途中退出，则退回到上一个节点（直接退出游戏时会触发OnApplicationQuit和该方法，所以避免重复触发）
+        if (isInLevel && !isQuit)
+        {
+            if (PlayerStateManager.Instance.CurrentState == PlayerState.Fight ||
+            PlayerStateManager.Instance.CurrentState == PlayerState.Boss ||
+            PlayerStateManager.Instance.CurrentState == PlayerState.Menu)
+            {
+                Debug.Log("退回节点");
+                Map currentMap = GameDataManager.Instance.mapData;
+                if (currentMap != null && currentMap.path.Count >= 1)
+                    currentMap.path.RemoveAt(currentMap.path.Count - 1);
+                GameDataManager.Instance.SaveMapData(currentMap);
+            }
+        }
     }
 }

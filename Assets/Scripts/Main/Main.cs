@@ -16,8 +16,6 @@ public class Main : MonoBehaviour
     {
         Texture2D cursorTexture = Resources.Load<Texture2D>("Cursor/cursor");
         Cursor.SetCursor(cursorTexture, hotspot, cursorMode);
-        //UIManager.Instance.ShowPanel<BookPanel>();
-        //UIManager.Instance.ShowPanel<BagPanel>();
         UIManager.Instance.ShowPanel<BeginPanel>();
         DOTween.Init();
         AudioManager.Instance.PlayBGM("BGM/Music1");
@@ -25,17 +23,17 @@ public class Main : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (LevelManager.Instance.isInLevel)
-            {
-                LevelManager.Instance.SkipThisWave();
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    if (LevelManager.Instance.isInLevel)
+        //    {
+        //        LevelManager.Instance.SkipThisWave();
+        //    }
+        //}
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit(); //退出游戏
-        }
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    Application.Quit(); //退出游戏
+        //}
     }
 }

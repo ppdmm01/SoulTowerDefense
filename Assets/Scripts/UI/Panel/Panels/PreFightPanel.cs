@@ -177,21 +177,45 @@ public class PreFightPanel : BasePanel
     /// </summary>
     public void UpdateBuffInfo(BuffData data)
     {
-        buffTitle.text = data.buffName;
+        switch (data.buffType)
+        {
+            case BuffType.None:
+                buffTitle.text = "";
+                break;
+            case BuffType.Burn:
+                buffTitle.text = "<sprite=1>";
+                break;
+            case BuffType.Slow:
+                buffTitle.text = "<sprite=4>";
+                break;
+            case BuffType.Stun:
+                buffTitle.text = "<sprite=6>";
+                break;
+            case BuffType.Mark:
+                buffTitle.text = "<sprite=9>";
+                break;
+            default:
+                buffTitle.text = "";
+                break;
+        }
         string info = "";
         switch (data.buffType)
         {
             case BuffType.Burn:
-                info = $"攻击时<color=red>{Mathf.RoundToInt(data.triggerChance * 100)}%</color>几率附带<color=red>灼烧</color>：" +
+                info = $"攻击时<color=red>{Mathf.RoundToInt(data.triggerChance * 100)}%</color>几率附带<sprite=1>：" +
                     $"每秒造成<color=red>{data.damage}</color>点伤害，持续<color=red>{data.duration}s</color>。";
                 break;
             case BuffType.Slow:
-                info = $"攻击时<color=red>{Mathf.RoundToInt(data.triggerChance*100)}%</color>几率附带<color=red>缓慢</color>：" +
+                info = $"攻击时<color=red>{Mathf.RoundToInt(data.triggerChance*100)}%</color>几率附带<sprite=4>：" +
                     $"令敌人减速,持续<color=red>{data.duration}s</color>。";
                 break;
             case BuffType.Stun:
-                info = $"攻击时<color=red>{Mathf.RoundToInt(data.triggerChance * 100)}%</color>几率附带<color=red>眩晕</color>：" +
+                info = $"攻击时<color=red>{Mathf.RoundToInt(data.triggerChance * 100)}%</color>几率附带<sprite=6>：" +
                     $"敌人停住不动，持续<color=red>{data.duration}s</color>。";
+                break;
+            case BuffType.Mark:
+                info = $"攻击时<color=red>{Mathf.RoundToInt(data.triggerChance * 100)}%</color>几率附带<sprite=9>：" +
+                    $"期间敌人受到伤害增加{Mathf.RoundToInt((data.woundMultiplier-1)*100)}%，持续<color=red>{data.duration}s</color>。";
                 break;
         }
         buffTxt.text = info;
@@ -228,6 +252,7 @@ public class PreFightPanel : BasePanel
     /// </summary>
     public void StartFight()
     {
-        LevelManager.Instance.StartLevel("LevelScene1");
+        Map mapData = MapView.Instance.mapManager.CurrentMap;
+        LevelManager.Instance.StartLevel("LevelScene1",mapData.path.Count);
     }
 }

@@ -30,6 +30,12 @@ public class ForgeGrid : BaseGrid
             return;
         }
 
+        if (GameResManager.Instance.GetTaixuNum() < nowSynthesis.price)
+        {
+            UIManager.Instance.ShowTipInfo("太虚不足，合成失败");
+            return;
+        }
+
         //合成成功
         foreach (SynthesisItem productItem in nowSynthesis.product)
         {
@@ -65,6 +71,8 @@ public class ForgeGrid : BaseGrid
         }
         //销毁炉子内的所有物品
         GridManager.Instance.ClearAllItem(this, false);
+        //减去消耗的太虚
+        GameResManager.Instance.AddTaixuNum(-nowSynthesis.price);
         ForgePanel panel = UIManager.Instance.GetPanel<ForgePanel>(); //获取位置
         EffectManager.Instance.PlayUIEffect("SmokeUIEffect", panel.forgeTrans.position, 1.3f);
         AudioManager.Instance.PlaySound("SoundEffect/Forge");
@@ -132,18 +140,18 @@ public class ForgeGrid : BaseGrid
     {
         base.PlaceItem(item, gridPos, isUpdateCombination);
         if (CheckAllRepices())
-            UIManager.Instance.GetPanel<ForgePanel>()?.UpdateTip(true);
+            UIManager.Instance.GetPanel<ForgePanel>()?.UpdateTip(true,nowSynthesis.price);
         else
-            UIManager.Instance.GetPanel<ForgePanel>()?.UpdateTip(false);
+            UIManager.Instance.GetPanel<ForgePanel>()?.UpdateTip(false,0);
     }
 
     public override void RemoveItem(Item item, Vector2Int gridPos)
     {
         base.RemoveItem(item, gridPos);
         if (CheckAllRepices())
-            UIManager.Instance.GetPanel<ForgePanel>()?.UpdateTip(true);
+            UIManager.Instance.GetPanel<ForgePanel>()?.UpdateTip(true, nowSynthesis.price);
         else
-            UIManager.Instance.GetPanel<ForgePanel>()?.UpdateTip(false);
+            UIManager.Instance.GetPanel<ForgePanel>()?.UpdateTip(false, 0);
     }
 
     //获取指定id的物品数量

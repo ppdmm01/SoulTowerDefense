@@ -75,7 +75,6 @@ public class SelectPanel : BasePanel
         base.HideMe(action);
         //保存网格数据
         GridData storageBoxData = new GridData(storageBox.gridName, storageBox.items);
-        Debug.Log("保存数据："+storageBoxData);
         GameDataManager.Instance.UpdateGridData(storageBoxData);
         GameDataManager.Instance.SaveGridData();
         //清空物品
@@ -123,6 +122,7 @@ public class SelectPanel : BasePanel
         GridManager.Instance.ClearAllItem(selectGrid1, false);
         GridManager.Instance.ClearAllItem(selectGrid2, false);
         GridManager.Instance.ClearAllItem(selectGrid3, false);
+        skipBtn.gameObject.SetActive(false);
         StartCoroutine(closePanelRoutine());
     }
 

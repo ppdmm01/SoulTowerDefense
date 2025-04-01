@@ -27,7 +27,7 @@ RectTransform:
   m_GameObject: {fileID: 2477387184676714906}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.43610445, y: 0.43610445, z: 0.43610445}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5787381760694119551}
@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5691297796010406685
 CanvasRenderer:
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1077874472, guid: b4d847b8154d85d4c8091a77067d0ca9, type: 3}
+  m_Sprite: {fileID: 235269165, guid: 48e0f0cb06c035a4fb5ed1e5d3aec6b1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -102,7 +102,7 @@ RectTransform:
   m_GameObject: {fileID: 2960783123899121588}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.43610445, y: 0.43610445, z: 0.43610445}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5787381760694119551}
@@ -110,7 +110,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8935518635814916400
 CanvasRenderer:
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1906185705, guid: b4d847b8154d85d4c8091a77067d0ca9, type: 3}
+  m_Sprite: {fileID: -1887983530, guid: 48e0f0cb06c035a4fb5ed1e5d3aec6b1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -187,7 +187,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6499149083115365485
 CanvasRenderer:
@@ -213,7 +213,9 @@ MonoBehaviour:
   starHide: {fileID: 2477387184676714906}
   showIcon: {fileID: 7304669065645539542}
   hideIcon: {fileID: 2223003943876769446}
-  starShowIcon: {fileID: 1180353999, guid: 898948b5862157548bdcc03344cde63f, type: 3}
-  starHideIcon: {fileID: -1182490181, guid: 898948b5862157548bdcc03344cde63f, type: 3}
-  fireShowIcon: {fileID: 2142465780, guid: 898948b5862157548bdcc03344cde63f, type: 3}
-  fireHideIcon: {fileID: -99035784, guid: 898948b5862157548bdcc03344cde63f, type: 3}
+  starShowIcon: {fileID: -1887983530, guid: 48e0f0cb06c035a4fb5ed1e5d3aec6b1, type: 3}
+  starHideIcon: {fileID: 235269165, guid: 48e0f0cb06c035a4fb5ed1e5d3aec6b1, type: 3}
+  fireShowIcon: {fileID: -205374294, guid: 48e0f0cb06c035a4fb5ed1e5d3aec6b1, type: 3}
+  fireHideIcon: {fileID: -1316509175, guid: 48e0f0cb06c035a4fb5ed1e5d3aec6b1, type: 3}
+  type: 0
+  isActive: 0

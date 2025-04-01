@@ -76,9 +76,9 @@ public class MapPlayerTracker : MonoBehaviour
         switch (mapNode.Node.nodeType)
         {
             case NodeType.MinorEnemy:
-                //UIManager.Instance.HidePanel<MapPanel>();
-                //UIManager.Instance.ShowPanel<PreFightPanel>();
-                //PlayerStateManager.Instance.ChangeState(PlayerState.Fight);
+                UIManager.Instance.HidePanel<MapPanel>();
+                UIManager.Instance.ShowPanel<PreFightPanel>();
+                PlayerStateManager.Instance.ChangeState(PlayerState.Fight);
                 Instance.Locked = false;
                 break;
             case NodeType.Boss:
@@ -89,27 +89,36 @@ public class MapPlayerTracker : MonoBehaviour
                 break;
             case NodeType.Crystal:
                 Instance.Locked = false;
-                //UIManager.Instance.HidePanel<MapPanel>();
-                //UIManager.Instance.ShowPanel<SelectPanel>().UpdateItem();
-               // PlayerStateManager.Instance.ChangeState(PlayerState.Select);
+                //Œ¥ µœ÷
                 break;
             case NodeType.Store:
-                //UIManager.Instance.HidePanel<MapPanel>();
-                //UIManager.Instance.ShowPanel<StorePanel>();
-                //PlayerStateManager.Instance.ChangeState(PlayerState.Store);
+                UIManager.Instance.HidePanel<MapPanel>();
+                UIManager.Instance.ShowPanel<StorePanel>();
+                PlayerStateManager.Instance.ChangeState(PlayerState.Store);
                 Instance.Locked = false;
                 break;
             case NodeType.Forge:
-                //UIManager.Instance.HidePanel<MapPanel>();
-                //UIManager.Instance.ShowPanel<ForgePanel>();
-                //PlayerStateManager.Instance.ChangeState(PlayerState.Forge);
+                UIManager.Instance.HidePanel<MapPanel>();
+                UIManager.Instance.ShowPanel<ForgePanel>();
+                PlayerStateManager.Instance.ChangeState(PlayerState.Forge);
                 Instance.Locked = false;
                 break;
             case NodeType.Treasure:
                 Instance.Locked = false;
-                //UIManager.Instance.HidePanel<MapPanel>();
-                //UIManager.Instance.ShowPanel<SelectPanel>().UpdateItem();
-                //PlayerStateManager.Instance.ChangeState(PlayerState.Select);
+                UIManager.Instance.HidePanel<MapPanel>();
+                UIManager.Instance.ShowPanel<RewardPanel>().SetReward("±¶œ‰£°", new List<RewardData>()
+                {
+                    new RewardData(RewardType.Taixu,40,60),
+                    new RewardData(RewardType.Item,0,0),
+                    new RewardData(RewardType.Item,0,0)
+                });
+                PlayerStateManager.Instance.ChangeState(PlayerState.Select);
+                break;
+            case NodeType.Event:
+                UIManager.Instance.HidePanel<MapPanel>();
+                UIManager.Instance.ShowPanel<EventPanel>();
+                PlayerStateManager.Instance.ChangeState(PlayerState.Event);
+                Instance.Locked = false;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

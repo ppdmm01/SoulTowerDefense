@@ -203,6 +203,16 @@ public class TowerManager : SingletonMono<TowerManager>
             target.isUsed = true;
             isPlacing = false;
             target.HideRange();
+            //推开周围的敌人
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(target.transform.position, 1.5f);
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.CompareTag("Enemy"))
+                {
+                    Vector2 forceDir = (collider.transform.position - target.transform.position).normalized;
+                    collider.GetComponent<Rigidbody2D>().AddForce(forceDir*0.01f);
+                }
+            }
             //记录
             gameTowerList.Add(target);
             target = null;
@@ -262,91 +272,6 @@ public class TowerManager : SingletonMono<TowerManager>
         if (!towerSODic.ContainsKey(towerName)) return null;
         return towerSODic[towerName];
     }
-
-    ///// <summary>
-    ///// 修改指定防御塔属性
-    ///// </summary>
-    ///// <param name="towerName">防御塔名字</param>
-    ///// <param name="activeEffect">激活效果</param>
-    //public void SetTowerDataFromName(string towerName, ItemActiveEffect[] activeEffects)
-    //{
-    //    if (!towerDatas.ContainsKey(towerName)) 
-    //    {
-    //        Debug.Log("未找到名为"+towerName+"的防御塔");
-    //        return;
-    //    }
-
-    //    TowerData data = towerDatas[towerName];
-    //    BuffData buffData;
-    //    foreach (ItemActiveEffect activeEffect in activeEffects)
-    //    {
-    //        buffData = data.GetBuffData(activeEffect.BuffType);
-    //        switch (activeEffect.effectType)
-    //        {
-    //            case ItemActiveEffect.EffectType.Hp:
-    //                data.hp += Mathf.RoundToInt(activeEffect.value);
-    //                break;
-    //            case ItemActiveEffect.EffectType.Cost:
-    //                data.cost += Mathf.RoundToInt(activeEffect.value);
-    //                break;
-    //            case ItemActiveEffect.EffectType.Output:
-    //                data.output += Mathf.RoundToInt(activeEffect.value);
-    //                break;
-    //            case ItemActiveEffect.EffectType.Cooldown:
-    //                data.cooldown += activeEffect.value;
-    //                break;
-    //            case ItemActiveEffect.EffectType.DamageMultiplier:
-    //                data.damageMultiplier += activeEffect.value;
-    //                data.UpdateAttribute();
-    //                break;
-    //            case ItemActiveEffect.EffectType.RangeMultiplier:
-    //                data.rangeMultiplier += activeEffect.value;
-    //                data.UpdateAttribute();
-    //                break;
-    //            case ItemActiveEffect.EffectType.IntervalMultiplier:
-    //                data.intervalMultiplier += activeEffect.value;
-    //                data.UpdateAttribute();
-    //                break;
-    //            case ItemActiveEffect.EffectType.Buff_Duration:
-    //                if (buffData != null) buffData.duration += activeEffect.value;
-    //                break;
-    //            case ItemActiveEffect.EffectType.Buff_TriggerChance:
-    //                if (buffData != null) buffData.triggerChance += activeEffect.value;
-    //                data.UpdateAttribute();
-    //                break;
-    //            case ItemActiveEffect.EffectType.Buff_Damage:
-    //                if (buffData != null) buffData.damageMultiplier += activeEffect.value;
-    //                data.UpdateAttribute();
-    //                break;
-    //            case ItemActiveEffect.EffectType.Buff_WoundMultiplier:
-    //                if (buffData != null) buffData.woundMultiplier += activeEffect.value;
-    //                break;
-    //            case ItemActiveEffect.EffectType.GrowSpeed:
-    //                break;
-    //        }
-    //    }
-    //}
-
-    ///// <summary>
-    ///// 通过标签统一修改防御塔属性
-    ///// </summary>
-    ///// <param name="tags">标签</param>
-    ///// <param name="activeEffects">激活效果</param>
-    //public void SetTowerDataFromTag(ItemTag[] tags,ItemActiveEffect[] activeEffects)
-    //{
-    //    bool flag = true; //标记是否满足标签条件
-    //    foreach (TowerData data in towerDatas.Values)
-    //    {
-    //        flag = true;
-    //        //只有所有标签满足并且检测点类型对应才行
-    //        foreach (ItemTag tag in tags)
-    //            if (!data.itemTags.Contains(tag)) 
-    //                flag = false;
-
-    //        if (flag)
-    //            SetTowerDataFromName(data.towerName, activeEffects);
-    //    }
-    //}
 
     /// <summary>
     /// 记录老数据

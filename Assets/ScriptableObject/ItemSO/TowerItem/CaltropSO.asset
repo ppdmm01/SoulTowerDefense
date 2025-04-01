@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
   m_Name: CaltropSO
   m_EditorClassIdentifier: 
-  id: 24
+  id: 25
   itemName: Caltrop
   itemChineseName: "\u94C1\u84BA\u85DC"
   price: 35
-  description: "\u94C1\u84BA\u85DC"
-  slotColorType: 1
+  description: "\u5BF9\u7ECF\u8FC7\u7684\u654C\u4EBA\u9020\u6210\u4F24\u5BB3"
+  slotColorType: 2
   shape:
     shapeMatrix: 01010000010100000000000000000000
     allowRotation: 1

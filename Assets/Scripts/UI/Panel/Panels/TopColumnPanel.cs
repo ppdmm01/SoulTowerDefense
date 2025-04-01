@@ -37,34 +37,55 @@ public class TopColumnPanel : BasePanel
     public HealthBar hpBar; //血条
     public TextMeshProUGUI hpText;
 
-    private float startTime; //计时器（到时放进管理器里）
+    private float startTime; //计时器
+    private float nowTime; //当前时间
+
+    public TextMeshProUGUI test;
 
     public override void Init()
     {
-        startTime = Time.time;
+        startTime = GameResManager.Instance.GetStartTime();
+        nowTime = GameResManager.Instance.GetNowTime();
         bookBtn.onClick.AddListener(() =>
         {
             //打开图鉴面板
+            UIManager.Instance.ShowPanel<BookPanel>();
         });
         mapBtn.onClick.AddListener(() =>
         {
             //打开地图面板
+            UIManager.Instance.HideAllPanel();
+            UIManager.Instance.ShowPanel<MapPanel>();
+            //节点退回一格       
+            Map currentMap = GameDataManager.Instance.mapData;
+            Debug.Log(currentMap.path.Count);
+            if (currentMap.path.Count >= 1)
+                currentMap.path.RemoveAt(currentMap.path.Count - 1);
+            Debug.Log(currentMap.path.Count);
+            GameDataManager.Instance.SaveMapData(currentMap);
+            //更新显示
+            MapView.Instance.mapManager.CurrentMap.path = currentMap.path;
+            MapView.Instance.SetAttainableNodes();
         });
         menuBtn.onClick.AddListener(() =>
         {
             //打开菜单面板
+            UIManager.Instance.ShowPanel<MenuPanel>();
         });
         crystalBtn.onClick.AddListener(() =>
         {
             //打开元气水晶面板
+            UIManager.Instance.ShowPanel<CrystalPanel>();
         });
-
+        UpdateHp(GameResManager.Instance.gameRes.coreNowHp, GameResManager.Instance.gameRes.coreMaxHp);
+        UpdateTaixuResNum(GameResManager.Instance.GetTaixuNum());
     }
 
     protected override void Update()
     {
         base.Update();
         UpdateTime();
+        //test.text = PlayerStateManager.Instance.CurrentState.ToString();
     }
 
     //更新血条
@@ -148,7 +169,8 @@ public class TopColumnPanel : BasePanel
     //更新时间
     private void UpdateTime()
     {
-        int duration = (int)(Time.time - startTime);
+        nowTime += Time.deltaTime;
+        int duration = (int)(nowTime - startTime);
         int hour = duration / 3600;
         int min = duration / 60;
         int sec = duration % 60;
@@ -175,5 +197,17 @@ public class TopColumnPanel : BasePanel
         else txt += sec;
 
         timerText.text = txt;
+    }
+
+    private void OnDestroy()
+    {
+        //保存时间数据
+        GameResManager.Instance.SaveTime(nowTime,startTime);
+    }
+
+    private void OnApplicationQuit()
+    {
+        //保存时间数据
+        GameResManager.Instance.SaveTime(nowTime, startTime);
     }
 }

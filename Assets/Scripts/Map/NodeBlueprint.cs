@@ -13,6 +13,7 @@ public enum NodeType
     Store, //商铺
     Forge, //锻造坊
     Treasure, //宝箱
+    Event, //事件
 }
 
 /// <summary>

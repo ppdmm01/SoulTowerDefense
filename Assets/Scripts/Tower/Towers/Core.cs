@@ -8,16 +8,21 @@ using UnityEngine.SocialPlatforms.Impl;
 /// </summary>
 public class Core : BaseTower
 {
-    public override void Wound(int dmg)
+    public override void Init(TowerData data)
+    {
+        base.Init(data);
+        TopColumnPanel panel = UIManager.Instance.GetPanel<TopColumnPanel>();
+        nowHp = GameResManager.Instance.gameRes.coreNowHp;
+        panel.UpdateHp(nowHp,data.hp);
+    }
+    public override void Wound(int dmg,Enemy enemy = null)
     {
         nowHp -= dmg;
-        //特效
-        //GameObject effObj = PoolMgr.Instance.GetObj("Effect/ExplosionEffect");
-        //effObj.transform.position = transform.position;
         if (nowHp < 0) nowHp = 0;
         //更新血条
         ShowHpBar();
         UpdateHpBar();
+        GameResManager.Instance.UpdateCoreHp(nowHp);
         UIManager.Instance.GetPanel<TopColumnPanel>()?.UpdateHp(nowHp,data.hp);
         //死亡
         if (nowHp <= 0)

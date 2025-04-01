@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 20}
+  m_AnchoredPosition: {x: -0.3198, y: 0}
+  m_SizeDelta: {x: 149.3603, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8943244463544239955
 CanvasRenderer:
@@ -58,19 +58,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 41778457, guid: 5b35df8ad3869c6429e5320e56e77bab, type: 3}
+  m_Sprite: {fileID: -2058867074, guid: 421971c0b10551142888795104e28ee4, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.412
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -109,8 +109,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 20}
+  m_AnchoredPosition: {x: -0.8818, y: 0.3919}
+  m_SizeDelta: {x: 148.2363, y: 17.6483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2690030791083397618
 CanvasRenderer:
@@ -140,12 +140,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1660898162, guid: 5b35df8ad3869c6429e5320e56e77bab, type: 3}
+  m_Sprite: {fileID: 518396264, guid: 421971c0b10551142888795104e28ee4, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.732
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -211,14 +211,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1660898162, guid: 5b35df8ad3869c6429e5320e56e77bab, type: 3}
+  m_Sprite: {fileID: -1661893391, guid: 421971c0b10551142888795104e28ee4, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1

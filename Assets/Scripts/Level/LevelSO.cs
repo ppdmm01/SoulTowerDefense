@@ -9,6 +9,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "LevelSO", menuName = "ScriptableObject/LevelSO")]
 public class LevelSO : ScriptableObject
 {
+    [Header("等级")]
+    public int level; //该关卡的等级
     [Header("波次")]
     public List<WaveInfo> waveInfos; //存储波次
 

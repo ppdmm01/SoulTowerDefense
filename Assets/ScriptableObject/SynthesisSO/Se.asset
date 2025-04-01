@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f9689ba3c5148443acbcfc81f663f25, type: 3}
   m_Name: Se
   m_EditorClassIdentifier: 
-  id: 1
   recipe:
   - type: 0
     tags: 
     data: {fileID: 11400000, guid: 9d91a29a424afa94cbf25833ec5ea6f8, type: 2}
-    num: 3
+    num: 2
   - type: 0
     tags: 00000000
     data: {fileID: 11400000, guid: 1d3f8662a451bde43bf760c6dccd59f1, type: 2}
@@ -27,3 +26,6 @@ MonoBehaviour:
     tags: 
     data: {fileID: 11400000, guid: c294d20225b3974458f7cfd7d1ece703, type: 2}
     num: 1
+  isRandomTagItem: 1
+  buff: 0
+  price: 30

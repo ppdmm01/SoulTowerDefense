@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,8 +22,13 @@ public class ForgePanel : BasePanel
     [Header("合成提示")]
     public GameObject OkObj; //可以合成
     public GameObject NoObj; //不可以合成
+
+    public TextMeshProUGUI priceTxt; //合成价格
+
     public override void Init()
     {
+        priceTxt.gameObject.SetActive(false);
+
         quitBtn.onClick.AddListener(() =>
         {
             if (forgeGrid.items.Count > 0 || productGrid.items.Count > 0)
@@ -39,7 +45,7 @@ public class ForgePanel : BasePanel
             forgeGrid.Synthesis(); //合成物品
         });
 
-        UpdateTip(false);
+        UpdateTip(false,0);
 
         //显示背包面板
         BagPanel bagPanel = UIManager.Instance.ShowPanel<BagPanel>();
@@ -79,17 +85,20 @@ public class ForgePanel : BasePanel
     /// <summary>
     /// 更新提示
     /// </summary>
-    public void UpdateTip(bool isOk)
+    public void UpdateTip(bool isOk,int price)
     {
         if (isOk)
         {
             OkObj.SetActive(true);
             NoObj.SetActive(false);
+            priceTxt.gameObject.SetActive(true);
+            priceTxt.text = $"<sprite=8>{price.ToString()}";
         }
         else
         {
             OkObj.SetActive(false);
             NoObj.SetActive(true);
+            priceTxt.gameObject.SetActive(false);
         }
     }
 

@@ -23,3 +23,6 @@ MonoBehaviour:
     tags: 05000000
     data: {fileID: 0}
     num: 1
+  isRandomTagItem: 1
+  buff: 0
+  price: 40

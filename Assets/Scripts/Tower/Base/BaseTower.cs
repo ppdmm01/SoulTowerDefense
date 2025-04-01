@@ -59,7 +59,7 @@ public class BaseTower : MonoBehaviour
             }
 
             //转向
-            if (target != null)
+            if (target != null && launcher != null)
             {
                 Vector2 dir = target.position - transform.position;
                 float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -132,7 +132,8 @@ public class BaseTower : MonoBehaviour
         rangeObj.SetActive(false);
 
         //创建血条
-        CreateHpBar();
+        if (data.hp > 0)
+            CreateHpBar();
     }
 
     /// <summary>
@@ -151,7 +152,7 @@ public class BaseTower : MonoBehaviour
     {
         FlashSmoothly(1f, Color.yellow, () =>
         {
-            UIManager.Instance.ShowTxtPopup(data.output.ToString(), Color.white,36, transform.position);
+            UIManager.Instance.ShowTxtPopup($"<sprite=5><color=purple>{data.output}</color>", Color.white,36, transform.position);
             GameResManager.Instance.AddSoulNum(data.output);
         });
     }
@@ -233,7 +234,7 @@ public class BaseTower : MonoBehaviour
         //创建血条
         GameObject HpBarObj = UIManager.Instance.CreateUIObjByPoolMgr("UI/UIObj/HealthBar");
         HealthBar hpBar = HpBarObj.GetComponent<HealthBar>();
-        hpBar.Init(nowHp, data.hp, Color.green,true);
+        hpBar.Init(nowHp, data.hp, Color.white,true);
         this.hpBar = hpBar;
         HideHpBar();
     }
@@ -280,6 +281,7 @@ public class BaseTower : MonoBehaviour
     /// </summary>
     public void ShowRange()
     {
+        if (rangeObj == null) return;
         if (!rangeObj.activeSelf)
             rangeObj.SetActive(true);
     }
@@ -289,6 +291,7 @@ public class BaseTower : MonoBehaviour
     /// </summary>
     public void HideRange()
     {
+        if (rangeObj == null) return;
         if (rangeObj.activeSelf)
             rangeObj.SetActive(false);
     }
@@ -299,6 +302,7 @@ public class BaseTower : MonoBehaviour
     /// <param name="color"></param>
     public void SetRangeColor(Color color)
     {
+        if (rangeObj == null) return;
         SpriteRenderer renderer = rangeObj.GetComponent<SpriteRenderer>();
         if (renderer.color != color)
             renderer.color = color;
@@ -309,7 +313,7 @@ public class BaseTower : MonoBehaviour
     /// <summary>
     /// 受伤
     /// </summary>
-    public virtual void Wound(int dmg)
+    public virtual void Wound(int dmg,Enemy enemy = null)
     {
         nowHp -= dmg;
         //更新血条

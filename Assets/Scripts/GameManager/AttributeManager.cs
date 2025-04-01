@@ -32,10 +32,10 @@ public class AttributeManager : Singleton<AttributeManager>
                 switch (condition.pointType)
                 {
                     case DetectionPoint.PointType.Star:
-                        description += "ÐÇÐÇ´¥·¢µÄ";
+                        description += "<sprite=10>´¥·¢µÄ";
                         break;
                     case DetectionPoint.PointType.Fire:
-                        description += "»ðÑæ´¥·¢µÄ";
+                        description += "<sprite=7>´¥·¢µÄ";
                         break;
                 }
                 break;
@@ -80,20 +80,28 @@ public class AttributeManager : Singleton<AttributeManager>
                 case BuffType.None:
                     break;
                 case BuffType.Burn:
-                    description += $"<color={Defines.redColor}>¡¸×ÆÉÕ¡¹</color>";
-                    growStr += $"<color={Defines.redColor}>¡¸×ÆÉÕ¡¹</color>";
+                    //description += $"<color={Defines.redColor}>¡¸×ÆÉÕ¡¹</color>";
+                    description += "<sprite=1>";
+                    growStr += "<sprite=1>";
+                    //growStr += $"<color={Defines.redColor}>¡¸×ÆÉÕ¡¹</color>";
                     break;
                 case BuffType.Slow:
-                    description += $"<color={Defines.cyanColor}>¡¸»ºÂý¡¹</color>";
-                    growStr += $"<color={Defines.cyanColor}>¡¸»ºÂý¡¹</color>";
+                    //description += $"<color={Defines.cyanColor}>¡¸»ºÂý¡¹</color>";
+                    //growStr += $"<color={Defines.cyanColor}>¡¸»ºÂý¡¹</color>";
+                    description += "<sprite=4>";
+                    growStr += "<sprite=4>";
                     break;
                 case BuffType.Stun:
-                    description += $"<color={Defines.greenColor}>¡¸ÒôÕð¡¹</color>";
-                    growStr += $"<color={Defines.greenColor}>¡¸ÒôÕð¡¹</color>";
+                    //description += $"<color={Defines.greenColor}>¡¸ÒôÕð¡¹</color>";
+                    //growStr += $"<color={Defines.greenColor}>¡¸ÒôÕð¡¹</color>";
+                    description += "<sprite=6>";
+                    growStr += "<sprite=6>";
                     break;
                 case BuffType.Mark:
-                    description += $"<color={Defines.grayColor}>¡¸Ó¡¼Ç¡¹</color>";
-                    growStr += $"<color={Defines.grayColor}>¡¸Ó¡¼Ç¡¹</color>";
+                    //description += $"<color={Defines.grayColor}>¡¸Ó¡¼Ç¡¹</color>";
+                    //growStr += $"<color={Defines.grayColor}>¡¸Ó¡¼Ç¡¹</color>";
+                    description += "<sprite=9>";
+                    growStr += "<sprite=9>";
                     break;
             }
             switch (effect.effectType)

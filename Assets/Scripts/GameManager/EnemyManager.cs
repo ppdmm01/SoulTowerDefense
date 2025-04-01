@@ -121,6 +121,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     /// </summary>
     private void KillAllEnemies()
     {
+        Debug.Log(enemies.Count);
         foreach (GameObject enemyObj in enemies)
         {
             enemyObj.GetComponent<Enemy>().Dead();

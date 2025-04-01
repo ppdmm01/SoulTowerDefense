@@ -1,8 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using static UnityEngine.Rendering.DebugUI;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -113,6 +117,30 @@ public class UIManager : Singleton<UIManager>
         return null;
     }
 
+    /// <summary>
+    /// 隐藏所有面板
+    /// </summary>
+    public void HideAllPanel()
+    {
+        List<BasePanel> deletePanels = panelDic.Values.ToList();
+        List<string> panelNames = panelDic.Keys.ToList();
+        for (int i= deletePanels.Count - 1; i>=0; i--)
+        {
+            //直接移除
+            BasePanel panel = deletePanels[i];
+            if (panel is LoadingPanel) 
+                continue; //不要移除加载面板
+            panel.HideMe(() =>
+            {
+                //移除自己
+                GameObject.Destroy(panel.gameObject);
+            });
+            panelDic.Remove(panelNames[i]); //删除面板
+        }
+        deletePanels.Clear();
+        panelNames.Clear();
+    }
+
     public void LoadScene(string sceneName,UnityAction fadeInCallback = null, UnityAction completedCallback = null)
     {
         LoadingPanel panel = ShowPanel<LoadingPanel>();
@@ -155,6 +183,15 @@ public class UIManager : Singleton<UIManager>
             UIObjList.Remove(UIObj);
             PoolMgr.Instance.PushUIObj(UIObj);
         }
+    }
+
+    /// <summary>
+    /// 通过对象池摧毁某一类的所有对象
+    /// </summary>
+    /// <param name="name"></param>
+    public void DestroyAllUIObjByPoolMgr(string name)
+    {
+        PoolMgr.Instance.PushAllUIObj(name);
     }
 
     /// <summary>

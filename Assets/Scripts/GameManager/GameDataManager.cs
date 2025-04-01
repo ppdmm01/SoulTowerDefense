@@ -8,9 +8,10 @@ using UnityEngine;
 /// </summary>
 public class GameDataManager : Singleton<GameDataManager>
 {
-    public MusicData musicData;
-    public List<GridData> gridDatas;
-    public Map mapData;
+    public MusicData musicData; //音乐数据
+    public List<GridData> gridDatas; //背包物品数据
+    public Map mapData; //地图数据
+    public GameRes gameResData; //游戏资源数据
 
     private GameDataManager()
     {
@@ -18,6 +19,7 @@ public class GameDataManager : Singleton<GameDataManager>
         musicData = JsonMgr.Instance.LoadData<MusicData>("MusicData") ?? new MusicData();
         gridDatas = JsonMgr.Instance.LoadData<List<GridData>>("GridDatas") ?? new List<GridData>();
         mapData = JsonMgr.Instance.LoadData<Map>("MapData") ?? new Map();
+        gameResData = JsonMgr.Instance.LoadData<GameRes>("GameRes");
     }
 
     /// <summary>
@@ -80,11 +82,24 @@ public class GameDataManager : Singleton<GameDataManager>
         JsonMgr.Instance.SaveData(mapData, "MapData");
     }
 
+    //更新游戏资源
+    public void UpdateGameResData(GameRes res)
+    {
+        gameResData = res;
+    }
+
+    //保存游戏资源
+    public void SaveGameResData()
+    {
+        JsonMgr.Instance.SaveData(gameResData, "GameRes");
+    }
+
     //清空数据
     public void ClearGameData()
     {
         mapData = null;
         gridDatas = null;
+        gameResData = null;
         SaveGridData();
         SaveMapData(null);
     }

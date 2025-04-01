@@ -100,7 +100,7 @@ public class ItemSlot : MonoBehaviour
     private IEnumerator FlashRoutine()
     {
         slotImg.material.SetFloat("_FlashAmount", 1);
-        slotImg.material.SetColor("_FlashColor", Color.yellow);
+        slotImg.material.SetColor("_FlashColor", Color.green);
         yield return new WaitForSeconds(flashTime);
         slotImg.material.SetColor("_FlashColor", nowColor);
         slotImg.material.SetFloat("_FlashAmount", 0);

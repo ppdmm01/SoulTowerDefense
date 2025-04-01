@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2137bce18c41c05448a334d3fc4559ea, type: 3}
   m_Name: Crystal
   m_EditorClassIdentifier: 
-  icon: {fileID: -2123041178, guid: d07485b782dcab54aa497adf36f40e29, type: 3}
+  icon: {fileID: 9160751, guid: 421971c0b10551142888795104e28ee4, type: 3}
   nodeType: 2

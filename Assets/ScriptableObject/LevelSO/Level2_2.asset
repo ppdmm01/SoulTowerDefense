@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c45384361ee458146ab57dc3552794d7, type: 3}
+  m_Name: Level2_2
+  m_EditorClassIdentifier: 
+  level: 2
+  waveInfos:
+  - spawnInfos:
+    - enemyName: CowMonster
+      totalNum: 12
+      spawnNum: 1
+      frequency: 1.5
+      delayTime: 0
+  - spawnInfos:
+    - enemyName: Snail
+      totalNum: 25
+      spawnNum: 2
+      frequency: 1.5
+      delayTime: 0
+  rewardDatas:
+  - rewardType: 0
+    minValue: 21
+    maxValue: 28
+  - rewardType: 1
+    minValue: 0
+    maxValue: 0

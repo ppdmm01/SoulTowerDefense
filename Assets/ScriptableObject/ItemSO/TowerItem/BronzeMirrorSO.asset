@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
+  m_Name: BronzeMirrorSO
+  m_EditorClassIdentifier: 
+  id: 24
+  itemName: BronzeMirrorTower
+  itemChineseName: "\u94DC\u955C"
+  price: 35
+  description: "\u9AD8\u8840\u91CF\u4F46\u65E0\u6CD5\u653B\u51FB\uFF0C\u88AB\u653B\u51FB\u65F6\u4F1A\u5BF9\u654C\u4EBA\u65BD\u52A0buff"
+  slotColorType: 2
+  shape:
+    shapeMatrix: 01010000010100000000000000000000
+    allowRotation: 1
+  detectionPoints: []
+  buffTypes: 02000000
+  itemAttributes: []
+  icon: {fileID: 29799246, guid: 89aded2db29897047919c8f811a0d2ee, type: 3}
+  itemTags: 0200000006000000

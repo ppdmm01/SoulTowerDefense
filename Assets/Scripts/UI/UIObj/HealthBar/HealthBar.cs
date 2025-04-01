@@ -59,7 +59,14 @@ public class HealthBar : MonoBehaviour
     /// <param name="maxHp">×î´óÑªÁ¿</param>
     public void UpdateHp(int nowHp, int maxHp)
     {
-        hpImg.fillAmount = (float)nowHp / (float)maxHp;
+        if (maxHp <= 0)
+        {
+            hpImg.fillAmount = 0;
+        }
+        else
+        {
+            hpImg.fillAmount = (float)nowHp / (float)maxHp;
+        }
         if (updateCoroutine != null)
         {
             StopCoroutine(updateCoroutine);

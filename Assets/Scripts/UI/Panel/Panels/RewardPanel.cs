@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RewardPanel : BasePanel
 {
+    public TextMeshProUGUI title; //标题
     public Button closeBtn;
     public Transform btnContainer; //装奖励按钮的容器
 
@@ -18,8 +20,9 @@ public class RewardPanel : BasePanel
     }
 
     //设置奖励
-    public void SetReward(List<RewardData> rewards)
+    public void SetReward(string title,List<RewardData> rewards)
     {
+        this.title.text = title;
         foreach (RewardData reward in rewards)
         {
             GameObject rewardObj = Instantiate(Resources.Load<GameObject>("UI/UIObj/RewardBtn"));

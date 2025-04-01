@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c45384361ee458146ab57dc3552794d7, type: 3}
+  m_Name: Level5_1
+  m_EditorClassIdentifier: 
+  level: 5
+  waveInfos:
+  - spawnInfos:
+    - enemyName: CowMonster
+      totalNum: 10
+      spawnNum: 1
+      frequency: 1.5
+      delayTime: 0
+    - enemyName: Bat
+      totalNum: 12
+      spawnNum: 1
+      frequency: 1.5
+      delayTime: 8
+  - spawnInfos:
+    - enemyName: CowMonster
+      totalNum: 20
+      spawnNum: 1
+      frequency: 1.2
+      delayTime: 0
+    - enemyName: CowMonster
+      totalNum: 15
+      spawnNum: 3
+      frequency: 1.2
+      delayTime: 16
+  - spawnInfos:
+    - enemyName: CowMonster
+      totalNum: 50
+      spawnNum: 4
+      frequency: 1.3
+      delayTime: 0
+  rewardDatas:
+  - rewardType: 0
+    minValue: 30
+    maxValue: 40
+  - rewardType: 1
+    minValue: 0
+    maxValue: 0

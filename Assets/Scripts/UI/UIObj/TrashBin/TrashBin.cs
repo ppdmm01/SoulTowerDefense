@@ -23,8 +23,8 @@ public class TrashBin : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
             item.SetIsUpdateInfo(true);
             item.DeleteMe();
             EffectManager.Instance.PlayUIEffect("SmokeUIEffect",item.transform.position);
+            GameResManager.Instance.AddTaixuNum(item.data.price/2); //获取一半资源
         }
-        //TODO:获取资源
     }
 
     public void OnPointerEnter(PointerEventData eventData)

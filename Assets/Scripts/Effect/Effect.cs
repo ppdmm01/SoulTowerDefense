@@ -10,14 +10,16 @@ public class Effect : MonoBehaviour
 {
     public float DestroyTime = 3f;
     private UnityAction callback;
+    private Vector3 originScale; //记录初始的大小
     private void OnEnable()
     {
+        originScale = transform.localScale;
         DestroyMe(DestroyTime);
     }
 
     private void OnDisable()
     {
-        transform.localScale = Vector3.one;
+        transform.localScale = originScale; //恢复到原来的大小
         StopAllCoroutines();
         callback = null;
     }

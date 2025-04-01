@@ -16,6 +16,7 @@ public class LabelBtn : MonoBehaviour
     {
         btn.onClick.AddListener(() =>
         {
+            if (page <= 0) return;
             BookPanel panel = UIManager.Instance.GetPanel<BookPanel>();
             if (panel != null)
             {

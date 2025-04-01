@@ -27,17 +27,19 @@ public class ItemInfo : MonoBehaviour
         itemName.text = data.itemChineseName;
         //类型
         string typeInfo = $"<color={Defines.blueColor}>物品类型：</color>";
-        if (data.itemTags.Contains(ItemTag.Tower)) typeInfo += ColorTextTools.ColorText("【防御塔】", "#FF3030");
-        else typeInfo += ColorTextTools.ColorText("【道具】", "#00B6FF");
+        if (data.itemTags.Contains(ItemTag.Tower)) typeInfo += "<sprite=0>";
+        else typeInfo += "<sprite=3>";
         CreateAttributeInfo("Type", typeInfo);
         //塔
         if (data.itemTags.Contains(ItemTag.Tower))
         {
             string towerName = TowerManager.Instance.GetTowerSO_ByName(data.itemName).towerChineseName;
             string info =
-                $"放置在背包中：可使用{ColorTextTools.ColorTextWithBrackets(towerName, Defines.redColor)}\n" +
+                $"放置在背包中：可使用{ColorTextTools.ColorTextWithBrackets(towerName, Defines.purpleColor)}\n" +
                 $"若重复放置：属性不叠加，但会参与触发联动效果";
             CreateAttributeInfo("TowerItem", info);
+            string description = $"<color={Defines.blueColor}>防御塔描述：</color>\n" + data.description;
+            CreateAttributeInfo("TowerDescription", description);
             string towerBuffInfo = $"<color={Defines.blueColor}>buff标签：</color>\n";
             foreach (BuffType buffType in nowBuffTypes)
             {
@@ -46,16 +48,20 @@ public class ItemInfo : MonoBehaviour
                     case BuffType.None:
                         break;
                     case BuffType.Burn:
-                        towerBuffInfo += $"<color={Defines.redColor}>「灼烧」</color>\n";
+                        //towerBuffInfo += $"<color={Defines.redColor}>「灼烧」</color>\n";
+                        towerBuffInfo += "<sprite=1>";
                         break;
                     case BuffType.Slow:
-                        towerBuffInfo += $"<color={Defines.cyanColor}>「缓慢」</color>\n";
+                        //towerBuffInfo += $"<color={Defines.cyanColor}>「缓慢」</color>\n";
+                        towerBuffInfo += "<sprite=4>";
                         break;
                     case BuffType.Stun:
-                        towerBuffInfo += $"<color={Defines.greenColor}>「音震」</color>\n";
+                        //towerBuffInfo += $"<color={Defines.greenColor}>「音震」</color>\n";
+                        towerBuffInfo += "<sprite=6>";
                         break;
                     case BuffType.Mark:
-                        towerBuffInfo += $"<color={Defines.grayColor}>「印记」</color>\n";
+                        //towerBuffInfo += $"<color={Defines.grayColor}>「印记」</color>\n";
+                        towerBuffInfo += "<sprite=9>";
                         break;
                 }
             }
@@ -110,6 +116,9 @@ public class ItemInfo : MonoBehaviour
             }
         }
         CreateAttributeInfo("itemTags", tagInfo);
+        //销毁获得的太虚
+        string price = $"分解：<sprite=8>{(data.price / 2)}";
+        CreateAttributeInfo("itemPrice", price);
         //更新背景高度
         (transform as RectTransform).sizeDelta = new Vector2((transform as RectTransform).sizeDelta.x, nowHeight + 50);
     }

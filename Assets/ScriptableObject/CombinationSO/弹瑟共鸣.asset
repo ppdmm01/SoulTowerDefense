@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30b69d9de411d7641a33567c0d90e7ac, type: 3}
   m_Name: "\u5F39\u745F\u5171\u9E23"
   m_EditorClassIdentifier: 
-  posType: 2
+  posType: 1
   combinationName: "\u5F39\u745F\u5171\u9E23"
   description: 
   activeAttribute:
@@ -21,6 +21,7 @@ MonoBehaviour:
       conditionType: 0
       pointType: 0
       name: 
+      chineseName: 
       tags: 06000000
     isGrow: 0
     growType: 0

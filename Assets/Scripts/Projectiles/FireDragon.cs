@@ -22,7 +22,7 @@ public class FireDragon : Projectile
         }
         AudioManager.Instance.PlaySound("SoundEffect/Explosion");
         //特效
-        EffectManager.Instance.PlayEffect("Explode", explosionPos.position);
+        EffectManager.Instance.PlayEffect("Explode", explosionPos.position,1.1f);
         //删除自己
         PoolMgr.Instance.PushObj(gameObject);
     }

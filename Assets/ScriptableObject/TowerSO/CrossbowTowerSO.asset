@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerName: CrossbowTower
   towerChineseName: "\u5F29\u5854"
-  description: 
+  description: "\u53D1\u5C04\u7BAD\u77E2\uFF0C\u5BF9\u5355\u4E2A\u654C\u4EBA\u9020\u6210\u4F24\u5BB3"
   towerIcon: {fileID: 1772640366, guid: 2f2241beb7d677848aa78d696cf9e668, type: 3}
-  hp: 50
-  cost: 10
+  hp: 25
+  cost: 20
   canBeAttack: 1
   isAttacker: 1
-  damage: 5
+  damage: 6
   range: 4
   interval: 1
   isProducer: 0

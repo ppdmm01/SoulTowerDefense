@@ -12,7 +12,8 @@ public enum PlayerState
     Forge, //锻造
     Event, //事件
     Crystal, //水晶
-    Boss //终点
+    Boss, //终点
+    Menu, //菜单
 }
 public class PlayerStateManager : Singleton<PlayerStateManager>
 {

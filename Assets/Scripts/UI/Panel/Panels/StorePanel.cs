@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -17,8 +18,14 @@ public class StorePanel : BasePanel
     [Header("商店栏相关")]
     public List<StoreGrid> storeGrids; //商店栏
 
+    public TextMeshProUGUI refreshPriceTxt; //刷新价格文本
+
+    private int nowRefreshPrice; //当前刷新所需太虚
+
     public override void Init()
     {
+        nowRefreshPrice = 10;
+        refreshPriceTxt.text = nowRefreshPrice.ToString();
         quitBtn.onClick.AddListener(() =>
         {
             canvasGroup.blocksRaycasts = false;
@@ -29,9 +36,19 @@ public class StorePanel : BasePanel
 
         refreshBtn.onClick.AddListener(() =>
         {
-            //TODO:花费一定资源
+            //花费一定资源率先你
             AudioManager.Instance.PlaySound("SoundEffect/Bell");
-            RefreshItems();
+            if (GameResManager.Instance.GetTaixuNum() >= nowRefreshPrice)
+            {
+                GameResManager.Instance.AddTaixuNum(-nowRefreshPrice);
+                nowRefreshPrice += 5; //刷新价格上升
+                refreshPriceTxt.text = nowRefreshPrice.ToString();
+                RefreshItems();
+            }
+            else
+            {
+                UIManager.Instance.ShowTipInfo("太虚不足，刷新失败");
+            }
         });
 
         //显示背包面板

@@ -146,8 +146,10 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         if (ItemManager.Instance.dragTarget == null)
         {
             GetConnectItems(true);
-            UIManager.Instance.GetPanel<BagPanel>()?.ShowItemInfo(this);
+            UIManager.Instance.GetPanel<BagPanel>()?.ShowItemInfo(this); //这里和下面的代码都需要优化（有时间的话，现在没时间就复制粘贴了）
             UIManager.Instance.GetPanel<SelectPanel>()?.ShowItemInfo(this);
+            UIManager.Instance.GetPanel<EventPanel>()?.ShowItemInfo(this);
+            UIManager.Instance.GetPanel<CrystalPanel>()?.ShowItemInfo(this);
         }
     }
 
@@ -157,6 +159,8 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         HideAllStar();
         UIManager.Instance.GetPanel<BagPanel>()?.HideItemInfo();
         UIManager.Instance.GetPanel<SelectPanel>()?.HideItemInfo();
+        UIManager.Instance.GetPanel<EventPanel>()?.HideItemInfo();
+        UIManager.Instance.GetPanel<CrystalPanel>()?.HideItemInfo();
     }
 
     private void Begin(PointerEventData eventData)
@@ -196,6 +200,23 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         isDrag = false;
         ItemManager.Instance.dragTarget = null;
 
+        GetConnectItems();
+        //Debug.Log("显示特效");
+        foreach (GameObject obj in starPoints)
+        {
+            StarPoint startPoint = obj.GetComponent<StarPoint>();
+            if (!startPoint.isActive) continue;
+            switch (startPoint.type)
+            {
+                case DetectionPoint.PointType.Star:
+                    EffectManager.Instance.PlayUIEffect("StarPointEffect", obj.transform.position);
+                    break;
+                case DetectionPoint.PointType.Fire:
+                    EffectManager.Instance.PlayUIEffect("FirePointEffect", obj.transform.position);
+                    break;
+            }
+        }
+
         CancelPreview(gridPos);//取消当前预览
         HideItemFrame(); //隐藏边框
 
@@ -205,17 +226,22 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         if (grid.CanPlaceItem(this, gridPos) 
             && (!oldGrid.isLocked || (oldGrid.isLocked && grid != oldGrid))) //原来网格不带锁 或者 带锁了但是移动到别的网格去了就算放置成功
         {
-            grid.PlaceItem(this, gridPos); //放置物品
             if (oldGrid.gridName == "StoreGrid")
             {
                 //购买物品
-                BuyThisItem();
+                if (!CanBuyThisItem())
+                {
+                    RecoverItem(); //恢复物品位置
+                    UIManager.Instance.ShowTipInfo("太虚不足，购买失败");
+                    return; //购买失败
+                }
             }
             if (oldGrid.gridName == "SelectGrid")
             {
                 //选择物品
                 EventCenter.Instance.EventTrigger(EventType.SelectItem);
             }
+            grid.PlaceItem(this, gridPos); //放置物品
             oldGrid = grid; //更新老背包
             oldGridPos = gridPos; //更新老位置坐标
         }
@@ -511,7 +537,7 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
                 neighborItemInfos.Add(connectItem);
             }
         }
-
+        //Debug.Log("添加星星");
         return neighborItemInfos.ToList();
     }
 
@@ -524,14 +550,15 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
         starPoints.Add(starObj);
     }
 
-    //隐藏所有星星
+    //隐藏所有星星（全部删除了，避免出现残留bug）
     public void HideAllStar()
     {
-        foreach (GameObject obj in starPoints)
-        {
-            UIManager.Instance.DestroyUIObjByPoolMgr(obj);
-        }
-        starPoints.Clear();
+        UIManager.Instance.DestroyAllUIObjByPoolMgr("Bag/StarPoint");
+        //foreach (GameObject obj in starPoints)
+        //{
+        //    UIManager.Instance.DestroyUIObjByPoolMgr(obj);
+        //}
+        //starPoints.Clear();
     }
 
     //匹配指定物品是否满足该物品的 联动属性激活要求
@@ -552,9 +579,12 @@ public class Item : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUp
 
     #region 商店相关
     //购买该物品
-    private void BuyThisItem()
+    private bool CanBuyThisItem()
     {
-        Debug.Log("购买成功");
+        //判断太虚资源是否够
+        if (GameResManager.Instance.GetTaixuNum() < data.price) return false;
+        GameResManager.Instance.AddTaixuNum(-data.price);
+        return true;
     }
     #endregion
 

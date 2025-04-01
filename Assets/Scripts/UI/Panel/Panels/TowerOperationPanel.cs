@@ -23,7 +23,7 @@ public class TowerOperationPanel : BasePanel
         sellBtn.onClick.AddListener(() =>
         {
             GameResManager.Instance.AddSoulNum(towerRes);
-            UIManager.Instance.ShowTxtPopup(towerRes.ToString(), Color.white, 36, pos);
+            UIManager.Instance.ShowTxtPopup($"<sprite=5><color=purple>{towerRes}</color>", Color.white, 36, pos);
             if (targetTower != null)
                 targetTower.Dead(); //Ïú»Ù·ÀÓùËþ
             UIManager.Instance.HidePanel<TowerOperationPanel>(false);

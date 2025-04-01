@@ -12,13 +12,14 @@ public class SynthesisSO : ScriptableObject
         Data, //具体某个物品
         Tag, //某一类标签的物品
     }
-    public int id; //id
     public List<SynthesisItem> recipe; //配方
     public List<SynthesisItem> product; //成品
 
     public bool isRandomTagItem = true; //配方和成品中的物品标签相同时，是否随机物品 
     [Header("成品获得的buff标记")]
     public BuffType buff;
+
+    public int price; //合成价格
 
     //统计配方需要的物品数量
     public int CountRecipeNum()

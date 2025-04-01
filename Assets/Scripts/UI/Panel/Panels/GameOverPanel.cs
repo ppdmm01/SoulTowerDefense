@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameOverPanel : BasePanel
 {
+    public TextMeshProUGUI title;
     public Button sureBtn;
     public override void Init()
     {
@@ -19,5 +21,10 @@ public class GameOverPanel : BasePanel
             //Çå³ý´æµµ
             GameDataManager.Instance.ClearGameData();
         });
+    }
+
+    public void SetTitle(bool isWin)
+    {
+        title.text = isWin ? "Ê¤Àû£¡£¡£¡" : "Ê§°Ü!"; 
     }
 }

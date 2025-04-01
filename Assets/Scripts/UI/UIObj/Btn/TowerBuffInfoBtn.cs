@@ -18,7 +18,27 @@ public class TowerBuffInfoBtn : MonoBehaviour
     /// <param name="data">·ÀÓùËþÊý¾Ý</param>
     public void InitInfo(BuffData data)
     {
-        labelText.text = data.buffName;
+        switch (data.buffType)
+        {
+            case BuffType.None:
+                labelText.text = "";
+                break;
+            case BuffType.Burn:
+                labelText.text = "<sprite=1>";
+                break;
+            case BuffType.Slow:
+                labelText.text = "<sprite=4>";
+                break;
+            case BuffType.Stun:
+                labelText.text = "<sprite=6>";
+                break;
+            case BuffType.Mark:
+                labelText.text = "<sprite=9>";
+                break;
+            default:
+                labelText.text = "";
+                break;
+        }
         btn.onClick.RemoveAllListeners();
         btn.onClick.AddListener(() =>
         {

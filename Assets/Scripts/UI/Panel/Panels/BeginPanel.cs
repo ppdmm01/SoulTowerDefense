@@ -71,12 +71,18 @@ public class BeginPanel : BasePanel
         canvasGroup.blocksRaycasts = false;
         //清理所有数据
         GameDataManager.Instance.ClearGameData();
+        GameResManager.Instance.ResetAllRes();
         UIManager.Instance.LoadScene("MapScene",
         () =>
         {
             UIManager.Instance.HidePanel<BeginPanel>(); //关闭开始界面
             UIManager.Instance.ShowPanel<MapPanel>();
-            UIManager.Instance.ShowPanel<SelectPanel>().UpdateTowerItem(); //开始新游戏，选择一个防御塔
+            UIManager.Instance.ShowPanel<RewardPanel>().SetReward("准备",new List<RewardData>()
+            {
+                new RewardData(RewardType.Taixu,100,120),
+                new RewardData(RewardType.Tower,0,0),
+                new RewardData(RewardType.Tower,0,0),
+            });
         });
     }
 }

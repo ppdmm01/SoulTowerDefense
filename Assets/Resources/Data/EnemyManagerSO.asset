@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: EnemyManagerSO
   m_EditorClassIdentifier: 
   enemySOList:
-  - {fileID: 11400000, guid: 0e9a6092ce7d250468538fc1352c579e, type: 2}
-  - {fileID: 11400000, guid: fd6e2820df89f1f41abccce8cfec93e7, type: 2}
-  - {fileID: 11400000, guid: 55e5f9e2adcb1794e8089ef6af3a87fa, type: 2}
+  - {fileID: 11400000, guid: 706d0f6866e7f6e49af0dd6cb03dd36a, type: 2}
+  - {fileID: 11400000, guid: 6bc8605d8a2b22349a46ae6c3ea70e5a, type: 2}
+  - {fileID: 11400000, guid: cb4e7599957397c49bfd7effff98161d, type: 2}
+  - {fileID: 11400000, guid: ef52c881e37db024b9dc0efd61fe77ab, type: 2}

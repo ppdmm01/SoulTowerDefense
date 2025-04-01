@@ -13,4 +13,27 @@ MonoBehaviour:
   m_Name: LevelManagerSO
   m_EditorClassIdentifier: 
   levelSOList:
+  - {fileID: 11400000, guid: a6ed633cc84fe3c478a3aa8463159dcb, type: 2}
   - {fileID: 11400000, guid: ae5ef33e019bfb34aa22a74ac1af15a9, type: 2}
+  - {fileID: 11400000, guid: a3079969caca355428921d3c0ec40602, type: 2}
+  - {fileID: 11400000, guid: b0472042de76c2749adf92f663761b08, type: 2}
+  - {fileID: 11400000, guid: 63faf0aa38a79b147a5f9071df0d2bfa, type: 2}
+  - {fileID: 11400000, guid: aafe59b41bcc72d4ab288954ddd19787, type: 2}
+  - {fileID: 11400000, guid: 067b31b9b0dae1d45a622c8c3f8525f4, type: 2}
+  - {fileID: 11400000, guid: 01ac21b6c43fbc34d97d5ec5400bbb39, type: 2}
+  - {fileID: 11400000, guid: 2bb7a14e7b04cfe4b8fc67a4e370378d, type: 2}
+  - {fileID: 11400000, guid: f76c922abb277654ba841fbdd97c981d, type: 2}
+  - {fileID: 11400000, guid: 624ab22a71410d249b0ace10cf65f7fb, type: 2}
+  - {fileID: 11400000, guid: a304fea60f6c71542bbe8080e17b2c79, type: 2}
+  - {fileID: 11400000, guid: 60a129efe7dda0a43bd099cc94da744f, type: 2}
+  - {fileID: 11400000, guid: 2637ef2a4f549f244bf83eb26503298d, type: 2}
+  - {fileID: 11400000, guid: 47d552a82f6375347a17420f47aac3c6, type: 2}
+  - {fileID: 11400000, guid: 3182571d73f323e40af2a902e5937a46, type: 2}
+  - {fileID: 11400000, guid: 3bb303490873b364192ed8353bb32e26, type: 2}
+  - {fileID: 11400000, guid: a85d489e672916b46bc49a67c03c53cf, type: 2}
+  - {fileID: 11400000, guid: ec67b29d9589b1d4d83d35e793708f4d, type: 2}
+  - {fileID: 11400000, guid: c402a54e5f516b642bd14510de80717d, type: 2}
+  - {fileID: 11400000, guid: cff163f1eda0e2f42b80351013abb319, type: 2}
+  - {fileID: 11400000, guid: 1c346179063628a498ca85fe2f9c0c2f, type: 2}
+  - {fileID: 11400000, guid: 400befb8201eb5f44b366f619e2696e9, type: 2}
+  - {fileID: 11400000, guid: 699a22232fef29f42b3b59baf8b40cad, type: 2}

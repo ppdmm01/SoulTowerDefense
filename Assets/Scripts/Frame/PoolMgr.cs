@@ -133,6 +133,16 @@ public class PoolMgr : Singleton<PoolMgr>
     }
 
     /// <summary>
+    /// 将某一类物体全部放入缓存池中
+    /// </summary>
+    /// <param name="name"></param>
+    public void PushAllUIObj(string name)
+    {
+        if (UIPoolDic.ContainsKey(name))
+            UIPoolDic[name].PushAllObjInUsedList();
+    }
+
+    /// <summary>
     /// 清除柜子中的数据
     /// </summary>
     public void ClearPool()

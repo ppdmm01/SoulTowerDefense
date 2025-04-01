@@ -14,7 +14,17 @@ public class TowerPanel : BasePanel
     private List<CreateTowerBtn> towerBtnList = new List<CreateTowerBtn>(); //存储放置防御塔的按钮
     public override void Init()
     {
+        //更新顶部栏
+        TopColumnPanel panel = UIManager.Instance.ShowPanel<TopColumnPanel>();
+        panel.transform.SetAsLastSibling();
+        if (panel != null)
+        {
+            panel.ShowBtn(TopColumnBtnType.Crystal, TopColumnBtnType.Menu);
+        }
+        panel.SetTitle("防守！");
 
+        //if ()
+        //PlayerStateManager.Instance.ChangeState(PlayerState.Fight);
     }
 
     /// <summary>

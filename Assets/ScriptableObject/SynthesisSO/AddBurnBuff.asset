@@ -29,3 +29,4 @@ MonoBehaviour:
     num: 1
   isRandomTagItem: 0
   buff: 1
+  price: 50

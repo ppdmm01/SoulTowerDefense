@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 578254652ecb9044ba512c2f5e392687, type: 3}
+  m_Name: FireOilTowerSO
+  m_EditorClassIdentifier: 
+  towerName: FireOilTower
+  towerChineseName: "\u731B\u706B\u6CB9\u67DC"
+  description: "\u55B7\u5C04\u706B\u7130\uFF0C\u5BF9\u8303\u56F4\u5185\u7684\u6240\u6709\u654C\u4EBA\u6301\u7EED\u9020\u6210\u4F24\u5BB3"
+  towerIcon: {fileID: 1863162469, guid: 89aded2db29897047919c8f811a0d2ee, type: 3}
+  hp: 25
+  cost: 30
+  canBeAttack: 1
+  isAttacker: 1
+  damage: 2
+  range: 3
+  interval: 2.5
+  isProducer: 0
+  output: 0
+  cooldown: 0
+  buffDatas:
+  - triggerChance: 0.15
+    buffType: 1
+    buffName: "\u707C\u70E7"
+    isTriggerOverTime: 1
+    isStack: 0
+    duration: 4
+    triggerInterval: 1
+    damage: 3
+    speedMultiplier: 1
+    woundMultiplier: 1
+    damageMultiplier: 1
+  itemTags: 0100000006000000

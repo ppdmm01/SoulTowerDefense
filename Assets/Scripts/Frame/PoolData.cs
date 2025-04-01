@@ -128,4 +128,15 @@ public class PoolData
     {
         usedList.Add(obj);
     }
+
+    /// <summary>
+    /// 将使用的对象全部清除
+    /// </summary>
+    public void PushAllObjInUsedList()
+    {
+        for (int i=usedList.Count-1; i>=0; i--)
+        {
+            Push(usedList[i]); //将usedList中的所有物体放回抽屉中
+        }
+    }
 }

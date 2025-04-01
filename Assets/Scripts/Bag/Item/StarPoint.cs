@@ -22,8 +22,14 @@ public class StarPoint : MonoBehaviour
     public Sprite fireShowIcon;
     public Sprite fireHideIcon;
 
+    [HideInInspector] public DetectionPoint.PointType type;
+    [HideInInspector] public bool isActive;
+
     public void SetStarActive(bool active,DetectionPoint.PointType type)
     {
+        this.type = type;
+        this.isActive = active;
+
         switch (type)
         {
             case DetectionPoint.PointType.Star:

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e9594f62ebe744e9eb30002182deeb, type: 3}
+  m_Name: FireOilSO
+  m_EditorClassIdentifier: 
+  id: 28
+  itemName: FireOilTower
+  itemChineseName: "\u731B\u706B\u6CB9\u67DC"
+  price: 35
+  description: "\u55B7\u5C04\u706B\u7130\uFF0C\u5BF9\u8303\u56F4\u5185\u7684\u6240\u6709\u654C\u4EBA\u6301\u7EED\u9020\u6210\u4F24\u5BB3"
+  slotColorType: 2
+  shape:
+    shapeMatrix: 01010000010100000000000000000000
+    allowRotation: 1
+  detectionPoints: []
+  buffTypes: 01000000
+  itemAttributes: []
+  icon: {fileID: 1863162469, guid: 89aded2db29897047919c8f811a0d2ee, type: 3}
+  itemTags: 0100000006000000

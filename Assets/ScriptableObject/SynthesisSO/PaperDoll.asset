@@ -23,3 +23,6 @@ MonoBehaviour:
     tags: 
     data: {fileID: 11400000, guid: cce1538ee9d6f8a4ea422c5751ab4147, type: 2}
     num: 1
+  isRandomTagItem: 1
+  buff: 0
+  price: 20

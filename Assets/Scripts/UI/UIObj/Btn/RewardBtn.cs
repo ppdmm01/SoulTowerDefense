@@ -14,10 +14,11 @@ public class RewardBtn : MonoBehaviour
         switch (reward.rewardType)
         {
             case RewardType.Taixu:
-                rewardText.text = "Ì«Ðé¡Á" + reward.value;
+                int randomValue = Random.Range(reward.minValue, reward.maxValue+1);
+                rewardText.text = "<sprite=8>¡Á" + randomValue;
                 btn.onClick.AddListener(() =>
                 {
-                    GameResManager.Instance.AddTaixuNum(reward.value);
+                    GameResManager.Instance.AddTaixuNum(randomValue);
                     Destroy(this.gameObject);
                 });
                 break;
@@ -26,6 +27,14 @@ public class RewardBtn : MonoBehaviour
                 btn.onClick.AddListener(() =>
                 {
                     UIManager.Instance.ShowPanel<SelectPanel>()?.UpdateItem();
+                    Destroy(this.gameObject);
+                });
+                break;
+            case RewardType.Tower:
+                rewardText.text = "·ÀÓùËþ½±Àø£¡";
+                btn.onClick.AddListener(() =>
+                {
+                    UIManager.Instance.ShowPanel<SelectPanel>()?.UpdateTowerItem();
                     Destroy(this.gameObject);
                 });
                 break;
