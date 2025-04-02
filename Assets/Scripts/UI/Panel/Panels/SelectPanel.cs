@@ -11,6 +11,7 @@ public class SelectPanel : BasePanel
     public SelectItemGrid selectGrid2;
     public SelectItemGrid selectGrid3;
     public BaseGrid storageBox;
+    public Button arrangeBtn;
 
     public TextMeshProUGUI selectItemName1;
     public TextMeshProUGUI selectItemName2;
@@ -20,6 +21,7 @@ public class SelectPanel : BasePanel
     public GameObject ItemInfoObj;
     [Header("°´Å¥")]
     public Button skipBtn; //Ìø¹ý°´Å¥
+
     public override void Init()
     {
         HideItemInfo();
@@ -27,6 +29,10 @@ public class SelectPanel : BasePanel
         transform.SetAsLastSibling();
 
         skipBtn.onClick.AddListener(ClosePanelImmediate);
+        arrangeBtn.onClick.AddListener(() =>
+        {
+            GridManager.Instance.GetGridByName(storageBox.gridName).AutoArrange();
+        });
 
         EventCenter.Instance.AddEventListener(EventType.SelectItem, ClosePanel);
     }

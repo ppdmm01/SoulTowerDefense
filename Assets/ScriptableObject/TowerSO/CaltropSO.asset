@@ -21,7 +21,7 @@ MonoBehaviour:
   canBeAttack: 0
   isAttacker: 1
   damage: 7
-  range: 1
+  range: 0.8
   interval: 1
   isProducer: 0
   output: 0

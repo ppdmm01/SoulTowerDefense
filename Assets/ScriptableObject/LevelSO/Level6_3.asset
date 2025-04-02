@@ -18,34 +18,34 @@ MonoBehaviour:
     - enemyName: Bat
       totalNum: 30
       spawnNum: 1
-      frequency: 1
+      frequency: 1.5
       delayTime: 12
     - enemyName: CowMonster
       totalNum: 35
-      spawnNum: 2
+      spawnNum: 1
       frequency: 1.5
       delayTime: 0
   - spawnInfos:
     - enemyName: Bat
       totalNum: 35
       spawnNum: 2
-      frequency: 1.5
-      delayTime: 0
+      frequency: 2.5
+      delayTime: 10
     - enemyName: CowMonster
       totalNum: 20
-      spawnNum: 2
+      spawnNum: 1
       frequency: 1
-      delayTime: 5
+      delayTime: 0
     - enemyName: Skeleton
       totalNum: 15
       spawnNum: 1
       frequency: 1
-      delayTime: 10
+      delayTime: 20
   - spawnInfos:
     - enemyName: Bat
       totalNum: 50
-      spawnNum: 4
-      frequency: 1
+      spawnNum: 3
+      frequency: 1.5
       delayTime: 0
   rewardDatas:
   - rewardType: 1

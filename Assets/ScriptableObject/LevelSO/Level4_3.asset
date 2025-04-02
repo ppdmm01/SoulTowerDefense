@@ -33,7 +33,7 @@ MonoBehaviour:
       delayTime: 0
     - enemyName: CowMonster
       totalNum: 15
-      spawnNum: 2
+      spawnNum: 1
       frequency: 1
       delayTime: 10
   - spawnInfos:

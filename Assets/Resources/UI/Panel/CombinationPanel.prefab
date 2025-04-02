@@ -328,6 +328,7 @@ MonoBehaviour:
   isOnTop: 1
   closeBtn: {fileID: 7251049189978008705}
   sr: {fileID: 3615237889957276325}
+  gridLayoutGroup: {fileID: 819183591800813666}
 --- !u!1 &1230435238014298745
 GameObject:
   m_ObjectHideFlags: 0
@@ -1122,7 +1123,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1829983188, guid: f40a4273488c99e4ebf66ad19b91ff41, type: 3}
+  m_Sprite: {fileID: -771426473, guid: d8eceaefed4be3142857b71de0f48573, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

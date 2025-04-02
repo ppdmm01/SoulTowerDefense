@@ -8,6 +8,7 @@ public class CombinationPanel : BasePanel
 {
     public Button closeBtn;
     public ScrollRect sr; //放置组合信息的容器
+    public GridLayoutGroup gridLayoutGroup;
     private List<GameObject> combinationInfoList = new List<GameObject>();
     
     public override void Init()
@@ -24,10 +25,12 @@ public class CombinationPanel : BasePanel
     public void UpdateCombinationInfo()
     {
         ClearCombinationInfos();
+        sr.content.sizeDelta = new Vector2(sr.content.sizeDelta.x, 0);
         foreach (CombinationSO combination in CombinationManager.Instance.GetNowCombinations())  
         {
             GameObject combinationObj = Instantiate(Resources.Load<GameObject>("UI/UIObj/CombinationInfo"));
             combinationObj.transform.SetParent(sr.content, false);
+            sr.content.sizeDelta += new Vector2(sr.content.sizeDelta.x, gridLayoutGroup.cellSize.y);
             CombinationInfo info = combinationObj.GetComponent<CombinationInfo>();
             info.SetInfo(combination.combinationName,combination.activeAttribute);
             combinationInfoList.Add(combinationObj);

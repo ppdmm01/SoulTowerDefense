@@ -16,41 +16,41 @@ MonoBehaviour:
   waveInfos:
   - spawnInfos:
     - enemyName: Bat
-      totalNum: 30
+      totalNum: 20
       spawnNum: 1
-      frequency: 1
-      delayTime: 10
+      frequency: 1.2
+      delayTime: 12
     - enemyName: Snail
       totalNum: 15
-      spawnNum: 2
+      spawnNum: 1
       frequency: 1
       delayTime: 0
   - spawnInfos:
     - enemyName: Bat
       totalNum: 30
-      spawnNum: 2
+      spawnNum: 1
       frequency: 1.5
       delayTime: 0
     - enemyName: CowMonster
       totalNum: 25
       spawnNum: 2
-      frequency: 1
-      delayTime: 5
+      frequency: 1.5
+      delayTime: 10
   - spawnInfos:
     - enemyName: Bat
       totalNum: 18
-      spawnNum: 2
-      frequency: 1
-      delayTime: 5
-    - enemyName: Skeleton
-      totalNum: 15
-      spawnNum: 2
+      spawnNum: 1
       frequency: 1
       delayTime: 10
+    - enemyName: Skeleton
+      totalNum: 15
+      spawnNum: 1
+      frequency: 1
+      delayTime: 20
     - enemyName: CowMonster
       totalNum: 20
-      spawnNum: 3
-      frequency: 1
+      spawnNum: 2
+      frequency: 1.5
       delayTime: 0
   rewardDatas:
   - rewardType: 0

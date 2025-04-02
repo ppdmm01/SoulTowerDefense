@@ -23,7 +23,7 @@ MonoBehaviour:
   - spawnInfos:
     - enemyName: Snail
       totalNum: 25
-      spawnNum: 2
+      spawnNum: 1
       frequency: 1.5
       delayTime: 0
   rewardDatas:

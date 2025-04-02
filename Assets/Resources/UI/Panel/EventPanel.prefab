@@ -191,6 +191,7 @@ MonoBehaviour:
   btnD: {fileID: 6928800295543439805}
   txtD: {fileID: 1288976880267744574}
   storageBox: {fileID: 2121369577136676991}
+  arrangeBtn: {fileID: 3538672232171578186}
   rewardGrid: {fileID: 3503883310931308504}
   ItemInfoObj: {fileID: 5280192529999416624}
 --- !u!1 &735951920288244735
@@ -6021,7 +6022,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6953131453250722965
 RectTransform:
   m_ObjectHideFlags: 0

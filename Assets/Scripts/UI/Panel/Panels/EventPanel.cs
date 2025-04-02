@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 /// <summary>
 /// 事件面板（最后一天才加上的，写的很赶，所以代码不太美观）
@@ -45,6 +41,7 @@ public class EventPanel : BasePanel
 
     [Header("储物箱")]
     public BaseGrid storageBox;
+    public Button arrangeBtn;
 
     [Header("奖励")]
     public SelectItemGrid rewardGrid;
@@ -68,6 +65,10 @@ public class EventPanel : BasePanel
             canvasGroup.blocksRaycasts = false;
             UIManager.Instance.HidePanel<EventPanel>();
             UIManager.Instance.ShowPanel<MapPanel>();
+        });
+        arrangeBtn.onClick.AddListener(() =>
+        {
+            GridManager.Instance.GetGridByName(storageBox.gridName).AutoArrange();
         });
         //随机一个事件
         RandomEvent();
@@ -231,7 +232,7 @@ public class EventPanel : BasePanel
         btnC.interactable = false;
         btnD.interactable = false;
         string ans = "";
-        switch (nowSelect)
+        switch (data.ans)
         {
             case 1: ans = "A"; break;
             case 2: ans = "B"; break;

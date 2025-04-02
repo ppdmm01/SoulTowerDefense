@@ -23,7 +23,7 @@ MonoBehaviour:
     - enemyName: CowMonster
       totalNum: 10
       spawnNum: 1
-      frequency: 1
+      frequency: 1.5
       delayTime: 12
   - spawnInfos:
     - enemyName: Snail
@@ -33,8 +33,8 @@ MonoBehaviour:
       delayTime: 0
     - enemyName: CowMonster
       totalNum: 12
-      spawnNum: 2
-      frequency: 1
+      spawnNum: 1
+      frequency: 1.5
       delayTime: 10
   rewardDatas:
   - rewardType: 0

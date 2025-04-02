@@ -16,48 +16,53 @@ MonoBehaviour:
   waveInfos:
   - spawnInfos:
     - enemyName: CowMonster
-      totalNum: 60
-      spawnNum: 3
-      frequency: 1.2
+      totalNum: 20
+      spawnNum: 1
+      frequency: 1.5
+      delayTime: 0
+    - enemyName: CowMonster
+      totalNum: 30
+      spawnNum: 2
+      frequency: 1.5
       delayTime: 0
   - spawnInfos:
     - enemyName: Bat
       totalNum: 40
-      spawnNum: 2
+      spawnNum: 1
       frequency: 1.5
       delayTime: 0
     - enemyName: CowMonster
       totalNum: 30
       spawnNum: 2
       frequency: 1
-      delayTime: 5
+      delayTime: 10
     - enemyName: Skeleton
       totalNum: 18
       spawnNum: 1
       frequency: 1
-      delayTime: 10
+      delayTime: 20
   - spawnInfos:
     - enemyName: Bat
-      totalNum: 45
-      spawnNum: 2
-      frequency: 1
+      totalNum: 40
+      spawnNum: 1
+      frequency: 1.5
       delayTime: 0
     - enemyName: CowMonster
-      totalNum: 55
-      spawnNum: 4
-      frequency: 1
-      delayTime: 5
+      totalNum: 40
+      spawnNum: 2
+      frequency: 1.5
+      delayTime: 20
   - spawnInfos:
     - enemyName: CowMonster
       totalNum: 75
-      spawnNum: 4
+      spawnNum: 2
       frequency: 1
-      delayTime: 0
+      delayTime: 10
     - enemyName: Skeleton
-      totalNum: 40
-      spawnNum: 3
+      totalNum: 10
+      spawnNum: 1
       frequency: 1.2
-      delayTime: 15
+      delayTime: 0
   rewardDatas:
   - rewardType: 0
     minValue: 58

@@ -34,13 +34,13 @@ MonoBehaviour:
   - spawnInfos:
     - enemyName: Bat
       totalNum: 30
-      spawnNum: 2
-      frequency: 1
+      spawnNum: 1
+      frequency: 1.5
       delayTime: 0
     - enemyName: CowMonster
       totalNum: 25
       spawnNum: 3
-      frequency: 1
+      frequency: 2
       delayTime: 8
   rewardDatas:
   - rewardType: 0

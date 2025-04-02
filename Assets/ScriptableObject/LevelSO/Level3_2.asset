@@ -34,7 +34,7 @@ MonoBehaviour:
     - enemyName: CowMonster
       totalNum: 18
       spawnNum: 2
-      frequency: 1
+      frequency: 1.5
       delayTime: 10
   rewardDatas:
   - rewardType: 0

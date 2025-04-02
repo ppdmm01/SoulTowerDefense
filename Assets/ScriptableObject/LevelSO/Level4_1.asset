@@ -23,8 +23,8 @@ MonoBehaviour:
     - enemyName: Bat
       totalNum: 5
       spawnNum: 1
-      frequency: 1.5
-      delayTime: 12
+      frequency: 2
+      delayTime: 15
   - spawnInfos:
     - enemyName: Snail
       totalNum: 20
@@ -33,7 +33,7 @@ MonoBehaviour:
       delayTime: 0
     - enemyName: CowMonster
       totalNum: 12
-      spawnNum: 2
+      spawnNum: 1
       frequency: 1
       delayTime: 10
   - spawnInfos:

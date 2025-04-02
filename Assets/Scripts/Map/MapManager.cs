@@ -36,11 +36,11 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    //private void Update()
-    //{
-    //    //if (Input.GetKeyDown(KeyCode.Space))
-    //    //    GenerateNewMap();
-    //}
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            GenerateNewMap();
+    }
 
     public void GenerateNewMap()
     {

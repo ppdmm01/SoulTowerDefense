@@ -46,7 +46,7 @@ public class LevelManager : SingletonMono<LevelManager>
         }, 
         () =>
         {
-            AudioManager.Instance.PlayBGM("BGM/FightMusic");
+            AudioManager.Instance.PlayBGM("BGM/Fight");
             //关卡加载完成，显示战斗面板，初始化资源，开始出怪等逻辑
             isInLevel = true;
             //创建防御塔按钮
@@ -55,7 +55,7 @@ public class LevelManager : SingletonMono<LevelManager>
             TowerManager.Instance.CreateCore();
             //初始化资源
             GameResManager.Instance.ResetSoulNum(); //先归零
-            GameResManager.Instance.AddSoulNum(100);
+            GameResManager.Instance.AddSoulNum(100 + mapLayer*5);
             //记录波次信息
             LevelSO levelData = GetLevelData(mapLayer); //获取关卡信息
             currentLevelData = levelData;
@@ -75,9 +75,7 @@ public class LevelManager : SingletonMono<LevelManager>
     //获取一个关卡
     public LevelSO GetLevelData(int mapLayer)
     {
-        Debug.Log("LAYER:" + mapLayer);
         int level = (mapLayer+1) / 2; //获取关卡等级
-        Debug.Log("Level:" + level);
         List<LevelSO> list = data.levelSOList.Where(levelData => levelData.level == level).ToList(); //获取同等级的关卡
         LevelSO levelData = list.Random();
         Debug.Log("level:" + levelData.level + " name:" + levelData.name);
@@ -203,6 +201,7 @@ public class LevelManager : SingletonMono<LevelManager>
             UIManager.Instance.HidePanel<TowerPanel>();
             RewardPanel rewardPanel = UIManager.Instance.ShowPanel<RewardPanel>();
             rewardPanel.SetReward("战利品",currentLevelData.rewardDatas);
+            AudioManager.Instance.PlayBGM("BGM/Music2");
         });
     }
 
@@ -235,7 +234,6 @@ public class LevelManager : SingletonMono<LevelManager>
             PlayerStateManager.Instance.CurrentState == PlayerState.Boss ||
             PlayerStateManager.Instance.CurrentState == PlayerState.Menu)
             {
-                Debug.Log("退回节点");
                 Map currentMap = GameDataManager.Instance.mapData;
                 if (currentMap != null && currentMap.path.Count >= 1)
                     currentMap.path.RemoveAt(currentMap.path.Count - 1);
